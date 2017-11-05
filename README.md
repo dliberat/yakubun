@@ -17,7 +17,7 @@ It takes a document comprised of source language and target language segments an
 Usage
 -----
 
-[Download](http://www.danliberatori.com) the minified library and include it in the browser.
+[Download](https://raw.githubusercontent.com/garroadran/yakubun/master/dist/yakubun.js) the minified library and include it in the browser.
 
 ```
 <script type="text/javascript" src="yakubun.js"></script>
