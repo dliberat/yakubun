@@ -77,22 +77,21 @@ function replaceDoubleByteNums(string){
   return regexReplaceAllFromArray(numArr, string, 'gi');
 }
 
-function compareArrays(testArr) {
+function compareArrays(arr1, arr2) {
   // checks if two arrays are identical or not
-    if (this.length != testArr.length) return false;
-    for (var i = 0; i < testArr.length; i++) {
-        if (this[i].compare) { //To test values in nested arrays
-            if (!this[i].compare(testArr[i])) return false;
+    if (arr1.length != arr2.length) return false;
+    for (var i = 0; i < arr2.length; i++) {
+        if (Array.isArray(arr1[i])) { //To test values in nested arrays
+            if (!compareArrays(arr1[i], arr2[i])) return false;
         }
-        else if (this[i] !== testArr[i]) return false;
+        else if (arr1[i] !== arr2[i]) return false;
     }
     return true;
 }
 
 
-function metalogger(string)
-{
-  console.log(string);
+function metalogger(string){
+
 }
 
 export { 

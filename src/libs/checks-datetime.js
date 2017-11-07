@@ -1,8 +1,14 @@
 import * as general from './lib-generaluse.js';
 var moment = require('moment-timezone');
 
-
 function compareDates(source, target, checkOptions, oAccumulator){
+  
+  if(!verifyOptions(checkOptions)) {
+    oAccumulator.timeCheck_clean_source = source;
+    oAccumulator.timeCheck_clean_target = target;
+    general.metalogger('Invalid checkOptions. Could not compare dates');
+    return [null, oAccumulator];
+  };
 
   // source goes in [0], target goes in [1]
   var cleanStrings = cleanStringsBeforeDateCheck(source, target, checkOptions);
@@ -12,9 +18,12 @@ function compareDates(source, target, checkOptions, oAccumulator){
   // extract dates {2017-9-21} and {2017-9-21 12:00} and {2017-09-30 11:00am}
   var datesRegExp = new RegExp('{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9]}|{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9][ap]?[m]?}','gi');
   var comparison = general.regexComparer(cleanStrings[0], cleanStrings[1], datesRegExp, datesRegExp, false);
+  var compare = general.compareArrays(comparison[0], comparison[1]);
 
   // return if the comparison matches exactly, since no further checking is necessary
-  if(comparison[0].compare(comparison[1])) { return [null, oAccumulator]; }
+  if(compare) {
+    return [null, oAccumulator];
+  }
 
   // extract dates with 9/21 format and leave them in a side array
   datesRegExp = new RegExp('[0-1]?[0-9]\/[0-3]?[0-9]','gi');
@@ -25,9 +34,10 @@ function compareDates(source, target, checkOptions, oAccumulator){
 
   // convert to sorted moment array
   var momentArr = convertToMomentArr(comparison);
+  var compare = general.compareArrays(momentArr[0], momentArr[1]);
 
   // compare moment arrays. If they don't match, search in the side array
-  if(!momentArr[0].compareMomentDates(momentArr[1]))
+  if(!compare)
   {
     var res = removeMatchedDates(momentArr, potentialSlashDates[0], potentialSlashDates[1]);
     var retval = null;
@@ -511,6 +521,25 @@ Array.prototype.compareMomentDates = function(testArr) {
         if (this[i].format('MMM.D') !== testArr[i].format('MMM.D')) return false;
     }
     return true;
+}
+
+function verifyOptions(checkOptions){
+  if(
+    !checkOptions.hasOwnProperty('sourceLang') ||
+    !checkOptions.hasOwnProperty('targetLang') ||
+    !checkOptions.hasOwnProperty('dateFormats')
+    ){
+      return false;
+    }
+    
+  if(
+    !checkOptions.dateFormats.hasOwnProperty(checkOptions.sourceLang) ||
+    !checkOptions.dateFormats.hasOwnProperty(checkOptions.targetLang)
+    ){
+      return false;
+    }
+
+  return true;
 }
 
 export {

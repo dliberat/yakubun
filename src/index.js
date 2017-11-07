@@ -2,6 +2,12 @@ import * as checks_lang from './libs/checks-language.js';
 import * as checksDateTime from './libs/checks-datetime.js';
 import * as checks_numbers from './libs/checks-numbers.js';
 import verify from './verifyOptions.js';
+import { 
+  regexComparer,
+  regexReplaceAllFromArray,
+  regexReturnAllMatches,
+  compareArrays
+} from './libs/lib-generaluse.js';
 
 
 function scan(bilingualDoc, checkOptions, callback){
@@ -17,7 +23,7 @@ function startScan(bilingualDoc, checkOptions, callback)
   var oAccumulator = {
     segmentNumber: 0,
     tests: getTests(checkOptions)
-  }
+  };
 
   // loop through all the segments in the bilingual Doc
   for(var property in bilingualDoc){
@@ -91,12 +97,7 @@ function getTests(checkOptions){
   return tests;
 }
 
-import { 
-  regexComparer,
-  regexReplaceAllFromArray,
-  regexReturnAllMatches,
-  compareArrays
-} from './libs/lib-generaluse.js';
+
 
 export { 
   scan,

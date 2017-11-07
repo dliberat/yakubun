@@ -23,12 +23,6 @@ Usage
 <script type="text/javascript" src="yakubun.js"></script>
 ```
 
-Or import it in Node.js.
-
-```
-const yakubun = include('yakubun.js')
-```
-
 ### Public functions
 
 1. Use the `yakubun.scan(bilingualDoc, checkOptions, callback)` function to run scans on a bilingual document. The results for each segment are passed along to the callback function you provide.

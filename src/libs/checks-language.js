@@ -106,7 +106,7 @@ function findBulletsWithNoSpaces(source, target, checkOptions, oAccumulator){
     var bullets = checkOptions.customBullets;
     reg = new RegExp('^[' + bullets + '][a-zA-Z0-9\\(]|\\\\n[' + bullets + '][a-zA-Z0-9\\(]','gm');
     if(reg.test(target)){
-      retval = 'Make sure there are spaces after bullet points.'
+      retval = 'Make sure there are spaces after bullet points.';
     }
   }
   
@@ -153,7 +153,7 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator){
       if(a !== b){ return false; }
       }
     return true;
-  }
+  };
 
   // ensure that an object exists to keep track of the bullets
   if(!oAccumulator.trackNumberedBullets){
@@ -176,7 +176,7 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator){
   // if there are no matches, return right away
   if(matchArr.length === 0) { return [null, oAccumulator]; }
 
-    var num
+    var num;
   // else loop through the results and sort them into the appropriate arrays
   for(var i = 0; i < matchArr.length; i++){
     num = matchArr[i][1] || matchArr[i][2];
@@ -224,4 +224,4 @@ export {
   findBulletsWithNoSpaces,
   detectOxfordCommas,
   trackNumberedBullets
-}
+};
