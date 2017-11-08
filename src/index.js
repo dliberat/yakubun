@@ -1,6 +1,8 @@
 import * as checks_lang from './libs/checks-language.js';
 import * as checksDateTime from './libs/checks-datetime.js';
 import * as checks_numbers from './libs/checks-numbers.js';
+import { compareTimes } from './libs/time.js';
+
 import verify from './verifyOptions.js';
 import { 
   regexComparer,
@@ -71,7 +73,7 @@ function getTests(checkOptions){
     ['numberedBullets', checks_lang.trackNumberedBullets],
     ['tzDates', checksDateTime.compareDatesTz],
     ['dates',checksDateTime.compareDates],
-    ['times',checksDateTime.compareTimes],
+    ['times', compareTimes],
     ['numbers', checks_numbers.compareNumbers]
   ]
 

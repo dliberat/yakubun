@@ -55,83 +55,55 @@ function compareDates(source, target, checkOptions, oAccumulator){
 }
 
 function compareDatesTz(source, target, checkOptions, oAccumulator){
-    var retval = null;
-
-    // check whether time zones have been provided
-    var sourceTZ = checkOptions.sourceTimeZone || 'Asia/Tokyo';
-    var targetTZ = checkOptions.targetTimeZone || 'Asia/Tokyo';
-
-    // source goes in [0], target goes in [1]
-    var cleanStrings = cleanStringsBeforeDateCheck(source, target, checkOptions);
-    oAccumulator.timeCheck_clean_source = cleanStrings[0];
-    oAccumulator.timeCheck_clean_target = cleanStrings[1];
-
-    // extract dates in only this format {2017-9-21 12:00}
-    var datesRegExp = new RegExp('{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9]}','gi');
-    var comparison = general.regexComparer(cleanStrings[0], cleanStrings[1], datesRegExp, datesRegExp, false);
-
-    // turn all dates and times into two-digits so as to be ISO compliant
-     comparison = convertToTwoDigitDates(comparison);
-
-    // convert to sorted moment array
-    var momentArr = convertToMomentArr(comparison, sourceTZ, targetTZ);
-
-    // loop through momentArray[0], which is an array of the JP moments
-    // and check if a matching date exists in momentArray[1] which is
-    // an array of the target language dates
-
-    for (var i = momentArr[0].length -1; i >= 0; i--) {
-      for (var j = 0; j < momentArr[1].length; j++) {
-        if(momentArr[0][i].isSame(momentArr[1][j])){
-          // remove the moments from the arrays
-          momentArr[0].splice(i,1);
-          momentArr[1].splice(j,1);
-          break;
-        }
-      }
-    }
-
-    // momentArr should now only contain the dates that have no matches
-    retval = formatForOutput(momentArr, oAccumulator, sourceTZ, targetTZ);
-
-    return [retval, oAccumulator];
-
-}
-
-function compareTimes(source, target, checkOptions, oAccumulator){
-  source = oAccumulator.timeCheck_clean_source;
-  target = oAccumulator.timeCheck_clean_target;
-
-  // clean up the strings
-  var cleanStrings = cleanStringsBeforeTimeCheck(source, target, checkOptions);
-  source = cleanStrings[0];
-  oAccumulator.timeCheck_clean_source = cleanStrings[0];
-
-  target = cleanStrings[1];
-  oAccumulator.timeCheck_clean_target = cleanStrings[1];
-
-  // extract times
-  var sourceRegEx = new RegExp('[0-2]?[0-9][:\uFF1A][0-5][0-9]','g');
-  var targetRegEx = new RegExp('[0-2]?[0-9]:[0-5][0-9]', 'gi');
-
-  // returns an array consisting of two arrays
-  // [ [matches in source] , [matches in target] ]
-  // the final argument must be true if using capturing groups in the RegEx
-  var comparison = general.regexComparer(source, target, sourceRegEx, targetRegEx, false);
-
-  // loop through the returned regex matches, and create an array of moments
-  var sourceMoments = parseTimeStringsIntoMomentArr(comparison[0]).sort(momentSort);
-  var targetMoments = parseTimeStringsIntoMomentArr(comparison[1]).sort(momentSort);
+  
+  if(!verifyOptions(checkOptions)) {
+    oAccumulator.timeCheck_clean_source = source;
+    oAccumulator.timeCheck_clean_target = target;
+    general.metalogger('Invalid checkOptions. Could not compare dates');
+    return [null, oAccumulator];
+  };
 
   var retval = null;
-  // compare times
-  if(!sourceMoments.compareMomentTimes(targetMoments))
-  {
-    retval = 'Times: Found <span class="text-time">' + timeDisplayFormatting(sourceMoments) +
-  '</span> in source and <span class="text-time">' + timeDisplayFormatting(targetMoments) + '</span> in target.';
+
+  // check whether time zones have been provided
+  var sourceTZ = checkOptions.sourceTimeZone || 'Asia/Tokyo';
+  var targetTZ = checkOptions.targetTimeZone || 'Asia/Tokyo';
+
+  // source goes in [0], target goes in [1]
+  var cleanStrings = cleanStringsBeforeDateCheck(source, target, checkOptions);
+  oAccumulator.timeCheck_clean_source = cleanStrings[0];
+  oAccumulator.timeCheck_clean_target = cleanStrings[1];
+
+  // extract dates in only this format {2017-9-21 12:00}
+  var datesRegExp = new RegExp('{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9]}','gi');
+  var comparison = general.regexComparer(cleanStrings[0], cleanStrings[1], datesRegExp, datesRegExp, false);
+
+  // turn all dates and times into two-digits so as to be ISO compliant
+   comparison = convertToTwoDigitDates(comparison);
+
+  // convert to sorted moment array
+  var momentArr = convertToMomentArr(comparison, sourceTZ, targetTZ);
+
+  // loop through momentArray[0], which is an array of the JP moments
+  // and check if a matching date exists in momentArray[1] which is
+  // an array of the target language dates
+
+  for (var i = momentArr[0].length -1; i >= 0; i--) {
+    for (var j = 0; j < momentArr[1].length; j++) {
+      if(momentArr[0][i].isSame(momentArr[1][j])){
+        // remove the moments from the arrays
+        momentArr[0].splice(i,1);
+        momentArr[1].splice(j,1);
+        break;
+      }
+    }
   }
 
+  // momentArr should now only contain the dates that have no matches
+  retval = formatForOutput(momentArr, oAccumulator, sourceTZ, targetTZ);
+
   return [retval, oAccumulator];
+
 }
 
 
@@ -406,7 +378,10 @@ function formatForOutput (arr, oAccumulator, sourceTZ, targetTZ){
 
 // TIME CHECK
 function cleanStringsBeforeTimeCheck (source, target, checkOptions){
-   
+  
+  // replace all double-byte numbers with single byte versions
+  source = general.replaceDoubleByteNums(source);
+  
   // replace kanji times with standard numerical times
   source = source.replace(/([0-2]?[0-9])\u6642([0-5][0-9])\u5206/g, '$1:$2');
   source = source.replace(/([0-2]?[0-9])\u6642\u534A/g, '$1:30');
@@ -500,29 +475,6 @@ function timeDisplayFormatting (momentArr){
   return displayArray.join(', ');
 }
 
-Array.prototype.compare = general.compareArrays;
-
-Array.prototype.compareMomentTimes = function(testArr) {
-  // checks if two arrays are identical or not
-    if (this.length != testArr.length) return false;
-    for (var i = 0; i < testArr.length; i++) {
-        /*if (this[i].compare) { //To test values in nested arrays
-            if (!this[i].compare(testArr[i])) return false;
-        }*/
-        if (this[i].format('H:mm') !== testArr[i].format('H:mm')) return false;
-    }
-    return true;
-}
-
-Array.prototype.compareMomentDates = function(testArr) {
-  // checks if two arrays are identical or not
-    if (this.length != testArr.length) return false;
-    for (var i = 0; i < testArr.length; i++) {
-        if (this[i].format('MMM.D') !== testArr[i].format('MMM.D')) return false;
-    }
-    return true;
-}
-
 function verifyOptions(checkOptions){
   if(
     !checkOptions.hasOwnProperty('sourceLang') ||
@@ -544,6 +496,5 @@ function verifyOptions(checkOptions){
 
 export {
  compareDates,
- compareDatesTz,
- compareTimes
+ compareDatesTz
 }
