@@ -5,9 +5,12 @@ function compareTimes(source, target, checkOptions, oAccumulator){
   
   // check to make sure oAccumulator is an object
   if(typeof(oAccumulator) == 'object' && oAccumulator !== null){
+    // use the clean strings, if they exist
     if(oAccumulator.hasOwnProperty('timeCheck_clean_source')) source = oAccumulator.timeCheck_clean_source
     if(oAccumulator.hasOwnProperty('timeCheck_clean_target')) target = oAccumulator.timeCheck_clean_target
   } else {
+    // need to create this because this module pushes
+    // clean strings to the accumulator
     oAccumulator = {};
   }
 
