@@ -1,7 +1,6 @@
 import * as general from './lib-generaluse.js';
 var moment = require('moment-timezone');
 
-
 function compareTimes(source, target, checkOptions, oAccumulator){
   
   // check to make sure oAccumulator is an object
@@ -13,40 +12,10 @@ function compareTimes(source, target, checkOptions, oAccumulator){
   }
 
   // clean up the strings
-  var cleanStrings = cleanStringsBeforeTimeCheck(source, target, checkOptions);
-  source = cleanStrings[0];
-  oAccumulator.timeCheck_clean_source = cleanStrings[0];
-
-  target = cleanStrings[1];
-  oAccumulator.timeCheck_clean_target = cleanStrings[1];
-
-  // extract times
-  var sourceRegEx = new RegExp('[0-2]?[0-9][:\uFF1A][0-5][0-9]','g');
-  var targetRegEx = new RegExp('[0-2]?[0-9]:[0-5][0-9]', 'gi');
-
-  // returns an array consisting of two arrays
-  // [ [matches in source] , [matches in target] ]
-  // the final argument must be true if using capturing groups in the RegEx
-  var comparison = general.regexComparer(source, target, sourceRegEx, targetRegEx, false);
-
-  // loop through the returned regex matches, and create an array of moments
-  var sourceMoments = parseTimeStringsIntoMomentArr(comparison[0]).sort(momentSort);
-  var targetMoments = parseTimeStringsIntoMomentArr(comparison[1]).sort(momentSort);
-
-  var compare = compareMomentTimes(sourceMoments, targetMoments);
-  var retval = null;
-  
-  // compare times
-  if(!compare)
-  {
-    retval = 'Times: Found <span class="text-time">' + timeDisplayFormatting(sourceMoments) +
-  '</span> in source and <span class="text-time">' + timeDisplayFormatting(targetMoments) + '</span> in target.';
-  }
-  return [retval, oAccumulator];
+  return clean(source, target, oAccumulator);
 }
 
-// TIME CHECK
-function cleanStringsBeforeTimeCheck (source, target, checkOptions){
+function clean(source, target, oAccumulator){
   
   // replace all double-byte numbers with single byte versions
   source = general.replaceDoubleByteNums(source);
@@ -62,28 +31,48 @@ function cleanStringsBeforeTimeCheck (source, target, checkOptions){
   source = source.replace(/([0-2]?[0-9])[:\uFF1A]([0-5][0-9])(?!})/g, '{$1:$2}');
   target = target.replace(/([0-2]?[0-9]:[0-5][0-9])(?!})/gi, '{$1}');
 
-  return [source, target]
+  // store clean strings in accumulator
+  oAccumulator.timeCheck_clean_source = source;
+  oAccumulator.timeCheck_clean_target = target;
+  return extract(source, target, oAccumulator);
 }
 
-function parseTimeStringsIntoMomentArr (stringsArr){
-  var outArr = [];
-  
-  for (var i = 0; i < stringsArr.length; i++){
-    var e = stringsArr[i];
-    var x = convertTimesToISO(e); // moment requires ISO 8601 strings
-    e = moment(x);
-    // check that e is a valid moment to avoid errors when comparing
-    if(e.isValid())
+function extract(source, target, oAccumulator){
+    // extract times
+    var sourceRegEx = new RegExp('[0-2]?[0-9][:\uFF1A][0-5][0-9]','g');
+    var targetRegEx = new RegExp('[0-2]?[0-9]:[0-5][0-9]', 'gi');
+    
+    // returns an array consisting of two arrays
+    // [ [matches in source] , [matches in target] ]
+    // the final argument must be true if using capturing groups in the RegEx
+    var comparison = general.regexComparer(source, target, sourceRegEx, targetRegEx, false);
+    
+    return momentConversion(comparison, oAccumulator);
+}
+
+function momentConversion(comparison, oAccumulator){
+    // loop through the returned regex matches, and create an array of moments
+    var sourceMoments = parseTimeStringsIntoMomentArr(comparison[0]).sort(momentSort);
+    var targetMoments = parseTimeStringsIntoMomentArr(comparison[1]).sort(momentSort);
+    
+    return hikaku(sourceMoments, targetMoments, oAccumulator);
+}
+
+function hikaku(sourceMoments, targetMoments, oAccumulator){
+    var compare = compareMomentTimes(sourceMoments, targetMoments);
+    var retval = null;
+    
+    // compare times
+    if(!compare)
     {
-      outArr.push(e);
-    } else {
-      console.log('Invalid moment.');
+        retval = 'Times: Found <span class="text-time">' + timeDisplayFormatting(sourceMoments) +
+        '</span> in source and <span class="text-time">' + timeDisplayFormatting(targetMoments) + '</span> in target.';
     }
-  }
-
-  return outArr;
+    
+    return [retval, oAccumulator];
 }
 
+/* UTILITY FUNCTIONS */
 function convertTimesToISO (string){
   
   string = string.toLowerCase();
@@ -156,6 +145,26 @@ function compareMomentTimes(arr1, arr2, comparison){
   return true;
 }
 
+function parseTimeStringsIntoMomentArr (stringsArr){
+  var outArr = [];
+  
+  for (var i = 0; i < stringsArr.length; i++){
+    var e = stringsArr[i];
+    var x = convertTimesToISO(e); // moment requires ISO 8601 strings
+    e = moment(x);
+    // check that e is a valid moment to avoid errors when comparing
+    if(e.isValid())
+    {
+      outArr.push(e);
+    } else {
+      console.log('Invalid moment.');
+    }
+  }
+
+  return outArr;
+}
+
+/* EXPORTS */
 export {
     compareTimes
 }
