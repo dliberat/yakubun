@@ -1,5 +1,4 @@
-function letterSubs(string)
-{
+function letterSubs(string){
   var numericalLetterReplacer = function (match, p1, p2){
       // parse the numerical portion as a number
       var mantissa = Number(p1);
@@ -16,8 +15,7 @@ function letterSubs(string)
     return string.replace(/([0-9]*?\.?[0-9])([KM])(?![a-zA-Z0-9])/g, numericalLetterReplacer)
 }
 
-function removeDelimiters(string, language)
-{
+function removeDelimiters(string, language){
   language = language.toLowerCase();
   if (language == 'ja' || language == 'en') {
     //TODO: Running the replacement twice is a bit of a hack. Improve this.

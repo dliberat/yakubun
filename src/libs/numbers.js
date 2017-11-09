@@ -18,7 +18,15 @@ function compareNumbers(source, target, checkOptions, oAccumulator){
     checkOptions = { sourceLang: 'ja', targetLang: 'en' };
   }
   
-  return removeDates(source, target, checkOptions, oAccumulator)
+  return replaceNumbers(source, target, checkOptions, oAccumulator)
+}
+
+function replaceNumbers(source, target, checkOptions, oAccumulator){
+  
+  source = general.replaceDoubleByteNums(source);
+  target = general.replaceDoubleByteNums(target);
+  
+  return removeDates(source, target, checkOptions, oAccumulator);
 }
 
 function removeDates(source, target, checkOptions, oAccumulator){
@@ -110,16 +118,11 @@ function extract(source, target, oAccumulator){
   // compare the cleaned strings based on the following regex
   var re = new RegExp('[0-9]+','gi');
   var comparison = general.regexComparer(source, target, re, re);
-  
   return oncePerAdjustments(comparison, target, oAccumulator);
 }
 
 function oncePerAdjustments(comparison, target, oAccumulator){
-  // allow for a single 'once' or 'per' to replace a single '1' if missing from the target
-  if (target === undefined) {
-    return comparison;
-  }
-
+  // allow for a single 'once' or 'per' to replace a single '1' if missing from the target  
   var reducer = function(a, b){
     if(b == '1') {
       return a + 1;
@@ -127,21 +130,26 @@ function oncePerAdjustments(comparison, target, oAccumulator){
       return a;
     }
   };
-  // count 1s in source text
+  
+  if (target === undefined) {
+    return compareAndFormat(comparison, oAccumulator);
+  }
+
+  // count 1s in source array
   var s = comparison[0].reduce(reducer, 0);
-  // count 1s in target text
+  // count 1s in target array
   var t = comparison[1].reduce(reducer, 0);
 
   if(s > t && target.indexOf('once') > 0){
     comparison[1].push('1');
     comparison[1].sort();
-    return comparison;
+    t ++;
   }
 
   if(s > t && target.indexOf(' per ') > 0){
     comparison[1].push('1');
     comparison[1].sort();
-    return comparison;
+    t ++;
   }
 
   return compareAndFormat(comparison, oAccumulator);
@@ -159,7 +167,6 @@ function compareAndFormat(comparison, oAccumulator){
     retval = 'Found <span class="text-warning">' + comparison[0].join(', ') +
   '</span> in source and <span class="text-warning">' + comparison[1].join(', ') + '</span> in target.';
   }
-  
   
   return [retval, oAccumulator];
 }

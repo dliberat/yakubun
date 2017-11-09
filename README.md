@@ -139,7 +139,11 @@ bannedWordsList = {
    
 8. Time zone dates
 
+   This is the least-tested module in the library. It extracts dates and times from your source and target texts based on a series of regular expressions that you pass in the `checkOptions` object. Fundamentally, it works in the same way as the regular dates check, except it requires that all dates in the `{2018-3-21 14:00}` format include times. Dates without times will not be parsed by this check. You can also pass information about which time zone your target text is in (defaults to America/Los_Angeles), and then Yakubun uses the Moment Timezone library to check whether or not the source text date (in the source text time zone, usually Asia/Tokyo) is equivalent to the target date in the target time zone.
+
 9. Dates
+
+   
 
 10. Times
 

@@ -3,18 +3,81 @@ const num = require('../src/libs/numbers.js');
 const util = require('../src/libs/numbers-utility.js');
 
 describe('Numbers check', function(){
-   it('Should detect missing numbers in the target', function(){
+   it('detect missing numbers in the target', function(){
       var source = 'リンゴ5個を持っています。';
       var target = 'I have no apples.';
       var res = num.compareNumbers(source, target, {}, {});
       expect(res[0]).to.equal('Found <span class="text-warning">5</span> in source and <span class="text-warning">nothing</span> in target.');
    });
-   it('Should be able to handle double-byte numbers');
+   it('detect missing numbers in the source', function(){
+      var source = '妹がいます。';
+      var target = 'I have 3 sisters';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal('Found <span class="text-warning">nothing</span> in source and <span class="text-warning">3</span> in target.');
+   })
+   it('Account for double-byte numbers', function(){
+      var source = '１０個の消しゴムを２６７円で買った';
+      var target = 'I bought 10 erasers for 268 yen.';
+      var res = num.compareNumbers(source, target, {}, {});
+      expect(res[0]).to.equal('Found <span class="text-warning">10, 267</span> in source and <span class="text-warning">10, 268</span> in target.');
+   });
    it('500万 should match 5,000,000', function(){
       var source = 'みんなで飾りつけたツリーの飾りが500万個を達成';
       var target = 'The number of decorations on the tree reached 5,000,000!';
       var res = num.compareNumbers(source, target);
       expect(res[0]).to.equal(null);
+   });
+   it('1.5万 should match 15000', function(){
+      var source = '先月1.5万円を得た。';
+      var target = 'Last month, I made 14,000 yen';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal('Found <span class="text-warning">15000</span> in source and <span class="text-warning">14000</span> in target.');
+   })
+   it('filter dates in {2018-02-18} format', function(){
+      var source = '{2019-03-10}にハワイに行く';
+      var target = 'I will go to Hawaii in the future.';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
+   it('filter dates in {2018-2-10} format', function(){
+      var source = '私は{2015-8-9}に妻にあった。２０歳でした。';
+      var target = 'I met my wife six years ago. I was 20';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
+   it('filter dates in {2018-12-25 12:00} format', function(){
+      var source = 'クリスマスは特別な日です。';
+      var target = 'Christmas starts on {2018-12-25 00:00}';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
+   it('filter dates in {2018-1-13 12:00} format', function(){
+      var source = '僕の誕生日は{2018-1-10 16:54}です。友達は{2018-5-20 13:14}だよ。';
+      var target = 'My birthday is in January, and my friend\'s birthday is in May.';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
+   it('"Once upon a time" should not count as a number', function(){
+      var source = '昔々、面白いことがいっぱいありました。';
+      var target = 'Once upon a time, there were many interesting things.';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
+   it('Allow "once" and "per" to replace the number 1, only if needed', function(){
+      var source = '１日ごとにチケットもらえる';
+      var target = 'Get a free ticket once a day.';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+      
+      var s = '１個ずつチャンスある！最大４回もらえる！';
+      var t = 'You have 1 chance per coffee cup you drink!';
+      var r = num.compareNumbers(s, t);
+      expect(r[0]).to.equal('Found <span class="text-warning">1, 4</span> in source and <span class="text-warning">1</span> in target.');
+      
+      var a = '薬を１日に３回飲みなさい';
+      var b = 'Take your medicine 3 times per day.';
+      var c = num.compareNumbers(a, b);
+      expect(c[0]).to.equal(null);
    });
    it('1度ずつ、１個ずつ、１回ずつ、and １回あたり should all match with an "each" in the target if it is English');
     
@@ -45,5 +108,24 @@ describe('Number utilities', function(){
       var res = util.letterSubs('1.1M Coins');
       expect(res).to.equal('1100000 Coins');
    });
-   it('implement custom lexical substitutions');
+   it('implement custom lexical substitutions', function(){
+      var arr = [
+         ['one', '1'],
+         ['two', '2'],
+         ['three', '3']
+         ]
+      var source = 'one, two, three';
+      var res = util.subber(source, arr);
+      expect(res).to.equal('1, 2, 3');
+   });
+   it('gracefully handle incorrectly formatted substitution Arrays', function(){
+      var substitutions = {
+         'one': 1,
+         'two': 2
+      };
+      var source = 'one, two';
+      var res = util.subber(source, substitutions);
+      var r = util.subber(source, null);
+      expect(res).to.equal('one, two');
+   })
 });
