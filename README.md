@@ -143,7 +143,46 @@ bannedWordsList = {
 
 9. Dates
 
+   The `compareDates` (and `compareDatesTz`) function sends your source and target texts through a variety of filters to convert any dates that appear in your text into the following format {YYYY-MM-DD HH:MM}. If no time information is available, `compareDates` works equally well with {YYYY-MM-DD}, although `compareDatesTz` does not.
+   The first filter converts any double-byte numbers such as １,２, or ３ into their single-byte equivalents, 1, 2, and 3.
+   The second filter runs a series of regular expression searches on the target text for Japanese text that could be misinterpreted as dates, such as ４日連続. In these cases, the filter preserves the number, but discards the 日 character to ensure that the text in question is not caught by a later filter.
+   A third filter ensures that all target language times include minutes, such that 2pm becomes 2:00pm, and 11am becomes 11:00am.
+   Next, `compareDates` uses a series of regular expressions passed in the `checkOptions.dateFormats` object to convert dates into the {YYYY-MM-DD HH:MM} or {YYYY-MM-DD} format.
+   `checkOptions.dateFormats` should contain an array for source and target languages:
    
+   ```
+   {
+      'ja': [],
+      
+      'en': []
+   }
+   ```
+   
+   And each array should contain arrays that tell `compareDates` what to search for, and how to perform the replacement.
+   
+   ```
+   {
+      'ja': [
+        ['([0-9]{4})\\u5E74([0-1]?[0-9])\\u6708([0-3]?[0-9])\\u65E5\\s?([0-2]?[0-9])[\\u6642\\uFF1A:]([0-5][0-9])', '{$1-$2-$3 $4:$5}'], // 2017年9月10日10時３０分
+        ['([0-1]?[0-9])\\u6708([0-3]?[0-9])\\u65E5\\s?([0-2]?[0-9])[\\u6642\\uFF1A:]([0-5][0-9])', '{' + thisYear + '-$1-$2 $3:$4}'] // 9月10日10時３０分
+      ],
+      
+      'en': [
+        ['([1]?[0-9]:[0-5][0-9][ap]m), Jan(?:uary)?\\.? ([0-3]?[0-9])', '{' + thisYear + '-1-$2 $1}'], // 12:30pm, Jan. 23
+        ['([1]?[0-9]:[0-5][0-9][ap]m), Feb(?:ruary)?\\.? ([0-3]?[0-9])', '{' + thisYear + '-2-$2 $1}']
+      ]
+   }
+   ```
+
+   Note the use of the `thisYear` variable. You must carefully consider how to fill in missing data so as to minimize the amount of false positives that translators will see.
+
+   Finally, a fourth filter searches for times with am or pm behind them and attempts to convert these to 24 hour clock format.
+
+  `compareDates` now scans the resulting "clean" strings for substrings in the format {YYYY-MM-DD HH:MM} or {YYYY-MM-DD} and uses the matches to create an array of Moments. Before comparing the source and target arrays though, it also performs an additional scan for substrings in the format MM/DD, which it stores away in a separate side array.
+  
+  When `compareDates` compares the Moments generated from the source text against the moments generated from the target text, if there is a Moment that does not have a match, it will look in the side arrays to see if it can find a match. In this way, numbers like 9/13 will be parsed as dates if the translator has translated them faithfully, but will otherwise be ignored since they most likely represent fractions. Any so-called "slash dates" that `compareDates` identifies will be removed from the clean strings. 
+
+  Before completing, `compareDates` stores its clean strings inside an accumulator object so that the Numbers check can use them. That way, when the Numbers check tries to compare the numbers in the source and target, it won't run into issues with dates that are expressed as numbers in the source (e.g., ６月) but words in the target ("June").
 
 10. Times
 
