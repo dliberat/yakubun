@@ -77,6 +77,11 @@ function commonSubs(string, language){
       ['\u2463','4 '],
       ['\u2464','5 '],
       ['\u2465','6 '],
+      ['\u7B2C\u4E00', '1 '], //第一
+      ['\u7B2C\u4E8C', '2 '],
+      ['\u7B2C\u4E09', '3 '],
+      ['\u7B2C\u56DB', '4 '],
+      ['\u7B2C\u4E94', '5 '],
       ['[1]?[0-9]\u6708','month']
     ],
     'en':[
@@ -101,10 +106,14 @@ function commonSubs(string, language){
       ['(\\d+)\\smillon',' $1000000 ']
     ]
   }
-
-  return general.regexReplaceAllFromArray(oSubstitutions[language], string, 'gi');
-
+  
+  if(oSubstitutions[language]){
+    return general.regexReplaceAllFromArray(oSubstitutions[language], string, 'gi');
+  } else {
+    return string;
+  }
 }
+
 
 function customSubs(source, target, checkOptions, oAccumulator){
   // additional replacements provided in checkOptions
