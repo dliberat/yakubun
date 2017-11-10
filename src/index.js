@@ -4,6 +4,7 @@ import * as checks_numbers from './libs/numbers.js';
 import { compareTimes } from './libs/time.js';
 
 import verify from './verifyOptions.js';
+import { preprocess } from './preprocess.js';
 import { 
   regexComparer,
   regexReplaceAllFromArray,
@@ -15,7 +16,8 @@ import {
 function scan(bilingualDoc, checkOptions, callback){
   // verify that all the options are OK
   checkOptions = verify(checkOptions);
-  
+  // run basic character conversions
+  bilingualDoc = preprocess(bilingualDoc);
   // return the oAccumulator value after scan is complete
   return startScan(bilingualDoc, checkOptions, callback);
 }

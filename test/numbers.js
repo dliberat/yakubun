@@ -79,6 +79,13 @@ describe('Numbers check', function(){
       var c = num.compareNumbers(a, b);
       expect(c[0]).to.equal(null);
    });
+   it('convert millions of numbers', function(){
+      var source = 'トータル飾り個数が500万個、1,500万個、2,500万個達成時の特別アイテムは、クリスマスツリーに飾りを10個以上寄付されたユーザーに限り支給されます。';
+      var target = 'The exclusive item rewards for reaching 5 million, 15 million, and 25 million decorations on the tree are only delivered to players who have put at least 10 decorations on the tree.';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
+   
    it('1度ずつ、１個ずつ、１回ずつ、and １回あたり should all match with an "each" in the target if it is English');
     
 });
