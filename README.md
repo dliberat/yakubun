@@ -238,7 +238,39 @@ Yakubun exports some of the same functions that it uses in its default tests to 
 
 |Test                                |Arguments                  |Description                       |
 |------------------------------------|---------------------------|----------------------------------|
-|`yakubun.regexComparer()`           |`source`,`target`,`sourceRegex`,`targetRegex`,`capturingGroups`|Returns an array `[sourceHits, targetHits, equivalent]`. All of the regex matches that match the source regex passed will be contained in the `sourceHits` array, and all the regex matches that match the target regex will be contained in the `targetHits` array. The third element in the return value tells you if the two arrays are exactly equal. If using a capturing group in your regexes, you must be sure to pass `true` in the final argument to this function.|
-|`yakubun.regexReplaceAllFromArray()`|                           | |
-|`yakubun.regexReturnAllMatches()`   |                           | |
-|`yakubun.compareArrays()`           |`arrayA`,`arrayB`          | |
+|`yakubun.regexComparer()`           |`source`, `target`, `sourceRegex`, `targetRegex`, `capturingGroups`|Returns an array `[sourceHits, targetHits, equivalent]`. All of the regex matches that match the source regex passed will be contained in the `sourceHits` array, and all the regex matches that match the target regex will be contained in the `targetHits` array. The third element in the return value tells you if the two arrays are exactly equal. If using a capturing group in your regexes, you must be sure to pass `true` in the final argument to this function.|
+|`yakubun.regexReplaceAllFromArray()`|`formatChangesArr`, `string`, `parameters` |`formatChangesArr` is an array of arrays. Each array inside of `formatChangesArr` consists of a regular expression string and a replacement value for the expression. Each of the arrays inside of `formatChangesArr` will be tested against `string`, and if there are matches, they will be replaced accordingly.|
+|`yakubun.regexReturnAllMatches()`   |`string`, `regex`, `accumulator arr`|Returns an array of all the matches for the given regex inside the string. If provided an array in the third argument, it will append the matches to that array. |
+|`yakubun.compareArrays()`           |`arrayA`,`arrayB`          |Returns `true` if the two arrays are identical, `false` if they are not. |
+
+## Sample usage
+
+### Replace all from array
+```
+var string = 'There is 1 February 29th every 4 years, but May 28 comes every year.';
+
+var formatChangesArr = [
+    ['January ([0-9]?[0-9])', '{2018-01-$1}'],
+    ['February ([0-9]?[0-9])', '{2018-02-$1}'],
+    ['March ([0-9]?[0-9])', '{2018-03-$1}'],
+    ['April ([0-9]?[0-9])', '{2018-04-$1}'],
+    ['May ([0-9]?[0-9])', '{2018-05-$1}']
+]
+
+var output = yakubun.regexReplaceAllFromArray(formatChangesArr, string, 'gi');
+
+// output = 'There is 1 {2018-02-29} every 4 years, but {2018-05-28} comes every year.'
+```
+
+### Compare arrays
+```
+var a = yakubun.compareArrays([1,2,3], [1,2,3]);
+var b = yakubun.compareArrays([1,2,3], [1,2]);
+var c = yakubun.compareArrays([1,2,[a,b]], [1,2,[a,b]]);
+var d = yakubun.compareArrays([1,2,[a,b]], [1,2,[a]);
+
+// a = true;
+// b = false;
+// c = true;
+// d = false;
+```
