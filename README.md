@@ -75,10 +75,10 @@ checkOptions
 |`tests`                               |_(Optional)_|_object_    |Used to disable the standard tests.|
 
 
-Tests
-=====
+Standard tests
+==============
 
-Yakubun comes equipped with a few standard tests. Some check only the target text, others perform crosschecks between the soruce and target. In order to disable one of the standard tests, or to enable the time zone dates check if you wish to use it, you can pass the relevant key with a value of `false` in the `tests` object within `checkOptions`. Custom tests can be added via the `customTests` key in the `checkOptions` object passed to the `scan` function.
+Yakubun comes equipped with a few standard tests. Some check only the target text, others perform crosschecks between the soruce and target. In order to disable one of the standard tests, or to enable the time zone dates check if you wish to use it, you can pass the relevant key with a value of `false` in the `tests` object within `checkOptions`. Custom tests can be added via the `customTests` key in `checkOptions`.
 
 1. Banned words
 
@@ -178,12 +178,67 @@ bannedWordsList = {
 
    Finally, a fourth filter searches for times with am or pm behind them and attempts to convert these to 24 hour clock format.
 
-  `compareDates` now scans the resulting "clean" strings for substrings in the format {YYYY-MM-DD HH:MM} or {YYYY-MM-DD} and uses the matches to create an array of Moments. Before comparing the source and target arrays though, it also performs an additional scan for substrings in the format MM/DD, which it stores away in a separate side array.
+   `compareDates` now scans the resulting "clean" strings for substrings in the format {YYYY-MM-DD HH:MM} or {YYYY-MM-DD} and uses the matches to create an array of Moments. Before comparing the source and target arrays though, it also performs an additional scan for substrings in the format MM/DD, which it stores away in a separate side array.
   
-  When `compareDates` compares the Moments generated from the source text against the moments generated from the target text, if there is a Moment that does not have a match, it will look in the side arrays to see if it can find a match. In this way, numbers like 9/13 will be parsed as dates if the translator has translated them faithfully, but will otherwise be ignored since they most likely represent fractions. Any so-called "slash dates" that `compareDates` identifies will be removed from the clean strings. 
+   When `compareDates` compares the Moments generated from the source text against the moments generated from the target text, if there is a Moment that does not have a match, it will look in the side arrays to see if it can find a match. In this way, numbers like 9/13 will be parsed as dates if the translator has translated them faithfully, but will otherwise be ignored since they most likely represent fractions. Any so-called "slash dates" that `compareDates` identifies will be removed from the clean strings. 
 
-  Before completing, `compareDates` stores its clean strings inside an accumulator object so that the Numbers check can use them. That way, when the Numbers check tries to compare the numbers in the source and target, it won't run into issues with dates that are expressed as numbers in the source (e.g., ６月) but words in the target ("June").
+   Before completing, `compareDates` stores its clean strings inside an accumulator object so that the Numbers check can use them. That way, when the Numbers check tries to compare the numbers in the source and target, it won't run into issues with dates that are expressed as numbers in the source (e.g., ６月) but words in the target ("June").
 
 10. Times
 
 11. Numbers
+
+Custom tests
+============
+
+You can define your own custom tests to be run on each segment of your bilingual document as follows:
+
+```
+checkOptions = {
+    customTests: [
+        ['myFirstTest', function(source, target, checkOptions, accumulator){ }],
+        ['mySecondTest', function(source, target, checkOptions, accumulator){ }],
+    ]
+}
+```
+
+`customTests` must be an array of [_string_, _function_]. Each function will get called for each translation with the source text, target text, your checkOptions, and an accumulator object as parameters. The accumulator object is used to pass data along from segment to segment. You can use it, for example, to ensure that if a certain source text has already appeared once in the text, that it will always have the same translation.
+
+```
+function customTest(source, target, checkOptions, accumulator){
+    var retval = null;
+
+    // create a tracker if it doesn't already exist
+    if(!accumulator.hasOwnProperty('tracker')){
+        accumulator.tracker = {};
+    }
+
+    // create an entry for the current source text if it doesn't exist
+    if(!accumulator.tracker.hasOwnProperty(source)){
+        accumulator.tracker[source] = target;
+    
+    // if the entry exists, confirm that the target text is the same
+    } else if(accumulator.tracker[source] != target){
+            retval = 'Same source but different targets: ';
+            retval += accumulator.tracker[source] + ' <> ';
+            retval += target;
+    }
+  }
+  
+  return [retval, accumulator];
+}
+```
+
+Pay special attention to the return value of the custom function. It must be an array. The first element of the array should be `null` if the segment passed the check. Otherwise, it should be a string that will get passed to your callback function for displaying the check results. The second element in the array should be the accumulator object, so that it can be passed ahead to the next test.
+
+Crosscheck Functions
+--------------------
+
+Yakubun exports some of the same functions that it uses in its default tests to help you create your own custom tests.
+
+|Test                                |Arguments                  |Description                       |
+|------------------------------------|---------------------------|----------------------------------|
+|`yakubun.regexComparer()`           |`source`,`target`,`sourceRegex`,`targetRegex`,`capturingGroups`|Returns an array `[sourceHits, targetHits, equivalent]`. All of the regex matches that match the source regex passed will be contained in the `sourceHits` array, and all the regex matches that match the target regex will be contained in the `targetHits` array. The third element in the return value tells you if the two arrays are exactly equal. If using a capturing group in your regexes, you must be sure to pass `true` in the final argument to this function.|
+|`yakubun.regexReplaceAllFromArray()`|                           | |
+|`yakubun.regexReturnAllMatches()`   |                           | |
+|`yakubun.compareArrays()`           |`arrayA`,`arrayB`          | |
