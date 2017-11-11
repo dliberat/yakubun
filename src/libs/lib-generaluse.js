@@ -1,4 +1,8 @@
-function regexComparer(source, target, sourceRegex, targetRegex, capturingGroups){
+function regexComparer(source,
+                      target,
+                      sourceRegex,
+                      targetRegex,
+                      capturingGroups){
   // if we are looking for a captured group, then we need to set this to one
   // otherwise, we simply return the first match (which is the whole match)
   capturingGroups = capturingGroups ? 1 : 0;
@@ -6,10 +10,13 @@ function regexComparer(source, target, sourceRegex, targetRegex, capturingGroups
   // perform the RegExp.exec to get the matches
   // .map discards all the metadata and only leaves the matches
   // .sort puts the arrays in order so they can be compared
-  var sourceHits = regexReturnAllMatches(source, sourceRegex).map(function(x){ return x[capturingGroups]; }).sort();
-  var targetHits = regexReturnAllMatches(target, targetRegex).map(function(x){ return x[capturingGroups]; }).sort();
+  var sourceHits = regexReturnAllMatches(source, sourceRegex)
+                    .map(function(x){ return x[capturingGroups]; }).sort();
+  var targetHits = regexReturnAllMatches(target, targetRegex)
+                    .map(function(x){ return x[capturingGroups]; }).sort();
 
-  return [sourceHits, targetHits];
+  var equiv = compareArrays(sourceHits, targetHits);
+  return [sourceHits, targetHits, equiv];
 }
 
 function regexReturnAllMatches(str, regex, accumulatorArr){
