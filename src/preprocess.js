@@ -18,4 +18,4 @@ function fullWidthToHalf(string){
     return string.replace(/[\uff01-\uff5e]/g, replacer);
 }
 
-export { preprocess }
+export default preprocess;

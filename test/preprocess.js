@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const mod = require('../src/preprocess.js');
+import preprocess from '../src/preprocess.js';
 
 describe('Preprocessing bilingualDoc', function(){
     it('convert ０１２３４５６７８９ to 0123456789', function(){
@@ -8,7 +8,7 @@ describe('Preprocessing bilingualDoc', function(){
                 source: '０１２３４５６７８９'
             }
         };
-        var res = mod.preprocess(fDoc);
+        var res = preprocess(fDoc);
         expect(res['0'].source).to.equal('0123456789');
     });
 })

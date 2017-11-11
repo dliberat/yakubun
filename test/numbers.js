@@ -85,7 +85,12 @@ describe('Numbers check', function(){
       var res = num.compareNumbers(source, target);
       expect(res[0]).to.equal(null);
    });
-   
+   it('detect ① as 1', function(){
+      var source = '①';
+      var target = '';
+      var res = num.compareNumbers(source, target);
+      expect(res[0]).to.equal('Found <span class="text-warning">1</span> in source and <span class="text-warning">nothing</span> in target.');
+   });
    it('1度ずつ、１個ずつ、１回ずつ、and １回あたり should all match with an "each" in the target if it is English');
     
 });

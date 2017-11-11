@@ -15,29 +15,41 @@ var standardTests = [
     ['dates',checksDateTime.compareDates],
     ['times', compareTimes],
     ['numbers', checks_numbers.compareNumbers]
-]
-
-var tests = []
+];
 
 function getTests(checkOptions){
-    // check to make sure the standard tests have not been disabled
-    if(checkOptions.hasOwnProperty('tests')){
-        for(var i = 0; i < standardTests.length; i++){
-            if(checkOptions.tests[standardTests[i][0]] !== false){
-                tests.push(standardTests[i]);
-                }
-            }
+    
+    var standard = checkOptions.tests || {};
+    var custom = checkOptions.customTests || {};
+    
+    if(standard.tzDates === true){
+        // disable regular dates check
+        standard.dates = false;
+    } else {
+        // disable tzDates by default
+        standard.tzDates = false;
     }
+
+    return buildArr(standard, custom);
+}
+
+function buildArr(standard, custom){
+    
+    var tests = []
+ 
+    // check to make sure the standard tests have not been disabled
+    for(var i = 0; i < standardTests.length; i++){
+        if(standard[standardTests[i][0]] !== false){
+            tests.push(standardTests[i]);
+            }
+        }
   
     // add in user-defined tests
-    if(checkOptions.hasOwnProperty('customTests')){
-        var customTests = checkOptions.customTests || [];
-        for(var i = 0; i < customTests.length; i++){
-        tests.push(customTests[i]);
-        }
+    for(var i = 0; i < custom.length; i++){
+    tests.push(custom[i]);
     }
     
-    return tests;
+    return tests;   
 }
 
 export default getTests;

@@ -2,7 +2,7 @@
 
 import verify from './verifyOptions.js';
 import getTests from './getTests.js';
-import { preprocess } from './preprocess.js';
+import preprocess from './preprocess.js';
 import { 
   regexComparer,
   regexReplaceAllFromArray,
