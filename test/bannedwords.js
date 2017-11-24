@@ -18,7 +18,7 @@ describe('Search for banned words.', function(){
         var list = {
             bannedWordsList: {
                 'CaseInsensitive': ['sexy'],
-                'CaseSensitive': ['diamond']
+                'CaseSensitive': ['diamond', '(?!^)(Character) (?!Booster)']
                 }
             }
        
@@ -32,6 +32,15 @@ describe('Search for banned words.', function(){
         var target = 'Check out that cool diamond!';
         var casesens = langchecks.findBannedWords('', target, list, undefined);
         expect(casesens[0]).to.equal('Suspicious terminology: <span class="text-warning">diamond</span>');
+       });
+       
+       it('Handles grouping', function(){
+           var target = 'Flag Character.';
+           var targRes = langchecks.findBannedWords('', target, list, undefined);
+           var targ = 'Character should not be flagged.';
+           var t = 'Also. Character should not be flagged.';
+           
+           expect(targRes[0]).to.equal('Suspicious terminology: <span class="text-warning">Character</span>');
        });
    });
    

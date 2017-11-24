@@ -96,7 +96,6 @@ function compareArrays(arr1, arr2) {
     return true;
 }
 
-
 function metalogger(string){
 
 }

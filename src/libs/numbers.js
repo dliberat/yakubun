@@ -82,7 +82,8 @@ function commonSubs(string, language){
       ['\u7B2C\u4E09', '3 '],
       ['\u7B2C\u56DB', '4 '],
       ['\u7B2C\u4E94', '5 '],
-      ['[1]?[0-9]\u6708','month']
+      ['[1]?[0-9]\u6708','month'],
+      ['\u5343\u8F09\u4E00\u9047', '']
     ],
     'en':[
       ['POP\\s?2', 'POP'],
@@ -114,8 +115,8 @@ function commonSubs(string, language){
   }
 }
 
-
 function customSubs(source, target, checkOptions, oAccumulator){
+  
   // additional replacements provided in checkOptions
   if(checkOptions.numIgnoreSource) source = subber(source, checkOptions.numIgnoreSource);
   if(checkOptions.numIgnoreTarget) target = subber(target, checkOptions.numIgnoreTarget);

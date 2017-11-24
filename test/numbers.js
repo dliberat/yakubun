@@ -91,6 +91,17 @@ describe('Numbers check', function(){
       var res = num.compareNumbers(source, target);
       expect(res[0]).to.equal('Found <span class="text-warning">1</span> in source and <span class="text-warning">nothing</span> in target.');
    });
+   it('-[Sクラス]模倣設計図面(1級建築) should not be flagged when passed into the numIgnoreSource object', function(){
+      var options = {
+         numIgnoreSource: [
+               ["\u6A21\u5023\u8A2D\u8A08\u56F3\u9762\x28\x31\u7D1A\u5EFA\u7BC9\x29", " "]
+            ]
+      }
+      var source = '-[Sクラス]模倣設計図面(1級建築)';
+      var target = 'Master Architect\'s Opus';
+      var res = num.compareNumbers(source, target, options);
+      expect(res[0]).to.equal(null);
+   });
    it('1度ずつ、１個ずつ、１回ずつ、and １回あたり should all match with an "each" in the target if it is English');
     
 });

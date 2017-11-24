@@ -18,7 +18,7 @@ var standardTests = [
 ];
 
 function getTests(checkOptions){
-    
+
     var standard = checkOptions.tests || {};
     var custom = checkOptions.customTests || {};
     
@@ -46,7 +46,8 @@ function buildArr(standard, custom){
   
     // add in user-defined tests
     for(var i = 0; i < custom.length; i++){
-    tests.push(custom[i]);
+        if(typeof custom[i][0] == 'string' &&
+        typeof custom[i][1] == 'function') tests.push(custom[i]);
     }
     
     return tests;   

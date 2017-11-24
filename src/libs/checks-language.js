@@ -18,8 +18,7 @@ function findBannedWords(source, target, checkOptions, oAccumulator)
   return [retval, oAccumulator];
 }
 
-function scanForBannedWords(str, wordsArr, caseSensitive, accumulatorArr)
-{
+function scanForBannedWords(str, wordsArr, caseSensitive, accumulatorArr){
   // takes an array of banned words and returns an array
   // of which of those were found in the string provided
 
