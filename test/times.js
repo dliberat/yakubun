@@ -1,4 +1,5 @@
 const expect = require('chai').expect;
+const dateMod = require('../src/libs/checks-datetime.js');
 const mod = require('../src/libs/time.js');
 
 describe('compareTimes', function(){
@@ -34,10 +35,4 @@ describe('compareTimes', function(){
         expect(res[1].timeCheck_clean_source).to.equal('私は毎日{22:30}に寝る。');
         expect(res[1].timeCheck_clean_target).to.equal('I go to bed at {22:30} every night.');
     });
-    it('recognize 0時 and 12am as equivalent', function(){
-        var source = 'イベントミッションは毎日0時に更新されます。';
-        var target = 'Event missions will be updated at 12am each day (GMT+9).';
-        var res = mod.compareTimes(source, target);
-        expect(res[0]).to.equal(null);
-    })
 })

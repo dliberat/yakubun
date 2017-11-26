@@ -34,7 +34,7 @@ function compareDates(source, target, checkOptions, oAccumulator){
 
   // convert to sorted moment array
   var momentArr = convertToMomentArr(comparison);
-  var compare = general.compareArrays(momentArr[0], momentArr[1]);
+  compare = general.compareArrays(momentArr[0], momentArr[1]);
 
   // compare moment arrays. If they don't match, search in the side array
   if(!compare)

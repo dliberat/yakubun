@@ -25,7 +25,7 @@ function regexReturnAllMatches(str, regex, accumulatorArr){
   // matches pushed on at the end.
   var accumulatorArr = accumulatorArr || [];
   do  { var m = regex.exec(str);
-        if (m) { accumulatorArr.push(m); }
+        if (m) {accumulatorArr.push(m); }
       } while (m);
   return accumulatorArr;
 }

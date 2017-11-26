@@ -5,6 +5,7 @@ describe('getTests', function(){
     var def = getTests({});
     it('return an array of functions', function(){
         for (var i = 0; i < def.length; i++){
+            console.log(def[i][0]);
             expect(def[i][1]).to.be.a('function');
         }
     });

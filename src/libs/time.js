@@ -21,6 +21,7 @@ function compareTimes(source, target, checkOptions, oAccumulator){
 function clean(source, target, oAccumulator){
   
   // replace all double-byte numbers with single byte versions
+  // TODO: This is probably not necessary since it's done at the beginning
   source = general.replaceDoubleByteNums(source);
   
   // replace kanji times with standard numerical times

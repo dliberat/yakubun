@@ -1,10 +1,11 @@
 import * as checks_lang from './libs/checks-language.js';
+import * as bannedWords from './libs/bannedWords.js';
 import * as checksDateTime from './libs/checks-datetime.js';
 import * as checks_numbers from './libs/numbers.js';
 import { compareTimes } from './libs/time.js';
 
 var standardTests = [
-    ['bannedWords', checks_lang.findBannedWords],
+    ['bannedWords', bannedWords.find],
     ['doubleSpaces', checks_lang.findDoubleSpaces],
     ['zenkakuCharacters', checks_lang.findJPCharacters],
     ['repeatedWords', checks_lang.findRepeatedWords],
