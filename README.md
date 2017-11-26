@@ -78,7 +78,7 @@ checkOptions
 Standard tests
 ==============
 
-Yakubun comes equipped with a few standard tests. Some check only the target text, others perform crosschecks between the soruce and target. In order to disable one of the standard tests, or to enable the time zone dates check if you wish to use it, you can pass the relevant key with a value of `false` in the `tests` object within `checkOptions`. Custom tests can be added via the `customTests` key in `checkOptions`.
+Yakubun comes equipped with a few standard tests. Some check only the target text, others perform crosschecks between the source and target. In order to disable one of the standard tests, or to enable the time zone dates check if you wish to use it, you can pass the relevant key with a value of `false` in the `tests` object within `checkOptions`. Custom tests can be added via the `customTests` key in `checkOptions`.
 
 1. Banned words (`bannedWords`)
 
@@ -108,6 +108,8 @@ bannedWordsList = {
 6. Bullet spaces (`bulletSpaces`)
 
    When using a bullet point to start a segment (or after a newline denoted by "\n"), it checks to make sure that a space exists between the bullet point and whatever text follows it. Recognized bullet points are dashes (-), katakana middle dots (・), black squares (■), and black down-pointing triangles (▼).
+   
+   Additional bullets can be added in the `customBullets` key of the `checkOptions`. `customBullets` should be a string containing all the bullets that you wish to add to the check. All bullets must occupy a single unicode code point.
 
 7. Oxford commas
 
