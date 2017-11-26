@@ -1,5 +1,6 @@
 import * as checks_lang from './libs/checks-language.js';
 import * as bannedWords from './libs/bannedWords.js';
+import ordinalNumbers from './libs/ordinalNumbers.js';
 import * as checksDateTime from './libs/checks-datetime.js';
 import * as checks_numbers from './libs/numbers.js';
 import { compareTimes } from './libs/time.js';
@@ -9,6 +10,7 @@ var standardTests = [
     ['doubleSpaces', checks_lang.findDoubleSpaces],
     ['zenkakuCharacters', checks_lang.findJPCharacters],
     ['repeatedWords', checks_lang.findRepeatedWords],
+    ['ordinalNumbers', ordinalNumbers],
     ['bulletSpaces', checks_lang.findBulletsWithNoSpaces],
     ['oxfordCommas', checks_lang.detectOxfordCommas],
     ['numberedBullets', checks_lang.trackNumberedBullets],
