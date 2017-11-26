@@ -80,7 +80,7 @@ Standard tests
 
 Yakubun comes equipped with a few standard tests. Some check only the target text, others perform crosschecks between the soruce and target. In order to disable one of the standard tests, or to enable the time zone dates check if you wish to use it, you can pass the relevant key with a value of `false` in the `tests` object within `checkOptions`. Custom tests can be added via the `customTests` key in `checkOptions`.
 
-1. Banned words
+1. Banned words (`bannedWords`)
 
    If a list of banned words is included in the `checkOptions`, Yakubun checks to make sure none of them are included in the target text.
 ```
@@ -89,27 +89,31 @@ bannedWordsList = {
  "CaseSensitive": ['These','woRds']
 }
 ```
-2. Double spaces
+2. Double spaces (`doubleSpaces`)
 
    Checks to make sure that no double spaces have remained in the target text.
 
-3. Zenkaku characters
+3. Zenkaku characters (`zenkakuCharacters`)
 
    Checks for the presence of the following full-width characters: （,）,：,！, and a full-width space. Additional full-width characters can be specified in `bannedWordsList` if necessary.
 
-4. Repeated words
+4. Repeated words (`repeatedWords`)
 
    Checks for for repeated words in the target text. Includes exceptions for "bye", "hee", "heh", "ha", "woo", and "boo".
 
-5. Bullet spaces
+5. Ordinal numbers (`ordinalNumbers`)
+
+   This test currently only works with English as the target language. It looks for Arabic numerals followed by one or two letters (e.g., 1st, 2nd, 3rd) and expects that they follow the standard spelling, such that things like 1nd, 4rd, 251nd will be flagged.
+
+6. Bullet spaces (`bulletSpaces`)
 
    When using a bullet point to start a segment (or after a newline denoted by "\n"), it checks to make sure that a space exists between the bullet point and whatever text follows it. Recognized bullet points are dashes (-), katakana middle dots (・), black squares (■), and black down-pointing triangles (▼).
 
-6. Oxford commas
+7. Oxford commas
 
    If `requireOxfordComma` is set to true (or left to its default), Yakubun will try to ensure that comma-separated lists of items ending in an "and", "or", or "and/or" include an Oxford comma. If `requireOxfordComma` is set to false, it will do the opposite.
 
-7. Numbered bullets
+8. Numbered bullets
 
    By default, Yakubun expects that bulleted (unordered) lists will have a space between the bullet and the following text.
    
@@ -137,11 +141,11 @@ bannedWordsList = {
    }
    ```
    
-8. Time zone dates
+9. Time zone dates
 
    This is the least-tested module in the library. It extracts dates and times from your source and target texts based on a series of regular expressions that you pass in the `checkOptions` object. Fundamentally, it works in the same way as the regular dates check, except it requires that all dates in the `{2018-3-21 14:00}` format include times. Dates without times will not be parsed by this check. You can also pass information about which time zone your target text is in (defaults to America/Los_Angeles), and then Yakubun uses the Moment Timezone library to check whether or not the source text date (in the source text time zone, usually Asia/Tokyo) is equivalent to the target date in the target time zone.
 
-9. Dates
+10. Dates
 
    The `compareDates` (and `compareDatesTz`) function sends your source and target texts through a variety of filters to convert any dates that appear in your text into the following format {YYYY-MM-DD HH:MM}. If no time information is available, `compareDates` works equally well with {YYYY-MM-DD}, although `compareDatesTz` does not.
    The first filter converts any double-byte numbers such as １,２, or ３ into their single-byte equivalents, 1, 2, and 3.
@@ -184,9 +188,13 @@ bannedWordsList = {
 
    Before completing, `compareDates` stores its clean strings inside an accumulator object so that the Numbers check can use them. That way, when the Numbers check tries to compare the numbers in the source and target, it won't run into issues with dates that are expressed as numbers in the source (e.g., ６月) but words in the target ("June").
 
-10. Times
+11. Times
 
-11. Numbers
+   Details coming soon.
+
+12. Numbers
+
+   Details coming soon.
 
 Custom tests
 ============
