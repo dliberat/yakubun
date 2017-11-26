@@ -107,16 +107,6 @@ bannedWordsList = {
 
 6. Bullet spaces (`bulletSpaces`)
 
-   When using a bullet point to start a segment (or after a newline denoted by "\n"), it checks to make sure that a space exists between the bullet point and whatever text follows it. Recognized bullet points are dashes (-), katakana middle dots (・), black squares (■), and black down-pointing triangles (▼).
-   
-   Additional bullets can be added in the `customBullets` key of the `checkOptions`. `customBullets` should be a string containing all the bullets that you wish to add to the check. All bullets must occupy a single unicode code point.
-
-7. Oxford commas
-
-   If `requireOxfordComma` is set to true (or left to its default), Yakubun will try to ensure that comma-separated lists of items ending in an "and", "or", or "and/or" include an Oxford comma. If `requireOxfordComma` is set to false, it will do the opposite.
-
-8. Numbered bullets
-
    By default, Yakubun expects that bulleted (unordered) lists will have a space between the bullet and the following text.
    
    ```
@@ -142,7 +132,45 @@ bannedWordsList = {
        customBullets: '>\*'
    }
    ```
+
+7. Oxford commas
+
+   If `requireOxfordComma` is set to true (or left to its default), Yakubun will try to ensure that comma-separated lists of items ending in an "and", "or", or "and/or" include an Oxford comma. If `requireOxfordComma` is set to false, it will do the opposite.
+
+8. Numbered bullets
+
+   Yakubun scans your target segments for instances of Arabic numerals followed by either a period or a closing bracket, indicating an ordered list.
    
+   ```
+   Groceries
+   1) Apples
+   2) Bananas
+   3) Milk
+   5) Cheese
+   ```
+   
+   If Yakubun encounters an unexpected number in the sequence (such as the 5 in the example above), it will flag it as a potential error.
+   
+   Since Yakubun treats bracket sequences and period sequences separately, it should not flag lists with sublists inside of them, but it will flag lists with inconsistent punctuation.
+   
+   ```
+   1) Groceries
+      1. Apples
+      2. Bananas
+   2) Emails to write
+      1. Bob
+      2. Jenna
+      3. Timmy
+   // function returns NULL (no error detected)
+   
+   Favorite captains
+   1. Picard
+   2. Kirk
+   3) Sisko
+   4. Janeway
+   // function returns 'Suspected error in numbered list (# sequence or punctuation).'
+   ```
+
 9. Time zone dates
 
    This is the least-tested module in the library. It extracts dates and times from your source and target texts based on a series of regular expressions that you pass in the `checkOptions` object. Fundamentally, it works in the same way as the regular dates check, except it requires that all dates in the `{2018-3-21 14:00}` format include times. Dates without times will not be parsed by this check. You can also pass information about which time zone your target text is in (defaults to America/Los_Angeles), and then Yakubun uses the Moment Timezone library to check whether or not the source text date (in the source text time zone, usually Asia/Tokyo) is equivalent to the target date in the target time zone.
