@@ -1,14 +1,4 @@
-import * as general from './lib-generaluse.js';
-
-function findDoubleSpaces(source, target, checkOptions, oAccumulator) {
-  let retval = null;
-  const reg = new RegExp(' {2}', 'g');
-  if (reg.test(target)) {
-    retval = 'Check for double spaces.';
-  }
-
-  return [retval, oAccumulator];
-}
+import * as general from './lib-generaluse';
 
 function findJPCharacters(source, target, checkOptions, oAccumulator) {
   // finds double-byte brackets, colons, or spaces.
@@ -35,20 +25,6 @@ function findJPCharacters(source, target, checkOptions, oAccumulator) {
   return [retval, oAccumulator];
 }
 
-function findRepeatedWords(source, target, checkOptions, oAccumulator) {
-  const exceptions = ['tsum', 'bye', 'hee', 'heh', 'ha', 'woo', 'boo']; // words that are allowed to repeat
-
-  target = target.toLowerCase();
-
-  // split into an array and filter only if there are multiple consecutive elements
-  const stringArr = target.split(' ').filter((element, index, arr) => element == arr[index - 1] && element !== '' && exceptions.indexOf(element) == -1);
-
-  let retval = null;
-  if (stringArr.length > 0) { retval = `Repeated words: ${stringArr.join(', ')}`; }
-
-  return [retval, oAccumulator];
-}
-
 function findBulletsWithNoSpaces(source, target, checkOptions, oAccumulator) {
   let retval = null;
   let reg;
@@ -67,30 +43,6 @@ function findBulletsWithNoSpaces(source, target, checkOptions, oAccumulator) {
     retval = 'Make sure there are spaces after bullet points.';
   }
 
-  return [retval, oAccumulator];
-}
-
-function detectOxfordCommas(source, target, checkOptions, oAccumulator) {
-  let retval = null;
-  let re,
-    msg,
-    requireOxfordComma;
-
-  if (checkOptions.requireOxfordComma === false) {
-    requireOxfordComma = false;
-  } else {
-    requireOxfordComma = true;
-  }
-
-  if (requireOxfordComma) {
-    re = new RegExp('([a-z]+)((?:,\\s[a-z]+)+)\\s+(and|or|and\\/or)\\s+([a-z]+)', 'gi');
-    msg = 'Possibly missing an Oxford comma.';
-  } else {
-    re = new RegExp('([a-z]+)((?:,\\s[a-z]+)+),\\s+(and|or|and\\/or)\\s+([a-z]+)', 'gi');
-    msg = 'Oxford comma detected.';
-  }
-
-  if (re.test(target)) { retval = msg; }
   return [retval, oAccumulator];
 }
 
@@ -166,10 +118,7 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
 }
 
 export {
-  findDoubleSpaces,
   findJPCharacters,
-  findRepeatedWords,
   findBulletsWithNoSpaces,
-  detectOxfordCommas,
   trackNumberedBullets,
 };

@@ -1,23 +1,26 @@
 import * as checksLang from './libs/checks-language';
+import findDoubleSpaces from './libs/doublespaces';
+import findRepeatedWords from './libs/repeatedwords';
+import detectOxfordCommas from './libs/oxfordcomma';
 import * as checksBannedWords from './libs/bannedWords';
 import ordinalNumbers from './libs/ordinalNumbers';
 import * as checksDateTime from './libs/checks-datetime';
-import * as checksNumbers from './libs/numbers';
+import compareNumbers from './libs/numbers';
 import { compareTimes } from './libs/time';
 
 const standardTests = [
   ['bannedWords', checksBannedWords.find],
-  ['doubleSpaces', checksLang.findDoubleSpaces],
+  ['doubleSpaces', findDoubleSpaces],
   ['zenkakuCharacters', checksLang.findJPCharacters],
-  ['repeatedWords', checksLang.findRepeatedWords],
+  ['repeatedWords', findRepeatedWords],
   ['ordinalNumbers', ordinalNumbers],
   ['bulletSpaces', checksLang.findBulletsWithNoSpaces],
-  ['oxfordCommas', checksLang.detectOxfordCommas],
+  ['oxfordCommas', detectOxfordCommas],
   ['numberedBullets', checksLang.trackNumberedBullets],
   ['tzDates', checksDateTime.compareDatesTz],
   ['dates', checksDateTime.compareDates],
   ['times', compareTimes],
-  ['numbers', checksNumbers.compareNumbers],
+  ['numbers', compareNumbers],
 ];
 
 function buildArr(standard, custom) {

@@ -1,8 +1,10 @@
-import * as general from './lib-generaluse.js';
+import * as general from './lib-generaluse';
 
 const moment = require('moment-timezone');
 
-function compareDates(source, target, checkOptions, oAccumulator) {
+function compareDates(source, target, checkOptions, accumulator) {
+  const oAccumulator = accumulator;
+  
   if (!verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
@@ -11,13 +13,13 @@ function compareDates(source, target, checkOptions, oAccumulator) {
   }
 
   // source goes in [0], target goes in [1]
-  const cleanStrings = cleanStringsBeforeDateCheck(source, target, checkOptions);
-  oAccumulator.timeCheck_clean_source = cleanStrings[0];
-  oAccumulator.timeCheck_clean_target = cleanStrings[1];
+  const [cleanSource, cleanTarget] = cleanStringsBeforeDateCheck(source, target, checkOptions);
+  oAccumulator.timeCheck_clean_source = cleanSource;
+  oAccumulator.timeCheck_clean_target = cleanTarget;
 
   // extract dates {2017-9-21} and {2017-9-21 12:00} and {2017-09-30 11:00am}
   let datesRegExp = new RegExp('{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9]}|{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9][ap]?[m]?}', 'gi');
-  let comparison = general.regexComparer(cleanStrings[0], cleanStrings[1], datesRegExp, datesRegExp, false);
+  let comparison = general.regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
   let compare = general.compareArrays(comparison[0], comparison[1]);
 
   // return if the comparison matches exactly, since no further checking is necessary
@@ -27,7 +29,7 @@ function compareDates(source, target, checkOptions, oAccumulator) {
 
   // extract dates with 9/21 format and leave them in a side array
   datesRegExp = new RegExp('[0-1]?[0-9]\/[0-3]?[0-9]', 'gi');
-  const potentialSlashDates = general.regexComparer(cleanStrings[0], cleanStrings[1], datesRegExp, datesRegExp, false);
+  const potentialSlashDates = general.regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
 
   // Turn all dates and times into two-digits so as to be ISO compliant
   comparison = convertToTwoDigitDates(comparison);
@@ -86,7 +88,7 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   // and check if a matching date exists in momentArray[1] which is
   // an array of the target language dates
 
-  for (let i = momentArr[0].length - 1; i >= 0; i--) {
+  for (let i = momentArr[0].length - 1; i >= 0; i -= 1) {
     for (let j = 0; j < momentArr[1].length; j++) {
       if (momentArr[0][i].isSame(momentArr[1][j])) {
         // remove the moments from the arrays

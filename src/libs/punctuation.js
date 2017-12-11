@@ -4,7 +4,7 @@ function quotationMarks(source, target, checkOptions, oAccumulator) {
   let caution = 'Periods should precede quotation marks.';
 
   // style is american by default
-  if (checkOptions.quotationMarks == 'UK') {
+  if (checkOptions.quotationMarks === 'UK') {
     searchTerm = '."';
     caution = 'Quotation marks should precede periods.';
   }
