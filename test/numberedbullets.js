@@ -35,11 +35,14 @@ describe('Ordered list tracker', function(){
               expect(res[1]).to.deep.include({ trackNumberedBullets: { period: ['1'], bracket: ['1', '2', '3']}});
            });
            it('1) Multiple. 2) Items. 3) On a single. 4) Line.', function(){
+               // TODO: Is this really intended behavior? The following should not be captured:
+               // Collect 4 A Class Battery (Lv. 1) Pendants and you can exchange them for an A Class Battery (Lv. 2).
+               
               var target =  '1) Multiple. 2) Items. 3) On a single. 4) Line';
               var res = langchecks.trackNumberedBullets('', target, options, accumulatorEmpty);
               expect(res[1]).to.deep.include({ trackNumberedBullets: { period: [], bracket: ['1','2', '3', '4']}});
            });
-           it('1. Multiple\\n2.Points separated\\n3. by line breaks')
+           it('1. Multiple\\n2.Points separated\\n3. by line breaks');
        });
        
        describe('Reset tracker after a break in the list', function(){

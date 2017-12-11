@@ -1,59 +1,57 @@
-import * as checks_lang from './libs/checks-language.js';
-import * as bannedWords from './libs/bannedWords.js';
-import ordinalNumbers from './libs/ordinalNumbers.js';
-import * as checksDateTime from './libs/checks-datetime.js';
-import * as checks_numbers from './libs/numbers.js';
-import { compareTimes } from './libs/time.js';
+import * as checksLang from './libs/checks-language';
+import * as checksBannedWords from './libs/bannedWords';
+import ordinalNumbers from './libs/ordinalNumbers';
+import * as checksDateTime from './libs/checks-datetime';
+import * as checksNumbers from './libs/numbers';
+import { compareTimes } from './libs/time';
 
-var standardTests = [
-    ['bannedWords', bannedWords.find],
-    ['doubleSpaces', checks_lang.findDoubleSpaces],
-    ['zenkakuCharacters', checks_lang.findJPCharacters],
-    ['repeatedWords', checks_lang.findRepeatedWords],
-    ['ordinalNumbers', ordinalNumbers],
-    ['bulletSpaces', checks_lang.findBulletsWithNoSpaces],
-    ['oxfordCommas', checks_lang.detectOxfordCommas],
-    ['numberedBullets', checks_lang.trackNumberedBullets],
-    ['tzDates', checksDateTime.compareDatesTz],
-    ['dates',checksDateTime.compareDates],
-    ['times', compareTimes],
-    ['numbers', checks_numbers.compareNumbers]
+const standardTests = [
+  ['bannedWords', checksBannedWords.find],
+  ['doubleSpaces', checksLang.findDoubleSpaces],
+  ['zenkakuCharacters', checksLang.findJPCharacters],
+  ['repeatedWords', checksLang.findRepeatedWords],
+  ['ordinalNumbers', ordinalNumbers],
+  ['bulletSpaces', checksLang.findBulletsWithNoSpaces],
+  ['oxfordCommas', checksLang.detectOxfordCommas],
+  ['numberedBullets', checksLang.trackNumberedBullets],
+  ['tzDates', checksDateTime.compareDatesTz],
+  ['dates', checksDateTime.compareDates],
+  ['times', compareTimes],
+  ['numbers', checksNumbers.compareNumbers],
 ];
 
-function getTests(checkOptions){
+function buildArr(standard, custom) {
+  const tests = [];
 
-    var standard = checkOptions.tests || {};
-    var custom = checkOptions.customTests || {};
-    
-    if(standard.tzDates === true){
-        // disable regular dates check
-        standard.dates = false;
-    } else {
-        // disable tzDates by default
-        standard.tzDates = false;
+  // check to make sure the standard tests have not been disabled
+  for (let i = 0; i < standardTests.length; i += 1) {
+    if (standard[standardTests[i][0]] !== false) {
+      tests.push(standardTests[i]);
     }
+  }
 
-    return buildArr(standard, custom);
+  // add in user-defined tests
+  for (let i = 0; i < custom.length; i += 1) {
+    if (typeof custom[i][0] === 'string' &&
+        typeof custom[i][1] === 'function') tests.push(custom[i]);
+  }
+
+  return tests;
 }
 
-function buildArr(standard, custom){
-    
-    var tests = []
- 
-    // check to make sure the standard tests have not been disabled
-    for(var i = 0; i < standardTests.length; i++){
-        if(standard[standardTests[i][0]] !== false){
-            tests.push(standardTests[i]);
-            }
-        }
-  
-    // add in user-defined tests
-    for(var i = 0; i < custom.length; i++){
-        if(typeof custom[i][0] == 'string' &&
-        typeof custom[i][1] == 'function') tests.push(custom[i]);
-    }
-    
-    return tests;   
+function getTests(checkOptions) {
+  const standard = checkOptions.tests || {};
+  const custom = checkOptions.customTests || {};
+
+  if (standard.tzDates === true) {
+    // disable regular dates check
+    standard.dates = false;
+  } else {
+    // disable tzDates by default
+    standard.tzDates = false;
+  }
+
+  return buildArr(standard, custom);
 }
 
 export default getTests;
