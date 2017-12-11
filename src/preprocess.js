@@ -1,3 +1,6 @@
+/* Convert all double-byte numbers in the source text
+to single-byte numbers. */
+
 function replacer(ch) {
   return String.fromCharCode(ch.charCodeAt(0) - 0xfee0);
 }
@@ -7,11 +10,10 @@ function fullWidthToHalf(string) {
 }
 
 function preprocess(doc) {
-  for (const property in doc) {
-    if (doc.hasOwnProperty(property)) {
-      doc[property].source = fullWidthToHalf(doc[property].source);
-    }
-  }
+  const keys = Object.keys(doc);
+  keys.forEach((element) => {
+    doc[element].source = fullWidthToHalf(doc[element].source);
+  });
 
   return doc;
 }
