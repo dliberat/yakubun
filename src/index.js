@@ -11,43 +11,51 @@ import {
 } from './libs/lib-generaluse';
 
 function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
+  let accumulator = oAccumulator;
   const oResults = {};
 
   // run each of the functions in oAccumulator
   // store the results of that function in the oResults object
   // and keep any metadata they send back through the second parameter in oAccumulator
-  for (let i = 0; i < oAccumulator.tests.length; i += 1) {
-    const testName = oAccumulator.tests[i][0];
-    const test = oAccumulator.tests[i][1];
-    const res = test(source, target, checkOptions, oAccumulator);
-    oResults[testName] = res[0];
-    oAccumulator = res[1];
+  for (let i = 0; i < accumulator.tests.length; i += 1) {
+    const testName = accumulator.tests[i][0];
+    const test = accumulator.tests[i][1];
+    const [a, b] = test(source, target, checkOptions, accumulator);
+
+    oResults[testName] = a;
+    accumulator = b;
   }
-  return [oResults, oAccumulator];
+
+  return [oResults, accumulator];
 }
 
 function startScan(bilingualDoc, checkOptions, callback) {
   let oAccumulator = {
-    segmentNumber: 0,
+    currentSegment: 0,
     tests: getTests(checkOptions),
   };
 
-  // loop through all the segments in the bilingual Doc
-  for (const property in bilingualDoc) {
-    if (bilingualDoc.hasOwnProperty(property)) {
-      oAccumulator.currentSegment = property;
-      // run all the tests on the given segment, and send the results to be displayed
-      const results = singleSegmentChecks(
-        bilingualDoc[property].source,
-        bilingualDoc[property].target,
-        checkOptions, oAccumulator);
-      oAccumulator = results[1];
+  // iterate over all the segments in the bilingualDoc
+  // call singleSegmentChecks on each segment
+  const segments = Object.keys(bilingualDoc);
+  segments.forEach((segment) => {
+    // track which segment we are currently on
+    oAccumulator.currentSegment = segment;
 
-      if (callback) {
-        callback(property, results[0]);
-      }
+    const [res, acc] = singleSegmentChecks(
+      bilingualDoc[segment].source,
+      bilingualDoc[segment].target,
+      checkOptions,
+      oAccumulator,
+    );
+
+    // use the accumulator to carry over data between segments
+    oAccumulator = acc;
+
+    if (callback) {
+      callback(segment, res);
     }
-  }
+  });
 
   return oAccumulator;
 }

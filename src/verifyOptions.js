@@ -1,44 +1,23 @@
-import { metalogger } from './libs/lib-generaluse.js';
-import defaultDateFormats from './dateformats.js';
+import { metalogger } from './libs/lib-generaluse';
+import defaultDateFormats from './dateformats';
 
-function verify(checkOptions) {
-  // verify that checkOptions exists and is an object
-  // if not, return a default set of options
-  if (typeof checkOptions !== 'object') {
-    const defaultOptions = {
-      sourceLang: 'ja',
-      targetLang: 'en',
-      dateFormats: defaultDateFormats,
-      bannedWordsList: {},
-      customTests: [],
-    };
-
-    return defaultOptions;
+function vBannedWords(list) {
+  let wordList = list;
+  if (typeof wordList !== 'object' || Array.isArray(wordList) || wordList === null) {
+    metalogger('No valid banned words list detected. Reverting to blank list.');
+    wordList = {};
   }
 
-  // verify these keys by default, since they're critical for basic tests
-  checkOptions.sourceLang = vLang(checkOptions.sourceLang, 'ja');
-  checkOptions.targetLang = vLang(checkOptions.targetLang, 'en');
-  checkOptions.dateFormats = vDateFormats(checkOptions.dateFormats, checkOptions.sourceLang, checkOptions.targetLang);
-  checkOptions.bannedWordsList = vBannedWords(checkOptions.bannedWordsList);
+  const keys = Object.keys(wordList);
 
-  // verify these keys if they have been included
-  //
-
-  return checkOptions;
-}
-
-function vLang(lang, def) {
-  // revert to default if user does not declare a language
-  if (typeof lang === 'undefined') {
-    return def;
-  } else if (typeof lang !== 'string') {
-    return def;
-  } else if (lang.length !== 2) {
-    metalogger('Invalid language code. Source and target languages must be in ISO 639-1 format. Reverting to default.');
-    return def;
+  if (keys.indexOf('CaseSensitive') < 0) {
+    wordList.CaseSensitive = [];
   }
-  return lang;
+  if (keys.indexOf('CaseInsensitive') < 0) {
+    wordList.CaseInsensitive = [];
+  }
+
+  return wordList;
 }
 
 function vDateFormats(dateFormats, sourceLang, targetLang) {
@@ -67,20 +46,45 @@ function vDateFormats(dateFormats, sourceLang, targetLang) {
   return dateFormats;
 }
 
-function vBannedWords(wordList) {
-  if (typeof wordList !== 'object' || Array.isArray(wordList) || wordList === null) {
-    metalogger('No valid banned words list detected. Reverting to blank list.');
-    return {};
+function vLang(lang, defaultValue) {
+  // revert to default if user does not declare a language
+  if (typeof lang === 'undefined') {
+    return defaultValue;
+  } else if (typeof lang !== 'string') {
+    return defaultValue;
+  } else if (lang.length !== 2) {
+    metalogger('Invalid language code. Source and target languages must be in ISO 639-1 format. Reverting to default.');
+    return defaultValue;
+  }
+  return lang;
+}
+
+function verify(options) {
+  // verify that checkOptions exists and is an object
+  // if not, return a default set of options
+  if (typeof options !== 'object') {
+    metalogger('Invalid checkOptions. Using default options instead.');
+    const defaultOptions = {
+      sourceLang: 'ja',
+      targetLang: 'en',
+      dateFormats: defaultDateFormats,
+      bannedWordsList: {},
+      customTests: [],
+    };
+
+    return defaultOptions;
   }
 
-  if (!wordList.hasOwnProperty('CaseSensitive')) {
-    wordList.CaseSensitive = [];
-  }
-  if (!wordList.hasOwnProperty('CaseInsensitive')) {
-    wordList.CaseInsensitive = [];
-  }
+  // verify these keys by default, since they're critical for basic tests
+  options.sourceLang = vLang(options.sourceLang, 'ja');
+  options.targetLang = vLang(options.targetLang, 'en');
+  options.bannedWordsList = vBannedWords(options.bannedWordsList);
+  options.dateFormats = vDateFormats(options.dateFormats, options.sourceLang, options.targetLang);
 
-  return wordList;
+  // verify these keys if they have been included
+  //
+
+  return options;
 }
 
 export default verify;

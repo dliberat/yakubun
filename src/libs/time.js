@@ -1,13 +1,23 @@
-import * as general from './lib-generaluse.js';
+import * as general from './lib-generaluse';
+import convertTimesToISO from '../utilities/convertTimesToISO';
 
 const moment = require('moment-timezone');
+let oAccumulator;
+let source;
+let target;
 
-function compareTimes(source, target, checkOptions, oAccumulator) {
+function compareTimes(src, tgt, checkOptions, acc) {
+  
+  source = src;
+  target = tgt;
+  oAccumulator = acc;
+  
   // check to make sure oAccumulator is an object
   if (typeof (oAccumulator) === 'object' && oAccumulator !== null) {
     // use the clean strings, if they exist
-    if (oAccumulator.hasOwnProperty('timeCheck_clean_source')) source = oAccumulator.timeCheck_clean_source;
-    if (oAccumulator.hasOwnProperty('timeCheck_clean_target')) target = oAccumulator.timeCheck_clean_target;
+    const keys = Object.keys(oAccumulator);
+    if (keys.indexOf('timeCheck_clean_source') > -1) source = oAccumulator.timeCheck_clean_source;
+    if (keys.indexOf('timeCheck_clean_target') > -1) target = oAccumulator.timeCheck_clean_target;
   } else {
     // need to create this because this module pushes
     // clean strings to the accumulator
@@ -18,7 +28,7 @@ function compareTimes(source, target, checkOptions, oAccumulator) {
   return clean(source, target, oAccumulator);
 }
 
-function clean(source, target, oAccumulator) {
+function clean() {
   // replace all double-byte numbers with single byte versions
   // TODO: This is probably not necessary since it's done at the beginning
   source = general.replaceDoubleByteNums(source);
@@ -40,7 +50,7 @@ function clean(source, target, oAccumulator) {
   return extract(source, target, oAccumulator);
 }
 
-function extract(source, target, oAccumulator) {
+function extract() {
   // extract times
   const sourceRegEx = new RegExp('[0-2]?[0-9][:\uFF1A][0-5][0-9]', 'g');
   const targetRegEx = new RegExp('[0-2]?[0-9]:[0-5][0-9]', 'gi');
@@ -50,18 +60,18 @@ function extract(source, target, oAccumulator) {
   // the final argument must be true if using capturing groups in the RegEx
   const comparison = general.regexComparer(source, target, sourceRegEx, targetRegEx, false);
 
-  return momentConversion(comparison, oAccumulator);
+  return momentConversion(comparison);
 }
 
-function momentConversion(comparison, oAccumulator) {
+function momentConversion(comparison) {
   // loop through the returned regex matches, and create an array of moments
   const sourceMoments = parseTimeStringsIntoMomentArr(comparison[0]).sort(momentSort);
   const targetMoments = parseTimeStringsIntoMomentArr(comparison[1]).sort(momentSort);
 
-  return hikaku(sourceMoments, targetMoments, oAccumulator);
+  return hikaku(sourceMoments, targetMoments);
 }
 
-function hikaku(sourceMoments, targetMoments, oAccumulator) {
+function hikaku(sourceMoments, targetMoments) {
   const compare = compareMomentTimes(sourceMoments, targetMoments);
   let retval = null;
 
@@ -75,27 +85,6 @@ function hikaku(sourceMoments, targetMoments, oAccumulator) {
 }
 
 /* UTILITY FUNCTIONS */
-function convertTimesToISO(string) {
-  string = string.toLowerCase();
-
-  // add 0 to single-digit hours
-  if (string.indexOf(':') === 1) { string = `0${string}`; }
-
-  // remove 'am'
-  string = string.replace(/\uFF1A/gi, ':');
-  string = string.replace(/12(:00)?am/gi, '00:00');
-  string = string.replace(/12(:00)?pm/gi, '12:00'); // need to do this otherwise 12pm turns into 24:00 and the date shifts over
-  string = string.replace(/am/gi, '');
-
-  // add 12 hours and remove pm
-  if (string.indexOf('pm') > 0) {
-    const hours = Number(string.slice(0, 2)) + 12;
-    const minutes = string.slice(3, 5);
-    string = hours.toString() + minutes;
-  }
-  return `19850520T${string.replace(':', '')}`;
-}
-
 function momentSort(a, b) {
   // This sort checks ONLY the times it does not take into account dates
 
@@ -120,23 +109,38 @@ function timeDisplayFormatting(momentArr) {
   if (momentArr.length === 0) {
     displayArray.push('nothing');
   } else {
-    for (let i = 0; i < momentArr.length; i++) {
-      displayArray.push(momentArr[i].format('H:mm'));
-    }
+    momentArr.forEach((element) => {
+      displayArray.push(element.format('H:mm'));
+    });
   }
   return displayArray.join(', ');
 }
 
+/**
+ * Compare two arrays of moments and determine whether or not
+ * they are identical.
+ * @param {array} arr1 - An array of moments
+ * @param {array} arr2 - An array of moments
+ * @param {string} comparison - If comparison === 'date', this function compares dates, not times.
+ **/
 function compareMomentTimes(arr1, arr2, comparison) {
+
   // if 'date' is passed as a third argument, compare dates
   // else, compare times
-  const format = comparison == 'date' ? 'MMM.D' : 'H:mm';
+  const format = comparison === 'date' ? 'MMM.D' : 'H:mm';
+  
+  // assume the arrays match
+  let arraysMatch = true;
 
-  if (arr1.length != arr2.length) return false;
-  for (let i = 0; i < arr2.length; i++) {
-    if (arr1[i].format(format) !== arr2[i].format(format)) return false;
-  }
-  return true;
+  // if their lengths are different, return false
+  if (arr1.length !== arr2.length) return false;
+  
+  // otherwise, compare each element
+  arr2.forEach((element, index) => {
+    if (arr1[index].format(format) !== element.format(format)) arraysMatch = false;
+  });
+  
+  return arraysMatch;
 }
 
 function parseTimeStringsIntoMomentArr(stringsArr) {
@@ -150,7 +154,7 @@ function parseTimeStringsIntoMomentArr(stringsArr) {
     if (e.isValid()) {
       outArr.push(e);
     } else {
-      console.log('Invalid moment.');
+      console.error('Invalid moment.');
     }
   }
 
