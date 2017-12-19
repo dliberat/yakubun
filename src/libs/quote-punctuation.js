@@ -1,4 +1,4 @@
-function quotationMarks(source, target, checkOptions, oAccumulator) {
+function quotePunctuation(source, target, checkOptions, oAccumulator) {
   let retval = null;
   let searchTerm = '".';
   let caution = 'Periods should precede quotation marks.';
@@ -18,6 +18,4 @@ function quotationMarks(source, target, checkOptions, oAccumulator) {
   return [retval, oAccumulator];
 }
 
-export {
-  quotationMarks,
-};
+export default quotePunctuation;

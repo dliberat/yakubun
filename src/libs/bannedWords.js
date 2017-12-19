@@ -24,8 +24,8 @@ function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr
 function find(source, target, checkOptions, oAccumulator) {
   let bannedWordsObj;
   let retval = null;
-  
-  if (checkOptions.hasOwnProperty('bannedWordsList')) {
+
+  if (checkOptions.bannedWordsList) {
     bannedWordsObj = checkOptions.bannedWordsList;
   }
   if (!bannedWordsObj) { return [null, oAccumulator]; }
@@ -40,6 +40,4 @@ function find(source, target, checkOptions, oAccumulator) {
   return [retval, oAccumulator];
 }
 
-export {
-  find,
-};
+export default find;
