@@ -1,13 +1,46 @@
+function metalogger() {
+
+}
+
+function compareArrays(arr1, arr2) {
+  // checks if two arrays are identical or not
+  // does not perform proper deep equality checks (objects are not treated as equal);
+  if (arr1.length !== arr2.length) return false;
+
+  for (let i = 0; i < arr2.length; i += 1) {
+    if (Array.isArray(arr1[i])) { // To test values in nested arrays
+      if (!compareArrays(arr1[i], arr2[i])) return false;
+    } else if (arr1[i] !== arr2[i]) return false;
+  }
+
+  return true;
+}
+
+
+/** Returns an array of all the matches to the given regex.
+ * If passed an initial array, it returns it with the new
+ * matches tacked on at the end
+ */
+function regexReturnAllMatches(str, regex, accumulatorArr = []) {
+  let m;
+
+  do {
+    m = regex.exec(str);
+    if (m) { accumulatorArr.push(m); }
+  } while (m);
+  return accumulatorArr;
+}
+
 function regexComparer(
   source,
   target,
   sourceRegex,
   targetRegex,
-  capturingGroups,
+  groupsExist,
 ) {
   // if we are looking for a captured group, then we need to set this to one
   // otherwise, we simply return the first match (which is the whole match)
-  capturingGroups = capturingGroups ? 1 : 0;
+  const capturingGroups = groupsExist ? 1 : 0;
 
   // perform the RegExp.exec to get the matches
   // .map discards all the metadata and only leaves the matches
@@ -21,42 +54,29 @@ function regexComparer(
   return [sourceHits, targetHits, equiv];
 }
 
-function regexReturnAllMatches(str, regex, accumulatorArr) {
-  // Returns an array of all the matches to the given regex.
-  // If passed an initial array, it returns it with the new
-  // matches pushed on at the end.
-  var accumulatorArr = accumulatorArr || [];
-  do {
-    var m = regex.exec(str);
-    if (m) { accumulatorArr.push(m); }
-  } while (m);
-  return accumulatorArr;
-}
-
 function addMinutesToSimpleENTimes(target) {
   return target.replace(/\s([1]?[0-9])([ap]m)|^([1]?[0-9])([ap]m)/g, ' $1$3:00$2$4');
 }
 
-function regexReplaceAllFromArray(formatChangesArr, string, parameters) {
-  parameters = parameters || 'gi';
-  const stringb = string;
+function regexReplaceAllFromArray(formatChangesArr, str, parameters = 'gi') {
+  let string = str;
 
   // check that formatChangesArr really is an array
   if (formatChangesArr === undefined) {
-    console.log('Error. formatChangesArr is undefined.');
+    metalogger('Error. formatChangesArr is undefined.');
     return string;
   }
 
   if (formatChangesArr.constructor !== Array) {
-    console.log('Error. formatChangesArr is not an Array.');
+    metalogger('Error. formatChangesArr is not an Array.');
     return string;
   }
 
-  for (let i = 0; i < formatChangesArr.length; i++) {
-    const e = formatChangesArr[i];
+  formatChangesArr.forEach((e) => {
     const re = new RegExp(e[0], parameters);
     string = string.replace(re, e[1]);
-  }
+  });
+
   return string;
 }
 
@@ -83,21 +103,6 @@ function replaceDoubleByteNums(string) {
   ];
 
   return regexReplaceAllFromArray(numArr, string, 'gi');
-}
-
-function compareArrays(arr1, arr2) {
-  // checks if two arrays are identical or not
-  if (arr1.length != arr2.length) return false;
-  for (let i = 0; i < arr2.length; i++) {
-    if (Array.isArray(arr1[i])) { // To test values in nested arrays
-      if (!compareArrays(arr1[i], arr2[i])) return false;
-    } else if (arr1[i] !== arr2[i]) return false;
-  }
-  return true;
-}
-
-function metalogger(string) {
-
 }
 
 export {

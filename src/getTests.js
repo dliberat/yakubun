@@ -2,23 +2,27 @@ import * as checksLang from './libs/checks-language';
 import findDoubleSpaces from './libs/doublespaces';
 import findRepeatedWords from './libs/repeatedwords';
 import detectOxfordCommas from './libs/oxfordcomma';
-import * as checksBannedWords from './libs/bannedWords';
+import quotePunctuation from './libs/quote-punctuation';
+import find from './libs/bannedWords';
 import ordinalNumbers from './libs/ordinalNumbers';
+import compareDates from './libs/dates/comparedates';
+import compareDatesTz from './libs/dates/comparedates-tz';
 import * as checksDateTime from './libs/checks-datetime';
 import compareNumbers from './libs/numbers';
-import { compareTimes } from './libs/time';
+import compareTimes from './libs/time';
 
 const standardTests = [
-  ['bannedWords', checksBannedWords.find],
+  ['bannedWords', find],
   ['doubleSpaces', findDoubleSpaces],
   ['zenkakuCharacters', checksLang.findJPCharacters],
+  ['quote-punct', quotePunctuation],
   ['repeatedWords', findRepeatedWords],
   ['ordinalNumbers', ordinalNumbers],
   ['bulletSpaces', checksLang.findBulletsWithNoSpaces],
   ['oxfordCommas', detectOxfordCommas],
   ['numberedBullets', checksLang.trackNumberedBullets],
-  ['tzDates', checksDateTime.compareDatesTz],
-  ['dates', checksDateTime.compareDates],
+  ['tzDates', compareDatesTz],
+  ['dates', compareDates],
   ['times', compareTimes],
   ['numbers', compareNumbers],
 ];

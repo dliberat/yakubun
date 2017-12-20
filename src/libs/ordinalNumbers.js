@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
 Check ordinal numbers to ensure that they have the proper trailing letters
 */
@@ -13,13 +14,12 @@ const oRules = {
   },
 };
 
-function ordinalNumbers(source, target, checkOptions, oAccumulator) {
+function ordinalNumbers(source, target, checkOptions = {}, oAccumulator) {
   // set EN as the default language
-  if (!checkOptions) { checkOptions = {}; }
   if (!checkOptions.targetLang) { checkOptions.targetLang = 'en'; }
 
   // abort if there are no rules for the targetLang
-  if (oRules.hasOwnProperty(checkOptions.targetLang)) {
+  if (oRules[checkOptions.targetLang]) {
     var rules = oRules[checkOptions.targetLang];
   } else {
     return [null, oAccumulator];

@@ -152,22 +152,24 @@ function replaceNumbers(source, target, checkOptions, oAccumulator) {
   return removeDates(src, tgt, checkOptions, oAccumulator);
 }
 
-function compareNumbers(source, target, checkOptions, oAccumulator) {
+function compareNumbers(source, target, options, oAccumulator) {
   let src = source;
   let tgt = target;
+  let checkOptions = options;
+
 
   // check to make sure oAccumulator is an object
   if (typeof (oAccumulator) === 'object' && oAccumulator !== null) {
     // use the clean strings, if they exist,
     // since timeCheck accounts for slash dates
-    if (oAccumulator.hasOwnProperty('timeCheck_clean_source')) src = oAccumulator.timeCheck_clean_source;
-    if (oAccumulator.hasOwnProperty('timeCheck_clean_target')) tgt = oAccumulator.timeCheck_clean_target;
+    if (oAccumulator.timeCheck_clean_source) src = oAccumulator.timeCheck_clean_source;
+    if (oAccumulator.timeCheck_clean_target) tgt = oAccumulator.timeCheck_clean_target;
   }
 
   // check to make sure checkOptions is valid
   if (typeof (checkOptions) === 'object' && checkOptions !== null) {
-    if (!checkOptions.hasOwnProperty('sourceLang')) checkOptions.sourceLang = 'ja';
-    if (!checkOptions.hasOwnProperty('targetLang')) checkOptions.targetLang = 'en';
+    if (!checkOptions.sourceLang) checkOptions.sourceLang = 'ja';
+    if (!checkOptions.targetLang) checkOptions.targetLang = 'en';
   } else {
     checkOptions = { sourceLang: 'ja', targetLang: 'en' };
   }

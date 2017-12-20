@@ -14,9 +14,12 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   let accumulator = oAccumulator;
   const oResults = {};
 
-  // run each of the functions in oAccumulator
+  // run each of the functions in oAccumulator.tests
   // store the results of that function in the oResults object
-  // and keep any metadata they send back through the second parameter in oAccumulator
+  // and keep any metadata they send back through the second parameter (b);
+
+  /* Dec. 20, 2017
+  Rewrote this code using the forEach loop below
   for (let i = 0; i < accumulator.tests.length; i += 1) {
     const testName = accumulator.tests[i][0];
     const test = accumulator.tests[i][1];
@@ -24,7 +27,14 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
 
     oResults[testName] = a;
     accumulator = b;
-  }
+  } */
+
+  accumulator.tests.forEach((test) => {
+    const [testName, testFunc] = test;
+    const [res, acc] = testFunc(source, target, checkOptions, accumulator);
+    oResults[testName] = res;
+    accumulator = acc;
+  });
 
   return [oResults, accumulator];
 }

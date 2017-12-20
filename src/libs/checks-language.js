@@ -12,15 +12,18 @@ function findJPCharacters(source, target, checkOptions, oAccumulator) {
 
   const foundChars = [];
 
-  for (let i = 0; i < jpChars.length; i++) {
+  for (let i = 0; i < jpChars.length; i += 1) {
     if (target.indexOf(jpChars[i]) > -1) {
-      jpChars[i] === '\u3000' ? foundChars.push('[Space]') : foundChars.push(jpChars[i]);
+      const x = jpChars[i] === '\u3000' ? '[Space]' : jpChars[i];
+      foundChars.push(x);
     }
   }
 
   let retval = null;
 
-  if (foundChars.length > 0) { retval = `Double-byte characters: <span class="text-alert">${foundChars.join(' ')}</span>`; }
+  if (foundChars.length > 0) {
+    retval = `Double-byte characters: <span class="text-alert">${foundChars.join(' ')}</span>`;
+  }
 
   return [retval, oAccumulator];
 }
@@ -46,30 +49,32 @@ function findBulletsWithNoSpaces(source, target, checkOptions, oAccumulator) {
   return [retval, oAccumulator];
 }
 
+function checkSequentialArray(arr) {
+  if (arr.length < 2) { return true; }
+
+  // returns FALSE if the array is not sequentially numbered (1,2,3,4)
+  for (let i = 1; i < arr.length; i += 1) {
+    const a = Number(arr[i - 1]);
+    const b = Number(arr[i]) - 1;
+    if (a !== b) { return false; }
+  }
+
+  return true;
+}
+
 function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
-  const checkSequentialArray = function (arr) {
-    if (arr.length < 2) { return true; }
-    // returns FALSE if the array is not sequentially numbered (1,2,3,4)
-    for (let i = 1; i < arr.length; i++) {
-      const a = Number(arr[i - 1]);
-      const b = Number(arr[i]) - 1;
-      if (a !== b) { return false; }
-    }
-    return true;
-  };
+  const periodArr = [];
+  const bracketArr = [];
 
   // ensure that an object exists to keep track of the bullets
   if (!oAccumulator.trackNumberedBullets) {
     oAccumulator.trackNumberedBullets = { period: [], bracket: [] };
   }
 
-  const periodArr = [];
-  const bracketArr = [];
-
-  for (var i = 0; i < oAccumulator.trackNumberedBullets.period.length; i++) {
+  for (let i = 0; i < oAccumulator.trackNumberedBullets.period.length; i += 1) {
     periodArr.push(oAccumulator.trackNumberedBullets.period[i]);
   }
-  for (var i = 0; i < oAccumulator.trackNumberedBullets.bracket.length; i++) {
+  for (let i = 0; i < oAccumulator.trackNumberedBullets.bracket.length; i += 1) {
     bracketArr.push(oAccumulator.trackNumberedBullets.bracket[i]);
   }
 
@@ -81,7 +86,7 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
 
   let num;
   // else loop through the results and sort them into the appropriate arrays
-  for (var i = 0; i < matchArr.length; i++) {
+  for (let i = 0; i < matchArr.length; i += 1) {
     num = matchArr[i][1] || matchArr[i][2];
     if (matchArr[i][0].indexOf(')') > -1) {
       oAccumulator.trackNumberedBullets.bracket.push(num);
@@ -94,6 +99,8 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
   // search for errors. Returns FALSE if there is an error in the numerical sequence
   const ret1 = checkSequentialArray(oAccumulator.trackNumberedBullets.period);
   const ret2 = checkSequentialArray(oAccumulator.trackNumberedBullets.bracket);
+  const numIsOne = num === 1 || num === '1';
+
   let retval = null;
 
   if (ret1 === false || ret2 === false) {
@@ -103,12 +110,12 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
     if (ret1 === false) {
       // reset the retval to null if the list is 3 or more items long and
       // the match is a 1, since we most likely just started a new list.
-      if (oAccumulator.trackNumberedBullets.period.length > 2 && num == 1) {
+      if (oAccumulator.trackNumberedBullets.period.length > 2 && numIsOne) {
         retval = null;
       }
       oAccumulator.trackNumberedBullets.period = [];
     } else {
-      if (oAccumulator.trackNumberedBullets.bracket.length > 2 && num == 1) {
+      if (oAccumulator.trackNumberedBullets.bracket.length > 2 && numIsOne) {
         retval = null;
       }
       oAccumulator.trackNumberedBullets.bracket = [];

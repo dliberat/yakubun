@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import * as general from './lib-generaluse';
+import * as general from '../lib-generaluse';
 
 function compareDates(source, target, checkOptions, accumulator) {
   const oAccumulator = accumulator;
@@ -466,7 +466,4 @@ function verifyOptions(checkOptions) {
   return true;
 }
 
-export {
-  compareDates,
-  compareDatesTz,
-};
+export default compareDates;
