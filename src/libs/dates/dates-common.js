@@ -1,5 +1,26 @@
-import moment from 'moment-timezone';
 import * as general from '../lib-generaluse';
+import convertToISOTime from './convertToISOTime';
+
+function verifyOptions(checkOptions) {
+  const optionKeys = Object.keys(checkOptions);
+  if (
+    optionKeys.indexOf('sourceLang') < 0 ||
+    optionKeys.indexOf('targetLang') < 0 ||
+    optionKeys.indexOf('dateFormats') < 0
+  ) {
+    return false;
+  }
+
+  const dateFormatsKeys = Object.keys(checkOptions.dateFormats);
+  if (
+    dateFormatsKeys.indexOf(checkOptions.sourceLang) < 0 ||
+    dateFormatsKeys.indexOf(checkOptions.targetLang) < 0
+  ) {
+    return false;
+  }
+
+  return true;
+}
 
 /**
  * Remove words from the JP that have kanji in them that would normally be
@@ -19,23 +40,28 @@ function initialJPFilter(string) {
 }
 
 function ensureTwoDigitNumber(match, m1, month, m2, date, m3, hour, m4) {
-  if (date.length === 1) { date = `0${date}`; }
-  if (month.length === 1) { month = `0${month}`; }
-  if (hour.length === 1) { hour = `0${hour}`; }
-  return m1 + month + m2 + date + m3 + hour + m4;
+  let dDate = date;
+  let dMonth = month;
+  let dHour = hour;
+  if (dDate.length === 1) { dDate = `0${dDate}`; }
+  if (dMonth.length === 1) { dMonth = `0${dMonth}`; }
+  if (dHour.length === 1) { dHour = `0${dHour}`; }
+  return m1 + dMonth + m2 + dDate + m3 + dHour + m4;
 }
 
 function ensureTwoDigitNumberNoTime(match, m1, month, m2, date, m3) {
-  if (date.length === 1) { date = `0${date}`; }
-  if (month.length === 1) { month = `0${month}`; }
-  return m1 + month + m2 + date + m3;
+  let dDate = date;
+  let dMonth = month;
+  if (dDate.length === 1) { dDate = `0${dDate}`; }
+  if (dMonth.length === 1) { dMonth = `0${dMonth}`; }
+  return m1 + dMonth + m2 + dDate + m3;
 }
 
-function monthConverter(element, index) {
+function monthConverter(element) {
   if (element.length > 12) {
     return element.replace(/({[0-9]{4}-)([0-1]?[0-9])(-)([0-3]?[0-9])( )([0-2]?[0-9])(:[0-5][0-9].*)/, ensureTwoDigitNumber);
   }
-    return element.replace(/({[0-9]{4}-)([0-1]?[0-9])(-)([0-3]?[0-9])(.*)/, ensureTwoDigitNumberNoTime);
+  return element.replace(/({[0-9]{4}-)([0-1]?[0-9])(-)([0-3]?[0-9])(.*)/, ensureTwoDigitNumberNoTime);
 }
 
 function convertToTwoDigitDates(comparison) {
@@ -54,26 +80,39 @@ function cleanGetRichCommaDateLists(string) {
   return general.regexReplaceAllFromArray(formatChanges, string, 'gi');
 }
 
-function momentDateSort(a, b) {
-  // leave elements unsorted if they are not moments
-  if (!moment.isMoment(a) || !moment.isMoment(b)) {
-    return 0;
-  }
+function cleanStringsBeforeDateCheck(src, tgt, checkOptions) {
+  let source = src;
+  let target = tgt;
 
-  // sort the moments
-  if (a.isBefore(b)) {
-    return -1;
-  } else if (b.isBefore(a)) {
-    return 1;
-  }
+  // ///////////////////// SOURCE TEXT CLEANUP//////////////////////////////////////
+  // replace all double-byte numbers with single byte versions
+  source = general.replaceDoubleByteNums(source);
+  // remove strings that should never be interpreted as numbers
+  source = initialJPFilter(source);
+  // parse all dates into the {2017-9-21} format
+  // Still need to convert things into 2-digit format
+  source = general.regexReplaceAllFromArray(checkOptions.dateFormats[checkOptions.sourceLang], source, 'gi');
 
-  // if anything went wrong, leave elements unsorted
-  return 0;
+  // //////////////////// TARGET TEXT CLEANUP ////////////////////////////////////
+  // change all 11am times to 11:00am
+  target = general.addMinutesToSimpleENTimes(target);
+  // convert Jan. 21, 22 to: Jan. 21 Jan. 22
+  target = cleanGetRichCommaDateLists(target);
+
+  // perform the big scan to catch as many dates and times as possible
+  target = general.regexReplaceAllFromArray(checkOptions.dateFormats[checkOptions.targetLang], target, 'gi');
+
+  // convert any times that were caught to 24 hour format and remove am/pm
+  target = convertToISOTime(target);
+
+  // TO DO: Convert months and dates to two-digit format in this cleanup step
+  return [source, target];
 }
 
 export {
-    initialJPFilter,
-    cleanGetRichCommaDateLists,
-    convertToTwoDigitDates,
-    momentDateSort,
-}
+  verifyOptions,
+  initialJPFilter,
+  cleanGetRichCommaDateLists,
+  convertToTwoDigitDates,
+  cleanStringsBeforeDateCheck,
+};

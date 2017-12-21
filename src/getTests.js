@@ -7,7 +7,6 @@ import find from './libs/bannedWords';
 import ordinalNumbers from './libs/ordinalNumbers';
 import compareDates from './libs/dates/comparedates';
 import compareDatesTz from './libs/dates/comparedates-tz';
-import * as checksDateTime from './libs/checks-datetime';
 import compareNumbers from './libs/numbers';
 import compareTimes from './libs/time';
 
