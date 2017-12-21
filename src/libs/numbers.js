@@ -3,7 +3,6 @@ import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './num
 
 const oSubstitutions = {
   ja: [
-    ['POP2', 'POP'],
     ['\u30C8\u30EA\u30D7\u30EB', ' 3 '], // トリプル
     ['\u30C0\u30D6\u30EB', ' 2 '], // ダブル
     ['\u5343', '000 '], // 千
@@ -27,7 +26,6 @@ const oSubstitutions = {
     ['\u5343\u8F09\u4E00\u9047', ''],
   ],
   en: [
-    ['POP\\s?2', 'POP'],
     ['doubl', ' 2 '],
     ['second\\s', ' 2 '],
     ['twice', ' 2 '],
