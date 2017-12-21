@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import getTests from '../src/getTests.js';
+import getTests from '../src/getTests';
 
 describe('getTests', function(){
     var def = getTests({});

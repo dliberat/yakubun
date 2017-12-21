@@ -3,6 +3,18 @@ import compareNumbers from '../src/libs/numbers';
 const util = require('../src/libs/numbers-utility.js');
 
 describe('Numbers check', function(){
+   it('Use cleaned strings from timecheck if present', function(){
+      const source = '12';
+      const target = '11';
+      const options = {};
+      const accumulator = {
+         timeCheck_clean_source: '2',
+         timeCheck_clean_target: '2',
+      }
+      
+      const res = compareNumbers(source, target, options, accumulator);
+      expect(res[0]).to.equal(null);
+   });
    it('detect missing numbers in the target', function(){
       var source = 'リンゴ5個を持っています。';
       var target = 'I have no apples.';
@@ -14,7 +26,7 @@ describe('Numbers check', function(){
       var target = 'I have 3 sisters';
       var res = compareNumbers(source, target);
       expect(res[0]).to.equal('Found <span class="text-warning">nothing</span> in source and <span class="text-warning">3</span> in target.');
-   })
+   });
    it('Account for double-byte numbers', function(){
       var source = '１０個の消しゴムを２６７円で買った';
       var target = 'I bought 10 erasers for 268 yen.';
@@ -32,7 +44,7 @@ describe('Numbers check', function(){
       var target = 'Last month, I made 14,000 yen';
       var res = compareNumbers(source, target);
       expect(res[0]).to.equal('Found <span class="text-warning">15000</span> in source and <span class="text-warning">14000</span> in target.');
-   })
+   });
    it('filter dates in {2018-02-18} format', function(){
       var source = '{2019-03-10}にハワイに行く';
       var target = 'I will go to Hawaii in the future.';
@@ -147,8 +159,8 @@ describe('Number utilities', function(){
          'two': 2
       };
       var source = 'one, two';
-      var res = util.subber(source, substitutions);
-      var r = util.subber(source, null);
+      const res = util.subber(source, substitutions);
+      const r = util.subber(source, null);
       expect(res).to.equal('one, two');
-   })
+   });
 });

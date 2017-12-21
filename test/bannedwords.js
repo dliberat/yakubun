@@ -1,5 +1,6 @@
 const expect = require('chai').expect;
-const mod = require('../src/libs/bannedWords.js');
+//const mod = require('../src/libs/bannedWords.js');
+import find from '../src/libs/bannedWords';
 
 describe('Search for banned words.', function(){
    
@@ -8,7 +9,7 @@ describe('Search for banned words.', function(){
            var list = {};
            var target = 'Check out that sexy Diamond!';
            
-           var undef = mod.find('', target, list, undefined);
+           var undef = find('', target, list, undefined);
            expect(undef).to.deep.equal([null,undefined]);
        });
    });
@@ -24,23 +25,24 @@ describe('Search for banned words.', function(){
        
        it('Works in case insensitive mode', function(){
         var target = 'Check out that Sexy Diamond!';
-        var caseinsens = mod.find('', target, list, undefined);
+        var caseinsens = find('', target, list, undefined);
         expect(caseinsens[0]).to.equal('Suspicious terminology: <span class="text-warning">Sexy</span>');
        });
        
        it('Works in case sensitive mode', function(){
         var target = 'Check out that cool diamond!';
-        var casesens = mod.find('', target, list, undefined);
+        var casesens = find('', target, list, undefined);
         expect(casesens[0]).to.equal('Suspicious terminology: <span class="text-warning">diamond</span>');
        });
        
-       it('Handles grouping', function(){
+       it.skip('Handles grouping', function(){
+           /* this test does not currently work */
            var target = 'Flag Character.';
-           var targRes = mod.find('', target, list, undefined);
+           var targRes = find('', target, list, undefined);
            var targ = 'Character should not be flagged.';
            var t = 'Also. Character should not be flagged.';
            
-           //expect(targRes[0]).to.equal('Suspicious terminology: <span class="text-warning">Character</span>');
+           expect(targRes[0]).to.equal('Suspicious terminology: <span class="text-warning">Character</span>');
        });
    });
    
@@ -53,7 +55,7 @@ describe('Search for banned words.', function(){
                  'CaseSensitive': ['diamond']
              }
          } 
-         var res = mod.find('', target, list, undefined);
+         var res = find('', target, list, undefined);
          expect(res[0]).to.equal(null);
       });
       
@@ -63,7 +65,7 @@ describe('Search for banned words.', function(){
                   'CaseInsensitive': ['sexy']
               }
           }
-         var res = mod.find('', target, list, undefined);
+         var res = find('', target, list, undefined);
          expect(res[0]).to.equal('Suspicious terminology: <span class="text-warning">sexy</span>');
       });
    });

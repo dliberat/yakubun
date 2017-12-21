@@ -24,7 +24,15 @@ describe('Entry point - index.js', function(){
       2: {
         source: 'わんわんが好きです。',
         target: 'I like  dogs.'
-      }
+      },
+      3: {
+        source: 'カードクリアでコイン×10000GET！',
+        target: 'Complete to get 10,000 Coins!',
+      },
+      4: {
+        source: '期間：9/26 16:59',
+        target: 'Til 9/26, 12:59AM (PDT).',
+      },
     };
   });
 
