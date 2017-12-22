@@ -34,4 +34,10 @@ describe('compareTimes', function(){
         expect(res[1].timeCheck_clean_source).to.equal('私は毎日{22:30}に寝る。');
         expect(res[1].timeCheck_clean_target).to.equal('I go to bed at {22:30} every night.');
     });
+    it('6:00～23:59 matches From 6:00 to 23:59 (GMT+9)', function(){
+        const source = '（6:00～23:59）';
+        const target = 'From 6:00 to 23:59 (GMT+9)';
+        const res = compareTimes(source, target);
+        expect(res[1].timeCheck_clean_source).to.equal('（{06:00}～{23:59}）');
+    });
 })

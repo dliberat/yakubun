@@ -1,5 +1,13 @@
 import * as general from './lib-generaluse';
 
+/**
+ * Takes an array of strings and returns an array
+ * of which of those were found in the string provided
+ * @param {string} str - The string in which to look for the words
+ * @param {string[]} wordsArr - The array of regexes to search for
+ * @param {boolean} caseSensitive - Case sensitivity
+ * @param {string[]} accumulatorArr - The array onto which to push the words detected
+ */
 function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr) {
   // takes an array of banned words and returns an array
   // of which of those were found in the string provided
@@ -12,15 +20,23 @@ function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr
   let foundArr = accumulatorArr || [];
 
   // loop through the banned words, and add them to foundArr
-  for (let i = 0; i < wordsArr.length; i += 1) {
-    const elem = wordsArr[i];
-    const re = new RegExp(elem, patternParameters);
+  wordsArr.forEach((element) => {
+    const re = new RegExp(element, patternParameters);
     foundArr = general.regexReturnAllMatches(str, re, foundArr);
-  }
+  });
 
   return foundArr;
 }
 
+/**
+ * Search for banned words provided in the
+ * checkOptions.bannedWords object
+ * @param {string} source - Source text
+ * @param {string} target - Target text
+ * @param {object} checkOptions - Options object
+ * @param {object} checkOptions.bannedWordsList - List of regex strings
+ * @param {object} oAccumulator - Carries over data between segments
+ */
 function find(source, target, checkOptions, oAccumulator) {
   let bannedWordsObj;
   let retval = null;
