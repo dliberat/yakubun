@@ -7,6 +7,19 @@ let source;
 let target;
 
 /* UTILITY FUNCTIONS */
+function twoDigitHours(match, hour, minutes) {
+  const hr = Number(hour);
+  const min = Number(minutes);
+
+  let sHr = Number(hour).toString();
+  let sMin = min.toString();
+
+  if (hr < 10) { sHr = `0${sHr}`; }
+  if (min < 10) { sMin = `0${sMin}`; }
+
+  return `{${sHr}:${sMin}}`;
+}
+
 function getMinutes(mObject) {
   return mObject.minutes() + (mObject.hours() * 60);
 }
@@ -130,7 +143,7 @@ function clean() {
   // times that are followed by a closing brace
   // have already been parsed by the datescheck
   // find all other times, and put them in braces
-  source = source.replace(/([0-2]?[0-9])[:\uFF1A]([0-5][0-9])(?!})/g, '{$1:$2}');
+  source = source.replace(/([0-2]?[0-9])[:\uFF1A]([0-5][0-9])(?!})/g, twoDigitHours);
   target = target.replace(/([0-2]?[0-9]:[0-5][0-9])(?!})/gi, '{$1}');
 
   // store clean strings in accumulator

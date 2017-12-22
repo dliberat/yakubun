@@ -1,5 +1,5 @@
 import * as general from '../lib-generaluse';
-import convertToISOTime from './convertToISOTime';
+import convertToTwentyFourHourClock from './convertToISOTime';
 
 function verifyOptions(checkOptions) {
   const optionKeys = Object.keys(checkOptions);
@@ -103,7 +103,7 @@ function cleanStringsBeforeDateCheck(src, tgt, checkOptions) {
   target = general.regexReplaceAllFromArray(checkOptions.dateFormats[checkOptions.targetLang], target, 'gi');
 
   // convert any times that were caught to 24 hour format and remove am/pm
-  target = convertToISOTime(target);
+  target = convertToTwentyFourHourClock(target);
 
   // TO DO: Convert months and dates to two-digit format in this cleanup step
   return [source, target];
