@@ -1,6 +1,21 @@
 import * as general from './lib-generaluse';
 
 /**
+ * Creates a string to return as an output
+ * @param {string[]} outputArray - The array of words detected
+ */
+function outputString(outputArray) {
+  let retval = null;
+
+  if (outputArray.length > 0) {
+    retval = `Suspicious terminology: <span class="text-warning">${outputArray.join(', ')}</span>`;
+  }
+
+  return retval;
+}
+
+
+/**
  * Takes an array of strings and returns an array
  * of which of those were found in the string provided
  * @param {string} str - The string in which to look for the words
@@ -8,16 +23,14 @@ import * as general from './lib-generaluse';
  * @param {boolean} caseSensitive - Case sensitivity
  * @param {string[]} accumulatorArr - The array onto which to push the words detected
  */
-function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr) {
-  // takes an array of banned words and returns an array
-  // of which of those were found in the string provided
+function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr = []) {
+  const patternParameters = caseSensitive ? 'g' : 'gi';
 
   // set to global match and non-case senstive matching by default
   if (!wordsArr || wordsArr.constructor !== Array) { return accumulatorArr; }
-  const patternParameters = caseSensitive ? 'g' : 'gi';
 
   // if an array was provided, add the identified words to that array
-  let foundArr = accumulatorArr || [];
+  let foundArr = accumulatorArr;
 
   // loop through the banned words, and add them to foundArr
   wordsArr.forEach((element) => {
@@ -39,7 +52,6 @@ function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr
  */
 function find(source, target, checkOptions, oAccumulator) {
   let bannedWordsObj;
-  let retval = null;
 
   if (checkOptions.bannedWordsList) {
     bannedWordsObj = checkOptions.bannedWordsList;
@@ -49,11 +61,7 @@ function find(source, target, checkOptions, oAccumulator) {
   let outputArray = scanForBannedWords(target, bannedWordsObj.CaseInsensitive, false);
   outputArray = scanForBannedWords(target, bannedWordsObj.CaseSensitive, true, outputArray);
 
-  if (outputArray.length > 0) {
-    retval = `Suspicious terminology: <span class="text-warning">${outputArray.join(', ')}</span>`;
-  }
-
-  return [retval, oAccumulator];
+  return [outputString(outputArray), oAccumulator];
 }
 
 export default find;
