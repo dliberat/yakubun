@@ -14,7 +14,6 @@ function outputString(outputArray) {
   return retval;
 }
 
-
 /**
  * Takes an array of strings and returns an array
  * of which of those were found in the string provided
