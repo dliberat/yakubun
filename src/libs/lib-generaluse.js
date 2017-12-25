@@ -82,6 +82,16 @@ function regexReplaceAllFromArray(formatChangesArr, str, parameters = 'gi') {
 
 function replaceDoubleByteNums(string) {
   const numArr = [
+    ['\u5341\u4E00', '11'],
+    ['\u5341\u4E8C', '12'],
+    ['\u5341\u4E09', '13'],
+    ['\u5341\u56DB', '14'],
+    ['\u5341\u4E94', '15'],
+    ['\u5341\u516D', '16'],
+    ['\u5341\u4E03', '17'],
+    ['\u5341\u516B', '18'],
+    ['\u5341\u4E5D', '19'],
+    ['\u4E8C\u5341', '20'],
     ['\uFF10', '0'],
     ['\uFF11', '1'],
     ['\uFF12', '2'],
