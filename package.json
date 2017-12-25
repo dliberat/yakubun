@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "Library for checking Japanese translations",
   "main": "dist/yakubun.js",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/garroadran/yakubun"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/garroadran/yakubun"
   },
   "author": "Dan Liberatori <daniel.liberatori@gmail.com>",
   "dependencies": {
@@ -25,7 +25,6 @@
     "json-loader": "^0.5.7",
     "mocha": "^4.0.1",
     "nyc": "^11.3.0",
-    "sinon": "^4.1.2",
     "style-loader": "^0.19.0",
     "uglifyjs-webpack-plugin": "^1.0.1",
     "webpack": "^3.8.1"
