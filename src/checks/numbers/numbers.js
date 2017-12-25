@@ -1,4 +1,4 @@
-import * as general from './lib-generaluse';
+import * as general from '../../utilities/general';
 import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './numbers-utility';
 
 const oSubstitutions = {

@@ -1,4 +1,4 @@
-import * as general from '../lib-generaluse';
+import * as general from '../../utilities/general';
 import convertToTwentyFourHourClock from './convertToISOTime';
 
 function verifyOptions(checkOptions) {

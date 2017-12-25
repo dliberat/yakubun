@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import * as general from '../lib-generaluse';
+import * as general from '../../utilities/general';
 
 /*
 Takes an array with the following arguments

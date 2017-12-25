@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
-import * as general from './lib-generaluse';
-import convertTimesToISO from '../utilities/convertTimesToISO';
+import * as general from '../../utilities/general';
+import convertTimesToISO from '../../utilities/convertTimesToISO';
 
 let oAccumulator;
 let source;

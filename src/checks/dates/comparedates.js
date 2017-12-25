@@ -1,4 +1,4 @@
-import * as general from '../lib-generaluse';
+import * as general from '../../utilities/general';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';

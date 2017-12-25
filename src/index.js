@@ -8,7 +8,7 @@ import {
   regexReplaceAllFromArray,
   regexReturnAllMatches,
   compareArrays,
-} from './libs/lib-generaluse';
+} from './utilities/general';
 
 function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   let accumulator = oAccumulator;

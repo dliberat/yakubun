@@ -3,7 +3,7 @@ Check ordinal numbers to ensure that they have the proper trailing letters
 */
 
 import indicator from 'ordinal/indicator';
-import * as general from './lib-generaluse';
+import * as general from '../utilities/general';
 
 let accumulator;
 

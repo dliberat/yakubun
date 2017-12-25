@@ -1,4 +1,4 @@
-import { metalogger } from './libs/lib-generaluse';
+import { metalogger } from './utilities/general';
 import defaultDateFormats from './dateformats';
 
 function vBannedWords(list) {

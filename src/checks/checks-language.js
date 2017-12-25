@@ -1,4 +1,4 @@
-import * as general from './lib-generaluse';
+import * as general from '../utilities/general';
 
 function findJPCharacters(source, target, checkOptions, oAccumulator) {
   // finds double-byte brackets, colons, or spaces.

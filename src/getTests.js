@@ -1,14 +1,14 @@
-import * as checksLang from './libs/checks-language';
-import findDoubleSpaces from './libs/doublespaces';
-import findRepeatedWords from './libs/repeatedwords';
-import detectOxfordCommas from './libs/oxfordcomma';
-import quotePunctuation from './libs/quote-punctuation';
-import find from './libs/bannedWords';
-import ordinalNumbers from './libs/ordinalNumbers';
-import compareDates from './libs/dates/comparedates';
-import compareDatesTz from './libs/dates/comparedates-tz';
-import compareNumbers from './libs/numbers';
-import compareTimes from './libs/time';
+import * as checksLang from './checks/checks-language';
+import findDoubleSpaces from './checks/doublespaces';
+import findRepeatedWords from './checks/repeatedwords';
+import detectOxfordCommas from './checks/oxfordcomma';
+import quotePunctuation from './checks/quote-punctuation';
+import find from './checks/bannedWords';
+import ordinalNumbers from './checks/ordinalNumbers';
+import compareDates from './checks/dates/comparedates';
+import compareDatesTz from './checks/dates/comparedates-tz';
+import compareNumbers from './checks/numbers/numbers';
+import compareTimes from './checks/time/time';
 
 const standardTests = [
   ['bannedWords', find],
