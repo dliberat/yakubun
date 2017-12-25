@@ -108,21 +108,13 @@ describe('Numbers check', function(){
          numIgnoreSource: [
                ["\u6A21\u5023\u8A2D\u8A08\u56F3\u9762\x28\x31\u7D1A\u5EFA\u7BC9\x29", " "]
             ]
-      }
+      };
       var source = '-[Sクラス]模倣設計図面(1級建築)';
       var target = 'Master Architect\'s Opus';
       var res = compareNumbers(source, target, options);
       expect(res[0]).to.equal(null);
    });
    it('1度ずつ、１個ずつ、１回ずつ、and １回あたり should all match with an "each" in the target if it is English');
-   
-   it('randomtest', function(){
-      const source = '新スロット「十二仙人物語」登場★';
-      const target = 'Play the new 12 Zodiac slots!';
-      const res = compareNumbers(source, target);
-      console.log(res[0]);
-      
-   });
 });
 
 describe('Number utilities', function(){
@@ -137,7 +129,7 @@ describe('Number utilities', function(){
    it('convert 1.000.000 into 1000000 for ES', function(){
       var res = util.removeDelimiters('1.000.000', 'es');
       expect(res).to.equal('1000000');
-   })
+   });
    it('convert 12,000,000 into 12000000 for JA', function(){
       var res = util.removeDelimiters('12,000,000', 'ja')
       expect(res).to.equal('12000000');
