@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import find from '../src/libs/bannedWords';
+import find from '../src/checks/bannedWords';
 
 describe('Search for banned words.', function(){
    

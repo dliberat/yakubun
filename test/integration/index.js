@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import * as yakubun from '../src/index';
+import * as yakubun from '../../src/index';
 
 let counter = 0;
 let bilingualDoc;
@@ -33,6 +33,10 @@ describe('Entry point - index.js', function(){
         source: '期間：9/26 16:59',
         target: 'Til 9/26, 12:59AM (PDT).',
       },
+      5: {
+        source: '最終ログイン日時が2017年2月7日0時0分より前、且つ、お客さまが保有する「クローバー」（有償のものも含む）のデータのみ（台湾でプレイされているお客さまを除く）',
+        target: 'Clovers in storage (both paid for and free) for players not playing in Taiwan whose last login was before 12am, Feb 7, 2017 (GMT+9).',
+      }
     };
   });
 
@@ -44,12 +48,12 @@ describe('Entry point - index.js', function(){
   
   it('Detect errors in the text', function(){
     const g = function g(segmentNumber, testResults){
-        if (segmentNumber == 2) {
-            //testResults.doubleSpaces = 'Check for double spaces.';
+        if (segmentNumber === 2) {
             expect(testResults.doubleSpaces).to.equal('Check for double spaces.');
+        } else if (segmentNumber == 5) {
+          console.log(testResults);
         }
     };
-    
     yakubun.scan(bilingualDoc, {}, g);
   });
 });

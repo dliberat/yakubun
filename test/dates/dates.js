@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
-import compareDates from '../src/libs/dates/comparedates';
-import convertToISOTime from '../src/libs/dates/convertToISOTime';
+import compareDates from '../../src/checks/dates/comparedates';
+import convertToISOTime from '../../src/checks/dates/convertToISOTime';
 
 describe('compareDates', function(){
     var options = {
@@ -14,7 +14,8 @@ describe('compareDates', function(){
         'en': [
             ['([1]?[0-9]:[0-5][0-9][ap]m), Dec(?:ember)?\\.? ([0-3]?[0-9])', '{2018-12-$2 $1}'], // 12:30pm, Dec. 23
             ['Jan(?:uary)?\\.? ([0-3]?[0-9])', '{2018-1-$1}'], // Jan. 15
-            ['([0-1]?[0-9])\\/([0-3]?[0-9]),? ([0-2]?[0-9]:[0-5][0-9][AP]M)', '{2018-$1-$2 $3}']  // 11/5, 16:59AM
+            ['([0-1]?[0-9])\\/([0-3]?[0-9]),? ([0-2]?[0-9]:[0-5][0-9][AP]M)', '{2018-$1-$2 $3}'],  // 11/5, 16:59AM
+            ['GMT\\+9', ' ']
             ]
         }
     };

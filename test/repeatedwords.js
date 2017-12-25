@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import findRepeatedWords from '../src/libs/repeatedwords';
+import findRepeatedWords from '../src/checks/repeatedwords';
 
 describe('Find repeated words', function(){
    var options = {};

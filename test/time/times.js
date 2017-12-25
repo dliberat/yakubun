@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import compareTimes from '../src/libs/time.js';
+import compareTimes from '../../src/checks/time/time.js';
 
 describe('compareTimes', function(){
     it('use data from the clean strings if available, or from regular source/target if not', function(){

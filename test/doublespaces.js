@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import findDoubleSpaces from '../src/libs/doublespaces';
+import findDoubleSpaces from '../src/checks/doublespaces';
 
 describe('Search for double spaces', function(){
    var options = {};

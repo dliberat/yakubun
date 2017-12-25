@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import * as general from '../src/libs/lib-generaluse';
+import * as general from '../src/utilities/general';
 
 describe('General use functions', function(){
    it('Verify whether two arrays are identical', function(){

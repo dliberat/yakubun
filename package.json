@@ -32,7 +32,7 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "test": "mocha test --require babel-core/register",
+    "test": "mocha test/* --require babel-core/register",
     "report": "nyc mocha test --require babel-core/register"
   }
 }

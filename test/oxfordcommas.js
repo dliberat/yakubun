@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import detectOxfordCommas from '../src/libs/oxfordcomma';
+import detectOxfordCommas from '../src/checks/oxfordcomma';
 
 describe('Detect Oxford commas', function(){
    var options = {};

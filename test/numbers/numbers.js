@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
-import compareNumbers from '../src/libs/numbers';
-const util = require('../src/libs/numbers-utility.js');
+import compareNumbers from '../../src/checks/numbers/numbers';
+const util = require('../../src/checks/numbers/numbers-utility.js');
 
 describe('Numbers check', function(){
    it('Use cleaned strings from timecheck if present', function(){
@@ -115,6 +115,12 @@ describe('Numbers check', function(){
       expect(res[0]).to.equal(null);
    });
    it('1度ずつ、１個ずつ、１回ずつ、and １回あたり should all match with an "each" in the target if it is English');
+   it('should handle 十二 and other 10+ JP numbers', function(){
+      const source = '新スロット「十二仙人物語」登場★';
+      const target = 'Play the new 12 Zodiac slots!';
+      const res = compareNumbers(source, target);
+      expect(res[0]).to.equal(null);
+   });
 });
 
 describe('Number utilities', function(){

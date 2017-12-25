@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import quotePunctuation from '../src/libs/quote-punctuation.js';
+import quotePunctuation from '../src/checks/quote-punctuation.js';
 
 describe('detect incorrect punctuation', function(){
     it('detect periods following quotation marks', function(){

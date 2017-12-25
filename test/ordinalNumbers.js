@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import ordinalNumbers from '../src/libs/ordinalNumbers.js';
+import ordinalNumbers from '../src/checks/ordinalNumbers.js';
 
 const options = {
     targetLang: 'en',
@@ -46,4 +46,9 @@ describe('Catch incorrect ordinal numbers', function(){
        const res = ordinalNumbers('', target, options);
        expect(res[0]).to.equal(null);
     });
+    it('Don\'t flag 11th', function() {
+        const target = 'This is the 11th present from me';
+        const res = ordinalNumbers('', target, options);
+        expect(res[0]).to.equal(null);
+    })
 });

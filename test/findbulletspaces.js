@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const langchecks = require('../src/libs/checks-language.js');
+const langchecks = require('../src/checks/checks-language.js');
 
 describe('Require spaces after bullet points', function(){
    var options = {};

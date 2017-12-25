@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-import compareDatesTz from '../src/libs/dates/comparedates-tz';
+import compareDatesTz from '../../src/checks/dates/comparedates-tz';
 
 describe('compareDatesTz', function(){
     var options = {
