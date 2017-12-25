@@ -2,8 +2,11 @@
   "name": "Yakubun",
   "version": "0.0.1",
   "description": "Library for checking Japanese translations",
-  "main": "app/dist/yakubun.js",
-  "repository": "",
+  "main": "dist/yakubun.js",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/garroadran/yakubun"
+  },
   "author": "Dan Liberatori <daniel.liberatori@gmail.com>",
   "dependencies": {
     "moment": "^2.19.1",
@@ -20,6 +23,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "json-loader": "^0.5.7",
+    "mocha": "^4.0.1",
     "nyc": "^11.3.0",
     "sinon": "^4.1.2",
     "style-loader": "^0.19.0",
@@ -29,7 +33,7 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "test": "mocha app/test --require babel-core/register",
-    "report": "nyc mocha app/test --require babel-core/register"
+    "test": "mocha test --require babel-core/register",
+    "report": "nyc mocha test --require babel-core/register"
   }
 }
