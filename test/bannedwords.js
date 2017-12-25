@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-//const mod = require('../src/libs/bannedWords.js');
 import find from '../src/libs/bannedWords';
 
 describe('Search for banned words.', function(){
@@ -21,7 +20,7 @@ describe('Search for banned words.', function(){
                 'CaseInsensitive': ['sexy'],
                 'CaseSensitive': ['diamond', '(?!^)(Character)(?! Booster)']
                 }
-            }
+            };
        
        it('Works in case insensitive mode', function(){
         var target = 'Check out that Sexy Diamond!';
@@ -54,7 +53,7 @@ describe('Search for banned words.', function(){
              'bannedWordsList': {
                  'CaseSensitive': ['diamond']
              }
-         } 
+         };
          var res = find('', target, list, undefined);
          expect(res[0]).to.equal(null);
       });
@@ -64,7 +63,7 @@ describe('Search for banned words.', function(){
               'bannedWordsList': {
                   'CaseInsensitive': ['sexy']
               }
-          }
+          };
          var res = find('', target, list, undefined);
          expect(res[0]).to.equal('Suspicious terminology: <span class="text-warning">sexy</span>');
       });
