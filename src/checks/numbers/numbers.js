@@ -1,4 +1,5 @@
 import * as general from '../../utilities/general';
+import CheckResult from '../../utilities/CheckResult';
 import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './numbers-utility';
 
 const oSubstitutions = {
@@ -57,7 +58,7 @@ function commonSubs(string, lang) {
 }
 
 function compareAndFormat(comparison, oAccumulator) {
-  let retval = null;
+  let checkResult = new CheckResult('numbers');
   let [src, tgt] = comparison;
   const compare = general.compareArrays(src, tgt);
 
@@ -65,11 +66,14 @@ function compareAndFormat(comparison, oAccumulator) {
     if (src.length === 0) src = ['nothing'];
     if (tgt.length === 0) tgt = ['nothing'];
 
-    retval = `Found <span class="text-warning">${src.join(', ')
+    checkResult.hasError = true;
+    checkResult.HTML = `Found <span class="text-warning">${src.join(', ')
     }</span> in source and <span class="text-warning">${tgt.join(', ')}</span> in target.`;
+    checkResult.plainText = `Found ${src.join(', ')} in source and ${tgt.join(', ')} in target.`;
+    checkResult.description = 'Numbers in source should be present in target and vice versa.';
   }
 
-  return [retval, oAccumulator];
+  return [checkResult, oAccumulator];
 }
 
 function oncePerAdjustments(comparison, target, oAccumulator) {

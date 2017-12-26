@@ -1,5 +1,5 @@
-const expect = require('chai').expect;
 import find from '../src/checks/bannedWords';
+const expect = require('chai').expect;
 
 describe('Search for banned words.', function(){
    
@@ -8,14 +8,14 @@ describe('Search for banned words.', function(){
            var list = {};
            var target = 'Check out that sexy Diamond!';
            
-           var undef = find('', target, list, undefined);
-           expect(undef).to.deep.equal([null,undefined]);
+           var [undef] = find('', target, list, undefined);
+           expect(undef.hasError).to.equal(false);
        });
    });
    
    describe('Find banned words', function(){
        
-        var list = {
+        const list = {
             bannedWordsList: {
                 'CaseInsensitive': ['sexy'],
                 'CaseSensitive': ['diamond', '(?!^)(Character)(?! Booster)']
@@ -23,15 +23,15 @@ describe('Search for banned words.', function(){
             };
        
        it('Works in case insensitive mode', function(){
-        var target = 'Check out that Sexy Diamond!';
-        var caseinsens = find('', target, list, undefined);
-        expect(caseinsens[0]).to.equal('Suspicious terminology: <span class="text-warning">Sexy</span>');
+        const target = 'Check out that Sexy Diamond!';
+        const [res] = find('', target, list, undefined);
+        expect(res.HTML).to.equal('Suspicious terminology: <span class="text-warning">Sexy</span>');
        });
        
        it('Works in case sensitive mode', function(){
-        var target = 'Check out that cool diamond!';
-        var casesens = find('', target, list, undefined);
-        expect(casesens[0]).to.equal('Suspicious terminology: <span class="text-warning">diamond</span>');
+        const target = 'Check out that cool diamond!';
+        const [res] = find('', target, list, undefined);
+        expect(res.HTML).to.equal('Suspicious terminology: <span class="text-warning">diamond</span>');
        });
        
        it.skip('Handles grouping', function(){
@@ -46,26 +46,26 @@ describe('Search for banned words.', function(){
    });
    
    describe('Only one list gets passed', function(){
-      var target = 'Check out that sexy Diamond!';
+      const target = 'Check out that sexy diamond!';
       
       it('Works if there is no case insensitive list', function(){
-         var list = {
+         const listb = {
              'bannedWordsList': {
                  'CaseSensitive': ['diamond']
              }
          };
-         var res = find('', target, list, undefined);
-         expect(res[0]).to.equal(null);
+         const [resA] = find('', target, listb, undefined);
+         expect(resA.hasError).to.equal(true);
       });
       
       it('Works if there is no case sensitive list', function(){
-         var list = {
+         const listc = {
               'bannedWordsList': {
                   'CaseInsensitive': ['sexy']
               }
           };
-         var res = find('', target, list, undefined);
-         expect(res[0]).to.equal('Suspicious terminology: <span class="text-warning">sexy</span>');
+         const [resB] = find('', target, listc, undefined);
+         expect(resB.HTML).to.equal('Suspicious terminology: <span class="text-warning">sexy</span>');
       });
    });
     

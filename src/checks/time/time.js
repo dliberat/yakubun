@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import * as general from '../../utilities/general';
+import CheckResult from '../../utilities/CheckResult';
 import convertTimesToISO from '../../utilities/convertTimesToISO';
 
 let oAccumulator;
@@ -98,15 +99,19 @@ function parseTimeStringsIntoMomentArr(stringsArr) {
 
 function hikaku(sourceMoments, targetMoments) {
   const compare = compareMomentTimes(sourceMoments, targetMoments);
-  let retval = null;
+  const checkResult = new CheckResult('time');
 
   // compare times
   if (!compare) {
-    retval = `Times: Found <span class="text-time">${timeDisplayFormatting(sourceMoments)
+    checkResult.hasError = true;
+    checkResult.description = 'Times should match between source and target';
+    checkResult.HTML = `Times: Found <span class="text-time">${timeDisplayFormatting(sourceMoments)
     }</span> in source and <span class="text-time">${timeDisplayFormatting(targetMoments)}</span> in target.`;
+    checkResult.plainText = `Times: Found ${timeDisplayFormatting(sourceMoments)
+    } in source and ${timeDisplayFormatting(targetMoments)} in target.`;
   }
 
-  return [retval, oAccumulator];
+  return [checkResult, oAccumulator];
 }
 
 function momentConversion(comparison) {

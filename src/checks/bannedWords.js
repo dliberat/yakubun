@@ -1,17 +1,21 @@
 import * as general from '../utilities/general';
+import CheckResult from '../utilities/CheckResult';
 
 /**
  * Creates a string to return as an output
  * @param {string[]} outputArray - The array of words detected
  */
 function outputString(outputArray) {
-  let retval = null;
+  const checkResult = new CheckResult('banned-words');
 
   if (outputArray.length > 0) {
-    retval = `Suspicious terminology: <span class="text-warning">${outputArray.join(', ')}</span>`;
+    checkResult.hasError = true;
+    checkResult.HTML = `Suspicious terminology: <span class="text-warning">${outputArray.join(', ')}</span>`;
+    checkResult.plainText = `Suspicious terminology: ${outputArray.join(', ')}`;
+    checkResult.description = '';
   }
 
-  return retval;
+  return checkResult;
 }
 
 /**
@@ -55,7 +59,7 @@ function find(source, target, checkOptions, oAccumulator) {
   if (checkOptions.bannedWordsList) {
     bannedWordsObj = checkOptions.bannedWordsList;
   }
-  if (!bannedWordsObj) { return [null, oAccumulator]; }
+  if (!bannedWordsObj) { return [outputString([]), oAccumulator]; }
 
   let outputArray = scanForBannedWords(target, bannedWordsObj.CaseInsensitive, false);
   outputArray = scanForBannedWords(target, bannedWordsObj.CaseSensitive, true, outputArray);
