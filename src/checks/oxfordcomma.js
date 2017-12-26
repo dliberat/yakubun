@@ -1,20 +1,35 @@
-function formatOutput(test, msg, oAccumulator) {
-  // if the regex returned true, send the message
-  let retval = null;
-  if (test) retval = msg;
-  return [retval, oAccumulator];
-}
+import CheckResult from '../utilities/CheckResult';
 
-function getMessage(required) {
-  if (required) {
-    return 'Possibly missing an Oxford comma.';
+let acc;
+let msg;
+let description;
+
+function formatOutput(test) {
+  const checkResult = new CheckResult('oxford-comma');
+  if (test) {
+    checkResult.hasError = true;
+    checkResult.HTML = msg;
+    checkResult.plainText = msg;
+    checkResult.description = description;
   }
-  return 'Oxford comma detected.';
+  return [checkResult, acc];
 }
 
-function detectOxfordCommas(source, target, checkOptions, oAccumulator) {
+function setMessage(required) {
+  if (required) {
+    msg = 'Possibly missing an Oxford comma.';
+    description = 'Comma-separated lists ending in "and" or "or" require a comma before the "and" or "or."';
+  }
+
+  msg = 'Oxford comma detected.';
+  description = 'Comma-separated lists ending in "and" or "or" should not have a comma before the "and" or "or."';
+}
+
+function detectOxfordCommas(source, target, checkOptions = {}, oAccumulator = {}) {
   let re;
   let requireOxfordComma = true;
+
+  acc = oAccumulator;
 
   // check settings
   if (checkOptions.requireOxfordComma === false) requireOxfordComma = false;
@@ -25,10 +40,10 @@ function detectOxfordCommas(source, target, checkOptions, oAccumulator) {
     re = new RegExp('([a-z]+)((?:,\\s[a-z]+)+),\\s+(and|or|and\\/or)\\s+([a-z]+)', 'gi');
   }
 
-  const msg = getMessage(requireOxfordComma);
+  setMessage(requireOxfordComma);
   const test = re.test(target);
 
-  return formatOutput(test, msg, oAccumulator);
+  return formatOutput(test);
 }
 
 export default detectOxfordCommas;

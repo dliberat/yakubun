@@ -5,44 +5,44 @@ describe('Detect Oxford commas', function(){
    var options = {};
    var optionsDisabled = { requireOxfordComma: false };
  
-   describe('Return null if there is no error', function(){
+   describe('Return false if there is no error', function(){
        it('Empty string', function(){
-           var target = '';
-           var res = detectOxfordCommas('', target, options, undefined);
-           expect(res[0]).to.equal(null);
+           const target = '';
+           const [res] = detectOxfordCommas('', target, options, undefined);
+           expect(res.hasError).to.equal(false);
        });
        it('One, two, and three', function(){
-          var target = 'One, two, and three.';
-          var res = detectOxfordCommas('', target, options, undefined);
-          expect(res[0]).to.equal(null);
+          const target = 'One, two, and three.';
+          const [res] = detectOxfordCommas('', target, options, undefined);
+          expect(res.hasError).to.equal(false);
        });
        it('One, two, or three', function(){
-        var target = 'One, two, or three';
-        var res = detectOxfordCommas('', target, options, undefined);
-        expect(res[0]).to.equal(null);
+        const target = 'One, two, or three';
+        const [res] = detectOxfordCommas('', target, options, undefined);
+        expect(res.hasError).to.equal(false);
        });
        it('One, two, and/or three', function(){
-          var target = 'One, two, and/or three';
-          var res = detectOxfordCommas('', target, options, undefined);
-          expect(res[0]).to.equal(null);
+          const target = 'One, two, and/or three';
+          const [res] = detectOxfordCommas('', target, options, undefined);
+          expect(res.hasError).to.equal(false);
        });
        it('requireOxfordComma: false - One, two and three', function(){
-        var target = 'One, two and three';
-        var res = detectOxfordCommas('', target, optionsDisabled, undefined);
+        const target = 'One, two and three';
+        const [res] = detectOxfordCommas('', target, optionsDisabled, undefined);
        });
    });
    
    describe('Flag errors', function(){
        it('One, two and three', function(){
-        var target = 'One, two and three';
-        var res = detectOxfordCommas('', target, options, undefined);
-        expect(res[0]).to.equal('Possibly missing an Oxford comma.');
+        const target = 'One, two and three';
+        const [res] = detectOxfordCommas('', target, options, undefined);
+        expect(res.hasError).to.equal(true);
        });
        
        it('requireOxfordComma: false - One, two, and three', function(){
-        var target = 'One, two, and three';
-        var res = detectOxfordCommas('', target, optionsDisabled, undefined);
-        expect(res[0]).to.equal('Oxford comma detected.');
+        const target = 'One, two, and three';
+        const [res] = detectOxfordCommas('', target, optionsDisabled, undefined);
+        expect(res.hasError).to.equal(true);
        });
        
    });

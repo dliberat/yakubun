@@ -4,16 +4,22 @@ Check ordinal numbers to ensure that they have the proper trailing letters
 
 import indicator from 'ordinal/indicator';
 import * as general from '../utilities/general';
+import CheckResult from '../utilities/CheckResult';
 
 let accumulator;
 
-function returnString(arr) {
-  const retval = `Check ordinal numbers: ${arr.join(', ')}`;
-  return [retval, accumulator];
+function returnError(arr) {
+  const checkResult = new CheckResult('ordinal-numbers');
+  checkResult.hasError = true;
+  checkResult.HTML = `Check ordinal numbers: ${arr.join(', ')}`;
+  checkResult.plainText = `Check ordinal numbers: ${arr.join(', ')}`;
+  checkResult.description = 'Verify spelling of numbers such as "1st", "2nd" and "3rd."';
+  return [checkResult, accumulator];
 }
 
 function returnNull() {
-  return [null, accumulator];
+  const checkResult = new CheckResult('ordinal-numbers');
+  return [checkResult, accumulator];
 }
 
 function hasBadSuffix(arr) {
@@ -40,7 +46,7 @@ function compareWithRules(arr) {
   });
 
   if (suspiciousNumbers.length > 0) {
-    return returnString(suspiciousNumbers);
+    return returnError(suspiciousNumbers);
   }
 
   return returnNull();
