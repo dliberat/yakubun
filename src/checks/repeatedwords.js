@@ -1,10 +1,18 @@
+import CheckResult from '../utilities/CheckResult';
+
 // words that are allowed to repeat
 const exceptions = ['tsum', 'bye', 'hee', 'heh', 'ha', 'woo', 'boo'];
 
 function formatOutput(stringArr, oAccumulator) {
-  let retval = null;
-  // the array will come back empty if no words were found
-  if (stringArr.length > 0) { retval = `Repeated words: ${stringArr.join(', ')}`; }
+  const retval = new CheckResult('repeatedWords', false);
+
+  if (stringArr.length > 0) {
+    retval.hasError = true;
+    retval.HTML = `Repeated words: ${stringArr.join(', ')}`;
+    retval.plainText = `Repeated words: ${stringArr.join(', ')}`;
+    retval.description = 'Did you mean to repeat these words?';
+  }
+
   return [retval, oAccumulator];
 }
 

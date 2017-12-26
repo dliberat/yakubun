@@ -1,41 +1,39 @@
-const expect = require('chai').expect;
 import findRepeatedWords from '../src/checks/repeatedwords';
+const expect = require('chai').expect;
 
-describe('Find repeated words', function(){
-   var options = {};
-   
-   describe('Return null if there is no error', function(){
-       it('Empty string', function(){
-           var target = '';
-           var res = findRepeatedWords('', target, options, undefined);
-           expect(res[0]).to.equal(null);
-       });
-       it('Lorem ipsum text', function(){
-          var target = 'I like dogs and everybody else should like dogs, too.';
-          var res = findRepeatedWords('', target, options, undefined);
-          expect(res[0]).to.equal(null);
-       });
-   });
-   
-   describe('Find repeated words', function(){
-       it('Find repeated words', function(){
-        var target = 'This is is sample text.';
-        var res = findRepeatedWords('', target, options, undefined);
-        expect(res[0]).to.equal('Repeated words: is');
-       });
-       
-       it('Ignore case and find repeated words', function(){
-        var target = 'This this is sample text.';
-        var res = findRepeatedWords('', target, options, undefined);
-        expect(res[0]).to.equal('Repeated words: this');
-       });
-       
-       it('Do not flag words in ignore list', function(){
-           var target = 'This is a test, ha ha ha.';
-           var res = findRepeatedWords('', target, options, undefined);
-           expect(res[0]).to.equal(null);
-       });
-   });
-   
+describe('Find repeated words', () => {
+  const options = {};
 
+  describe('Return null if there is no error', () => {
+    it('Empty string', () => {
+      const target = '';
+      const [res] = findRepeatedWords('', target, options, undefined);
+      expect(res.hasError).to.equal(false);
+    });
+    it('Lorem ipsum text', () => {
+      const target = 'I like dogs and everybody else should like dogs, too.';
+      const [res] = findRepeatedWords('', target, options, undefined);
+      expect(res.hasError).to.equal(false);
+    });
+  });
+
+  describe('Find repeated words', () => {
+    it('Find repeated words', () => {
+      const target = 'This is is sample text.';
+      const [res] = findRepeatedWords('', target, options, undefined);
+      expect(res.plainText).to.equal('Repeated words: is');
+    });
+
+    it('Ignore case and find repeated words', () => {
+      const target = 'This this is sample text.';
+      const [res] = findRepeatedWords('', target, options, undefined);
+      expect(res.plainText).to.equal('Repeated words: this');
+    });
+
+    it('Do not flag words in ignore list', () => {
+      const target = 'This is a test, ha ha ha.';
+      const [res] = findRepeatedWords('', target, options, undefined);
+      expect(res.hasError).to.equal(false);
+    });
+  });
 });
