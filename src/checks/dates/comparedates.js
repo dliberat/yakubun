@@ -2,6 +2,7 @@ import * as general from '../../utilities/general';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';
+import CheckResult from '../../utilities/CheckResult';
 
 function removeMatchedDates(momentArr, sideArr = [], sideArrTarget = []) {
   let slashFormat;
@@ -89,7 +90,10 @@ function compareDates(source, target, checkOptions, accumulator) {
 
   // return if the comparison matches exactly, since no further checking is necessary
   if (compare) {
-    return [null, oAccumulator];
+    const res = new CheckResult('dates');
+    res.hasError = false;
+    res.hasTargetDate = datesRegExp.test(cleanTarget);
+    return [res, oAccumulator];
   }
 
   // extract dates with 9/21 format and leave them in a side array
@@ -118,7 +122,9 @@ function compareDates(source, target, checkOptions, accumulator) {
 
     retval = formatForOutput(res, oAccumulator, null, null);
   }
-
+  
+  retval.checkName = 'dates';
+  retval.hasTargetDate = datesRegExp.test(cleanTarget);
   return [retval, oAccumulator];
 }
 

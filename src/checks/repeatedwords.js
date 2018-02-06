@@ -4,16 +4,16 @@ import CheckResult from '../utilities/CheckResult';
 const exceptions = ['tsum', 'bye', 'hee', 'heh', 'ha', 'woo', 'boo'];
 
 function formatOutput(stringArr, oAccumulator) {
-  const retval = new CheckResult('repeatedWords', false);
+  const checkResult = new CheckResult('repeatedWords', false);
 
   if (stringArr.length > 0) {
-    retval.hasError = true;
-    retval.HTML = `Repeated words: ${stringArr.join(', ')}`;
-    retval.plainText = `Repeated words: ${stringArr.join(', ')}`;
-    retval.description = 'Did you mean to repeat these words?';
+    checkResult.hasError = true;
+    checkResult.HTML = `Repeated words: ${stringArr.join(', ')}`;
+    checkResult.plainText = `Repeated words: ${stringArr.join(', ')}`;
+    checkResult.description = 'Did you mean to repeat these words?';
   }
 
-  return [retval, oAccumulator];
+  return [checkResult, oAccumulator];
 }
 
 function findRepeatedWords(source, target, checkOptions, oAccumulator) {

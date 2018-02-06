@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import * as general from '../../utilities/general';
+import CheckResult from '../../utilities/CheckResult';
 
 /*
 Takes an array with the following arguments
@@ -52,7 +53,20 @@ function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
     output = null;
   }
 
-  return output;
+  const checkResult = new CheckResult('dates');
+  checkResult.hasError = output !== null;
+  checkResult.HTML = output;
+  
+  if (output) {
+    checkResult.plainText = output.replace(/<(?:.|\n)*?>/gm, '');
+  } else {
+    checkResult.plainText = output;
+  }
+
+  /* This does not yet include info on whether any dates were
+  detected or not! That info needs to be filled in by the
+  main module before sthe result gets sent back to the calling function */
+  return checkResult;
 }
 
 export default formatForOutput;

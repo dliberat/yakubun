@@ -2,13 +2,15 @@ import * as general from '../../utilities/general';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';
+import CheckResult from '../../utilities/CheckResult';
 
 function compareDatesTz(source, target, checkOptions, oAccumulator) {
   if (!dates.verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
     general.metalogger('Invalid checkOptions. Could not compare dates');
-    return [null, oAccumulator];
+    const res = new CheckResult('dates-tz', false);
+    return [res, oAccumulator];
   }
 
   let retval = null;
@@ -50,6 +52,9 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
 
   // momentArr should now only contain the dates that have no matches
   retval = formatForOutput(momentArr, oAccumulator, sourceTZ, targetTZ);
+
+  retval.checkName = 'dates-tz';
+  retval.hasTargetDate = datesRegExp.test(cleanTarget);
 
   return [retval, oAccumulator];
 }

@@ -1,6 +1,5 @@
-const expect = require('chai').expect;
+import { expect } from 'chai';
 import compareDates from '../../src/checks/dates/comparedates';
-import convertToISOTime from '../../src/checks/dates/convertToISOTime';
 
 describe('compareDates', function(){
     var options = {
@@ -37,23 +36,23 @@ describe('compareDates', function(){
         expect(clean_target).to.equal('starts {2018-1-2}');
     });
     it('should convert all months and days and times into two-digit format');
-    it('should return null if there are matching dates', function(){
+    it('should return no error if there are matching dates', function(){
         var source = '2018年１月２日から開催';
         var target = 'starts Jan. 2';
         var res = compareDates(source, target, options, {});
-        expect(res[0]).to.equal(null);
+        expect(res[0].hasError).to.be.false;
     });
     it('should recognize that a date in the source does not exist in the target', function(){
        var source = 'イベント期間：21:59 01/10';
        var target = 'Event period: ';
        var res = compareDates(source, target, options, {});
-       expect(res[0]).to.equal('Source dates w/o match in target: <span class="text-date">Jan. 10</span>');
+       expect(res[0].hasError).to.be.true;
     });
     it('should recognize that a date in the target does not exist in the source', function(){
         var source = 'イベント期間：';
         var target = 'Event period: 9:59pm, Dec. 10';
         var res = compareDates(source, target, options, {});
-        expect(res[0]).to.equal('Target dates w/o match in source: <span class="text-date">Dec. 10</span>');
+        expect(res[0].hasError).to.be.true;
     });
     it('should not recognize ３日間 as a date, and leave the number in the clean string');
     it('should not recognize ２日連続 as a date, and leave the number in the clean string');
@@ -61,20 +60,3 @@ describe('compareDates', function(){
 });
 
 
-describe('convertToISOTime', function(){
-    it('12:00am -> 00:00', function(){
-        expect(convertToISOTime('12:00am')).to.equal('00:00');
-    });
-    it('12:00pm -> 12:00', function(){
-       expect(convertToISOTime('12:00pm')).to.equal('12:00');
-    });
-    it('3:34 -> 03:34', function(){
-        expect(convertToISOTime('3:34')).to.equal('03:34');
-    });
-    it('10:01pm -> 22:01', function(){
-       expect(convertToISOTime('10:01pm')).to.equal('22:01');
-    });
-    it('0:00 -> 00:00', function(){
-       expect(convertToISOTime('0:00')).to.equal('00:00');
-    });
-});
