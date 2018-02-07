@@ -122,7 +122,7 @@ function compareDates(source, target, checkOptions, accumulator) {
 
     retval = formatForOutput(res, oAccumulator, null, null);
   }
-  
+
   retval.checkName = 'dates';
   retval.hasTargetDate = datesRegExp.test(cleanTarget);
   return [retval, oAccumulator];

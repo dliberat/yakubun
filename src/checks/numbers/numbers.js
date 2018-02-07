@@ -13,7 +13,7 @@ function commonSubs(string, lang) {
 }
 
 function compareAndFormat(comparison, oAccumulator) {
-  let checkResult = new CheckResult('numbers');
+  const checkResult = new CheckResult('numbers');
   let [src, tgt] = comparison;
   const compare = general.compareArrays(src, tgt);
 

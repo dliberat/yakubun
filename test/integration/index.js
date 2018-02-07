@@ -50,8 +50,6 @@ describe('Entry point - index.js', function(){
     const g = function g(segmentNumber, testResults){
         if (segmentNumber === 2) {
             expect(testResults.doubleSpaces).to.equal('Check for double spaces.');
-        } else if (segmentNumber == 5) {
-          console.log(testResults);
         }
     };
     yakubun.scan(bilingualDoc, {}, g);

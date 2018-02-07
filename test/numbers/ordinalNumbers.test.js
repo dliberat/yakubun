@@ -1,5 +1,5 @@
-const expect = require('chai').expect;
-import ordinalNumbers from '../src/checks/ordinalNumbers.js';
+import { expect } from 'chai';
+import ordinalNumbers from '../../src/checks/ordinalNumbers';
 
 const options = {
     targetLang: 'en',

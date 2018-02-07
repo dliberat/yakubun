@@ -56,7 +56,7 @@ function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
   const checkResult = new CheckResult('dates');
   checkResult.hasError = output !== null;
   checkResult.HTML = output;
-  
+
   if (output) {
     checkResult.plainText = output.replace(/<(?:.|\n)*?>/gm, '');
   } else {
