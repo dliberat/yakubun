@@ -9,6 +9,7 @@
   },
   "author": "Dan Liberatori <daniel.liberatori@gmail.com>",
   "dependencies": {
+    "comma-number": "^2.0.0",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",
     "ordinal": "^1.0.2"
@@ -33,6 +34,7 @@
     "build": "webpack",
     "watch": "webpack --watch",
     "test": "mocha test/* --require babel-core/register",
+    "testnum": "mocha test/numbers/* --require babel-core/register",
     "report": "nyc mocha test --require babel-core/register"
   }
 }

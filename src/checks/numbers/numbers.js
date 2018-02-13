@@ -1,3 +1,4 @@
+import commaNumber from 'comma-number';
 import * as general from '../../utilities/general';
 import CheckResult from '../../utilities/CheckResult';
 import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './numbers-utility';
@@ -12,14 +13,21 @@ function commonSubs(string, lang) {
   return string;
 }
 
+function prettifyNumArray(arr) {
+  if (arr.length === 0) {
+    return ['nothing'];
+  }
+  return arr.map(element => commaNumber(element));
+}
+
 function compareAndFormat(comparison, oAccumulator) {
   const checkResult = new CheckResult('numbers');
   let [src, tgt] = comparison;
-  const compare = general.compareArrays(src, tgt);
+  const arraysAreEqual = general.compareArrays(src, tgt);
 
-  if (!compare) {
-    if (src.length === 0) src = ['nothing'];
-    if (tgt.length === 0) tgt = ['nothing'];
+  if (!arraysAreEqual) {
+    src = prettifyNumArray(src);
+    tgt = prettifyNumArray(tgt);
 
     checkResult.hasError = true;
     checkResult.HTML = `Found <span class="text-warning">${src.join(', ')

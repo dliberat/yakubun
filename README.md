@@ -267,7 +267,7 @@ function customTest(source, target, checkOptions, accumulator){
 }
 ```
 
-Pay special attention to the return value of the custom function. It must be an array. The first element of the array should be `null` if the segment passed the check. Otherwise, it should be a string that will get passed to your callback function for displaying the check results. The second element in the array should be the accumulator object, so that it can be passed ahead to the next test.
+Pay special attention to the return value of the custom function. It must be an array. The first element of the array should be a `CheckResult` object. The second element in the array should be the accumulator object, so that it can be passed ahead to the next test.
 
 Crosscheck Functions
 --------------------
