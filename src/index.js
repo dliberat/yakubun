@@ -50,6 +50,14 @@ function startScan(bilingualDoc, checkOptions, callback) {
     // use the accumulator to carry over data between segments
     oAccumulator = acc;
 
+    /* TO DO:
+       Results should be stored in an object that keeps track
+       of the errors that were found. That way, it should be possible
+       to implement an 'ignore error' function by keeping track of
+       the results of the previous scan. If an identical result
+       exists that has an 'ignore' flag, then it can be ignored.
+    */
+
     if (callback) {
       callback(segment, res);
     }
