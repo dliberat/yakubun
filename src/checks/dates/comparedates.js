@@ -124,7 +124,11 @@ function compareDates(source, target, checkOptions, accumulator) {
   }
 
   retval.checkName = 'dates';
-  retval.hasTargetDate = datesRegExp.test(cleanTarget);
+  
+  // Copy the arrays into the CheckResults object
+  retval.sourceDates = momentArr[0].slice();
+  retval.targetDates = momentArr[1].slice();
+
   return [retval, oAccumulator];
 }
 

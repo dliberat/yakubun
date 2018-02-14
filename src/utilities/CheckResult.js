@@ -1,14 +1,19 @@
 /**
- * Constructor function for an object to be returned by all checks.
- *
+ * @constructor
  */
-function CheckResult(checkName, hasError = false, HTML = '', hasDate = false) {
+function CheckResult(checkName, hasError = false, HTML = '') {
   this.checkName = checkName;
   this.description = '';
   this.hasError = hasError;
   this.HTML = HTML;
   this.plainText = '';
-  this.hasTargetDate = hasDate;
+  
+  this.sourceDates = [];
+  this.targetDates = [];
+
+  /* These are currently unused */
+  this.sourceNums = [];
+  this.targetNums = [];
 }
 
 export default CheckResult;

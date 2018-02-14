@@ -39,24 +39,31 @@ describe('compareDates', function(){
     it('should return no error if there are matching dates', function(){
         var source = '2018年１月２日から開催';
         var target = 'starts Jan. 2';
-        var res = compareDates(source, target, options, {});
-        expect(res[0].hasError).to.be.false;
+        var [res] = compareDates(source, target, options, {});
+        expect(res.hasError).to.be.false;
     });
     it('should recognize that a date in the source does not exist in the target', function(){
        var source = 'イベント期間：21:59 01/10';
        var target = 'Event period: ';
-       var res = compareDates(source, target, options, {});
-       expect(res[0].hasError).to.be.true;
+       var [res] = compareDates(source, target, options, {});
+       expect(res.hasError).to.be.true;
     });
     it('should recognize that a date in the target does not exist in the source', function(){
         var source = 'イベント期間：';
         var target = 'Event period: 9:59pm, Dec. 10';
-        var res = compareDates(source, target, options, {});
-        expect(res[0].hasError).to.be.true;
+        var [res] = compareDates(source, target, options, {});
+        expect(res.hasError).to.be.true;
     });
     it('should not recognize ３日間 as a date, and leave the number in the clean string');
     it('should not recognize ２日連続 as a date, and leave the number in the clean string');
     it('should clean out some basic words with numeral kanji in them');
+    it('Return detected dates in the results object', () => {
+       const source = 'イベント期間：20:59 2/21 から　2018年3月20日まで';
+       const target = 'Event from 8:59pm, Dec. 21 to Jan. 20';
+       const [res] = compareDates(source, target, options, {});
+       expect(res.sourceDates).to.be.an('array').that.has.lengthOf(2);
+       expect(res.targetDates).to.be.an('array').that.has.lengthOf(2);
+    });
 });
 
 
