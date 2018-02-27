@@ -6,12 +6,13 @@ import CheckResult from '../utilities/CheckResult';
 
 let acc;
 let searchTerm;
+let searchTermComma;
 let caution;
 
-function generateResult(test) {
+function generateResult(foundError) {
   const checkResult = new CheckResult('quote-punctuation');
 
-  if (test > -1) {
+  if (foundError) {
     checkResult.hasError = true;
     checkResult.description = caution;
     checkResult.HTML = caution;
@@ -24,9 +25,11 @@ function generateResult(test) {
 function setStyle(location = 'US') {
   if (location === 'UK') {
     searchTerm = '."';
+    searchTermComma = ',"';
     caution = 'Quotation marks should precede periods.';
   } else {
     searchTerm = '".';
+    searchTermComma = '",';
     caution = 'Periods should precede quotation marks.';
   }
 }
@@ -37,9 +40,10 @@ function quotePunctuation(source, target, checkOptions = {}, oAccumulator) {
   // style defaults to American
   setStyle(checkOptions.quotationMarks);
 
-  const test = target.indexOf(searchTerm);
+  const period = target.indexOf(searchTerm);
+  const comma = target.indexOf(searchTermComma);
 
-  return generateResult(test);
+  return generateResult(period > -1||comma > -1);
 }
 
 export default quotePunctuation;
