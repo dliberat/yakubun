@@ -11,6 +11,7 @@ function findJPCharacters(source, target, checkOptions, oAccumulator) {
     '\uFF1A', // ：
     '\uFF01', // !
     '\u3000', // space
+    '\uFF0E', // ．
   ];
 
   const foundChars = [];
