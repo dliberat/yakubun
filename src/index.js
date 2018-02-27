@@ -1,4 +1,4 @@
-/* YAKUBUN 1.0.0 https://github.com/garroadran/yakubun Created by Dan Liberatori. Free for use and modification (but notify the author please!) */
+/* YAKUBUN 1.1.0 https://github.com/garroadran/yakubun Created by Dan Liberatori. Free for use and modification (but notify the author please!) */
 
 import verify from './verifyOptions';
 import getTests from './getTests';

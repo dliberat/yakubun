@@ -95,7 +95,7 @@ bannedWordsList = {
 
 3. Zenkaku characters (`zenkakuCharacters`)
 
-   Checks for the presence of the following full-width characters: （,）,：,！, and a full-width space. Additional full-width characters can be specified in `bannedWordsList` if necessary.
+   Checks for the presence of the following full-width characters: （,）,：,！, full-width full stops (．), and a full-width space. Additional full-width characters can be specified in `bannedWordsList` if necessary.
 
 4. Repeated words (`repeatedWords`)
 
@@ -225,6 +225,10 @@ bannedWordsList = {
 12. Numbers
 
    Details coming soon.
+
+13. Quotation Punctuation
+
+   Throws a warning when quoted text is followed by a period or comma after the final quote (e.g. "This is incorrect", he said.). Pass in the parameter `quotationMarks: 'UK'` in `checkOptions` to reverse the behavior, so that "this quote throws up a warning."
 
 Custom tests
 ============
