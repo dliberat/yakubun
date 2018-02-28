@@ -43,7 +43,7 @@ function quotePunctuation(source, target, checkOptions = {}, oAccumulator) {
   const period = target.indexOf(searchTerm);
   const comma = target.indexOf(searchTermComma);
 
-  return generateResult(period > -1||comma > -1);
+  return generateResult(period > -1 || comma > -1);
 }
 
 export default quotePunctuation;

@@ -7,7 +7,7 @@ function CheckResult(checkName, hasError = false, HTML = '') {
   this.hasError = hasError;
   this.HTML = HTML;
   this.plainText = '';
-  
+
   this.sourceDates = [];
   this.targetDates = [];
 

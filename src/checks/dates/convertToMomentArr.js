@@ -40,7 +40,7 @@ function targetConverter(e) {
 function convertToMomentArr(comparison, tzSource, tzTarget) {
   sourceTz = tzSource;
   targetTz = tzTarget;
-  
+
   const newArr = [];
 
   newArr[0] = comparison[0].map(sourceConverter).sort(momentDateSort);
