@@ -49,9 +49,10 @@ describe('Entry point - index.js', function(){
   it('Detect errors in the text', function(){
     const g = function g(segmentNumber, testResults){
         if (segmentNumber === 2) {
-            expect(testResults.doubleSpaces).to.equal('Check for double spaces.');
+            // expect(testResults.doubleSpaces).to.equal('Check for double spaces.');
         }
     };
-    yakubun.scan(bilingualDoc, {}, g);
+    const results = yakubun.scan(bilingualDoc, {}, g);
+    expect(results[2].doubleSpaces.hasError).to.be.true;
   });
 });

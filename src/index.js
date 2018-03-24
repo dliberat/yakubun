@@ -10,6 +10,17 @@ import {
   compareArrays,
 } from './utilities/general';
 
+/**
+ * Runs the battery of checks on a single segment
+ * in the bilingual doc
+ * @param source {string} - Source text
+ * @param target {string} - Target text
+ * @param checkOptions {object} - Config
+ * @param oAccumulator {object} - Accumulates data over iterations
+ * @returns An array of two elements. The first is an object
+ * that contains the results of each of the checks. The second
+ * is the updated state of the accumulator object.
+ */
 function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   let accumulator = oAccumulator;
   const oResults = {};
@@ -31,14 +42,19 @@ function startScan(bilingualDoc, checkOptions, callback) {
   let oAccumulator = {
     currentSegment: 0,
     tests: getTests(checkOptions),
+    totalSegmentsChecked: 0,
   };
+  
+  const segmentResults = {};
 
   // iterate over all the segments in the bilingualDoc
   // call singleSegmentChecks on each segment
   const segments = Object.keys(bilingualDoc);
+  
   segments.forEach((segment) => {
     // track which segment we are currently on
     oAccumulator.currentSegment = segment;
+    oAccumulator.totalSegmentsChecked += 1;
 
     const [res, acc] = singleSegmentChecks(
       bilingualDoc[segment].source,
@@ -50,20 +66,16 @@ function startScan(bilingualDoc, checkOptions, callback) {
     // use the accumulator to carry over data between segments
     oAccumulator = acc;
 
-    /* TO DO:
-       Results should be stored in an object that keeps track
-       of the errors that were found. That way, it should be possible
-       to implement an 'ignore error' function by keeping track of
-       the results of the previous scan. If an identical result
-       exists that has an 'ignore' flag, then it can be ignored.
-    */
-
+    segmentResults[segment] = res;
+    // legacy
     if (callback) {
+      /* eslint-disable-next-line no-console */
+      console.warn('Use of callbacks after individual tests has been deprecated.');
       callback(segment, res);
     }
   });
 
-  return oAccumulator;
+  return segmentResults;
 }
 
 function scan(bilingualDoc, checkOptions, callback) {
