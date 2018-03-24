@@ -1,36 +1,23 @@
-```
- ____  ____       __               __                         
-|_  _||_  _|     [  |  _          [  |                        
-  \ \  / / ,--.   | | / ] __   _   | |.--.   __   _   _ .--.  
-   \ \/ / `'_\ :  | '' < [  | | |  | '/'`\ \[  | | | [ `.-. | 
-   _|  |_ // | |, | |`\ \ | \_/ |, |  \__/ | | \_/ |, | | | | 
-  |______|\'-;__/[__|  \_]'.__.'_/[__;.__.'  '.__.'_/[___||__]
-```
+# YAKUBUN
+[![Build Status](https://travis-ci.org/garroadran/yakubun.svg?branch=master)](htts://travis-ci.org/garroadran/yakubun)
 
 
-About
-=====
+## Overview
 
 Yakubun is a Javascript library designed to help Japanese translators check their work. 
 It takes a document comprised of source language and target language segments and runs a series of tests on each segment, then notifies the user which segments have failed which tests.
 
-Usage
------
+### Installation
 
-[Download](https://raw.githubusercontent.com/garroadran/yakubun/master/dist/yakubun.js) the minified library and include it in the browser.
+Download the minified library and include it in the browser.
 
 ```
 <script type="text/javascript" src="yakubun.js"></script>
 ```
 
-### Public functions
+### Usage
 
-1. Use the `yakubun.scan(bilingualDoc, checkOptions, callback)` function to run scans on a bilingual document. The results for each segment are passed along to the callback function you provide.
-2. Use the `yakubun.regexComparer()`, `yakubun.regexReplaceAllFromArray()`, `yakubun.regexReturnAllMatches()`, and `yakubun.compareArrays()` to create your own custom functions to run on each segment.
-
-### Public variables
-
-None at the moment.
+Use the `yakubun.scan(bilingualDoc, checkOptions)` function to run scans on a bilingual document. The results for each segment are passed along to the callback function you provide.
 
 Bilingual Document
 ==================
@@ -273,46 +260,19 @@ function customTest(source, target, checkOptions, accumulator){
 
 Pay special attention to the return value of the custom function. It must be an array. The first element of the array should be a `CheckResult` object. The second element in the array should be the accumulator object, so that it can be passed ahead to the next test.
 
-Crosscheck Functions
+CheckResult and other useful resources
 --------------------
 
-Yakubun exports some of the same functions that it uses in its default tests to help you create your own custom tests.
+The `CheckResult` object required in the return value of a check function can be constructed trivially. It should simply be an object with (at least) the following values.
 
-|Test                                |Arguments                  |Description                       |
-|------------------------------------|---------------------------|----------------------------------|
-|`yakubun.regexComparer()`           |`source`, `target`, `sourceRegex`, `targetRegex`, `capturingGroups`|Returns an array `[sourceHits, targetHits, equivalent]`. All of the regex matches that match the source regex passed will be contained in the `sourceHits` array, and all the regex matches that match the target regex will be contained in the `targetHits` array. The third element in the return value tells you if the two arrays are exactly equal. If using a capturing group in your regexes, you must be sure to pass `true` in the final argument to this function.|
-|`yakubun.regexReplaceAllFromArray()`|`formatChangesArr`, `string`, `parameters` |`formatChangesArr` is an array of arrays. Each array inside of `formatChangesArr` consists of a regular expression string and a replacement value for the expression. Each of the arrays inside of `formatChangesArr` will be tested against `string`, and if there are matches, they will be replaced accordingly.|
-|`yakubun.regexReturnAllMatches()`   |`string`, `regex`, `accumulator arr`|Returns an array of all the matches for the given regex inside the string. If provided an array in the third argument, it will append the matches to that array. |
-|`yakubun.compareArrays()`           |`arrayA`,`arrayB`          |Returns `true` if the two arrays are identical, `false` if they are not. |
-
-## Sample usage
-
-### Replace all from array
 ```
-var string = 'There is 1 February 29th every 4 years, but May 28 comes every year.';
-
-var formatChangesArr = [
-    ['January ([0-9]?[0-9])', '{2018-01-$1}'],
-    ['February ([0-9]?[0-9])', '{2018-02-$1}'],
-    ['March ([0-9]?[0-9])', '{2018-03-$1}'],
-    ['April ([0-9]?[0-9])', '{2018-04-$1}'],
-    ['May ([0-9]?[0-9])', '{2018-05-$1}']
-]
-
-var output = yakubun.regexReplaceAllFromArray(formatChangesArr, string, 'gi');
-
-// output = 'There is 1 {2018-02-29} every 4 years, but {2018-05-28} comes every year.'
+   const checkResult = {
+       checkName: string,
+       description: string,
+       hasError: boolean,
+       HTML: string,
+       plainText: string
+   }
 ```
 
-### Compare arrays
-```
-var a = yakubun.compareArrays([1,2,3], [1,2,3]);
-var b = yakubun.compareArrays([1,2,3], [1,2]);
-var c = yakubun.compareArrays([1,2,[a,b]], [1,2,[a,b]]);
-var d = yakubun.compareArrays([1,2,[a,b]], [1,2,[a]);
-
-// a = true;
-// b = false;
-// c = true;
-// d = false;
-```
+A basic constructor for this object, as well as a few other useful functions for use when crafting custom checks, are available in a the [yakubun-utils](https://github.com/garroadran/yakubun-utils) package.
