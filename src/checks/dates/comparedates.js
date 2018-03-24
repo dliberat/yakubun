@@ -1,5 +1,4 @@
 import { CheckResult, regexComparer, compareArrays } from 'yakubun-utils';
-import { metalogger } from '../../utilities/general';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';
@@ -71,7 +70,7 @@ function compareDates(source, target, checkOptions, accumulator) {
   if (!dates.verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
-    metalogger('Invalid checkOptions. Could not compare dates');
+    if (oAccumulator.log) oAccumulator.log('Invalid checkOptions. Could not compare dates');
     return [null, oAccumulator];
   }
 

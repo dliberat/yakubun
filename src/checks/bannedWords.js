@@ -1,5 +1,4 @@
 import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
-// import * as general from '../utilities/general';
 
 /**
  * Creates a string to return as an output

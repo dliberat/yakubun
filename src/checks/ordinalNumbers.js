@@ -4,7 +4,6 @@ Check ordinal numbers to ensure that they have the proper trailing letters
 
 import indicator from 'ordinal/indicator';
 import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
-import { metalogger } from '../utilities/general';
 
 let accumulator;
 
@@ -74,7 +73,7 @@ function ordinalNumbers(source, target, checkOptions = {}, oAccumulator) {
   accumulator = oAccumulator;
 
   if (checkOptions.targetLang !== 'en') {
-    metalogger('Ordinal number checks are only supported for English.');
+    accumulator.log('Ordinal number checks are only supported for English.');
     return returnNull();
   }
 

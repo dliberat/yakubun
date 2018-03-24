@@ -1,9 +1,5 @@
 import { replaceAllFromArray } from 'yakubun-utils';
 
-function metalogger() {
-
-}
-
 function addMinutesToSimpleENTimes(target) {
   return target.replace(/\s([1]?[0-9])([ap]m)|^([1]?[0-9])([ap]m)/g, ' $1$3:00$2$4');
 }
@@ -46,5 +42,4 @@ function replaceDoubleByteNums(string) {
 export {
   addMinutesToSimpleENTimes,
   replaceDoubleByteNums,
-  metalogger,
 };

@@ -1,5 +1,7 @@
+/* global describe, it */
+/* eslint no-unused-expressions: off */
+import { expect } from 'chai';
 import findRepeatedWords from '../src/checks/repeatedwords';
-const expect = require('chai').expect;
 
 describe('Find repeated words', () => {
   const options = {};

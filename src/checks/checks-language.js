@@ -1,5 +1,4 @@
 import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
-import { metalogger } from '../utilities/general';
 
 /** Find double byte brackets, colons, or exclamation marks
  * Additional JP characters should probably be added here
@@ -103,10 +102,10 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
     num = matchArr[i][1] || matchArr[i][2];
     if (matchArr[i][0].indexOf(')') > -1) {
       oAccumulator.trackNumberedBullets.bracket.push(num);
-      metalogger(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num})]`);
+      // oAccumulator.log(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num})]`);
     } else if (matchArr[i][0].indexOf('.') > -1) {
       oAccumulator.trackNumberedBullets.period.push(num);
-      metalogger(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num}.]`);
+      // oAccumulator.log(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num}.]`);
     }
   }
   // search for errors. Returns FALSE if there is an error in the numerical sequence

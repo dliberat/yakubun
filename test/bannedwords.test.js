@@ -35,8 +35,8 @@ describe('Search for banned words.', () => {
       /* this test does not currently work */
       const target = 'Flag Character.';
       const targRes = find('', target, list, undefined);
-      const targ = 'Character should not be flagged.';
-      const t = 'Also. Character should not be flagged.';
+      // const targ = 'Character should not be flagged.';
+      // const t = 'Also. Character should not be flagged.';
 
       expect(targRes[0]).to.equal('Suspicious terminology: <span class="text-warning">Character</span>');
     });
