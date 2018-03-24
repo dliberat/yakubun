@@ -1,5 +1,5 @@
-import * as general from '../utilities/general';
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
+import { metalogger } from '../utilities/general';
 
 /** Find double byte brackets, colons, or exclamation marks
  * Additional JP characters should probably be added here
@@ -93,7 +93,7 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
 
   // search for numbered bullet points
   const re = new RegExp('^(\\d)[.)]\\s|[^\\w]\\s(\\d)[.)]\\s', 'gm');
-  const matchArr = general.regexReturnAllMatches(target, re);
+  const matchArr = regexMatchesToArray(target, re);
   // if there are no matches, return right away
   if (matchArr.length === 0) { return [null, oAccumulator]; }
 
@@ -103,10 +103,10 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
     num = matchArr[i][1] || matchArr[i][2];
     if (matchArr[i][0].indexOf(')') > -1) {
       oAccumulator.trackNumberedBullets.bracket.push(num);
-      general.metalogger(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num})]`);
+      metalogger(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num})]`);
     } else if (matchArr[i][0].indexOf('.') > -1) {
       oAccumulator.trackNumberedBullets.period.push(num);
-      general.metalogger(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num}.]`);
+      metalogger(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num}.]`);
     }
   }
   // search for errors. Returns FALSE if there is an error in the numerical sequence

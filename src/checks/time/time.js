@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
-import * as general from '../../utilities/general';
-import CheckResult from '../../utilities/CheckResult';
+import { CheckResult, regexComparer } from 'yakubun-utils';
+import { replaceDoubleByteNums, metalogger } from '../../utilities/general';
 import convertTimesToISO from '../../utilities/convertTimesToISO';
 
 let oAccumulator;
@@ -88,7 +88,7 @@ function parseTimeStringsIntoMomentArr(stringsArr) {
     if (mom.isValid()) {
       outArr.push(mom);
     } else {
-      general.metalogger('Invalid moment.');
+      metalogger('Invalid moment.');
     }
   });
 
@@ -130,7 +130,7 @@ function extract() {
   // returns an array consisting of two arrays
   // [ [matches in source] , [matches in target] ]
   // the final argument must be true if using capturing groups in the RegEx
-  const comparison = general.regexComparer(source, target, sourceRegEx, targetRegEx, false);
+  const comparison = regexComparer(source, target, sourceRegEx, targetRegEx, false);
 
   return momentConversion(comparison);
 }
@@ -138,7 +138,7 @@ function extract() {
 function clean() {
   // replace all double-byte numbers with single byte versions
   // TODO: This is probably not necessary since it's done at the beginning
-  source = general.replaceDoubleByteNums(source);
+  source = replaceDoubleByteNums(source);
 
   // replace kanji times with standard numerical times
   source = source.replace(/([0-2]?[0-9])\u6642([0-5][0-9])\u5206/g, '$1:$2');
@@ -178,5 +178,4 @@ function compareTimes(src, tgt, checkOptions, acc) {
   return clean(source, target, oAccumulator);
 }
 
-/* EXPORTS */
 export default compareTimes;

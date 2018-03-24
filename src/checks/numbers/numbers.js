@@ -1,6 +1,11 @@
 import commaNumber from 'comma-number';
-import * as general from '../../utilities/general';
-import CheckResult from '../../utilities/CheckResult';
+import {
+  CheckResult,
+  regexComparer,
+  replaceAllFromArray,
+  compareArrays,
+} from 'yakubun-utils';
+import { replaceDoubleByteNums } from '../../utilities/general';
 import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './numbers-utility';
 import oSubstitutions from './num-words';
 
@@ -8,7 +13,7 @@ function commonSubs(string, lang) {
   const language = lang.toLowerCase();
 
   if (oSubstitutions[language]) {
-    return general.regexReplaceAllFromArray(oSubstitutions[language], string, 'gi');
+    return replaceAllFromArray(oSubstitutions[language], string, 'gi');
   }
   return string;
 }
@@ -23,7 +28,7 @@ function prettifyNumArray(arr) {
 function compareAndFormat(comparison, oAccumulator) {
   const checkResult = new CheckResult('numbers');
   let [src, tgt] = comparison;
-  const arraysAreEqual = general.compareArrays(src, tgt);
+  const arraysAreEqual = compareArrays(src, tgt);
 
   if (!arraysAreEqual) {
     src = prettifyNumArray(src);
@@ -69,7 +74,7 @@ function oncePerAdjustments(comparison, target, oAccumulator) {
 function extract(source, target, oAccumulator) {
   // compare the cleaned strings based on the following regex
   const re = new RegExp('[0-9]+', 'gi');
-  const comparison = general.regexComparer(source, target, re, re);
+  const comparison = regexComparer(source, target, re, re);
   return oncePerAdjustments(comparison, target, oAccumulator);
 }
 
@@ -111,8 +116,8 @@ function removeDates(source, target, checkOptions, oAccumulator) {
 }
 
 function replaceNumbers(source, target, checkOptions, oAccumulator) {
-  const src = general.replaceDoubleByteNums(source);
-  const tgt = general.replaceDoubleByteNums(target);
+  const src = replaceDoubleByteNums(source);
+  const tgt = replaceDoubleByteNums(target);
 
   return removeDates(src, tgt, checkOptions, oAccumulator);
 }

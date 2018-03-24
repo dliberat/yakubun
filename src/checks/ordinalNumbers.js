@@ -3,8 +3,8 @@ Check ordinal numbers to ensure that they have the proper trailing letters
 */
 
 import indicator from 'ordinal/indicator';
-import * as general from '../utilities/general';
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
+import { metalogger } from '../utilities/general';
 
 let accumulator;
 
@@ -56,7 +56,7 @@ function runRegex(target) {
   // regex to search for ordinal numbers
   const re = new RegExp('([0-9]+)([a-z][a-z])(?:\\W|$)', 'gi');
 
-  const arr = general.regexReturnAllMatches(target, re);
+  const arr = regexMatchesToArray(target, re);
   /* each arr contains
     [0]: full match (1st, 2nd, etc.);
     [1]: numeral (1, 2, etc.)
@@ -74,7 +74,7 @@ function ordinalNumbers(source, target, checkOptions = {}, oAccumulator) {
   accumulator = oAccumulator;
 
   if (checkOptions.targetLang !== 'en') {
-    general.metalogger('Ordinal number checks are only supported for English.');
+    metalogger('Ordinal number checks are only supported for English.');
     return returnNull();
   }
 

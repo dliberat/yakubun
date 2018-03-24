@@ -1,4 +1,4 @@
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult } from 'yakubun-utils';
 
 // words that are allowed to repeat
 const exceptions = ['tsum', 'bye', 'hee', 'heh', 'ha', 'woo', 'boo'];

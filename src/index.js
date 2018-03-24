@@ -1,14 +1,8 @@
-/* YAKUBUN 1.1.0 https://github.com/garroadran/yakubun Created by Dan Liberatori. Free for use and modification (but notify the author please!) */
+/* YAKUBUN 1.0.0 https://github.com/garroadran/yakubun Created by Dan Liberatori. Free for use and modification (but notify the author please!) */
 
 import verify from './verifyOptions';
 import getTests from './getTests';
 import preprocess from './preprocess';
-import {
-  regexComparer,
-  regexReplaceAllFromArray,
-  regexReturnAllMatches,
-  compareArrays,
-} from './utilities/general';
 
 /**
  * Runs the battery of checks on a single segment
@@ -44,13 +38,13 @@ function startScan(bilingualDoc, checkOptions, callback) {
     tests: getTests(checkOptions),
     totalSegmentsChecked: 0,
   };
-  
+
   const segmentResults = {};
 
   // iterate over all the segments in the bilingualDoc
   // call singleSegmentChecks on each segment
   const segments = Object.keys(bilingualDoc);
-  
+
   segments.forEach((segment) => {
     // track which segment we are currently on
     oAccumulator.currentSegment = segment;
@@ -87,10 +81,4 @@ function scan(bilingualDoc, checkOptions, callback) {
   return startScan(cleanBilingualDoc, cleanCheckOptions, callback);
 }
 
-export {
-  scan,
-  regexComparer,
-  regexReplaceAllFromArray,
-  regexReturnAllMatches,
-  compareArrays,
-};
+module.exports = scan;

@@ -1,5 +1,6 @@
-import * as general from '../../utilities/general';
+import { replaceAllFromArray } from 'yakubun-utils';
 import convertToTwentyFourHourClock from './convertToISOTime';
+import { addMinutesToSimpleENTimes, replaceDoubleByteNums } from '../../utilities/general';
 
 function verifyOptions(checkOptions) {
   const optionKeys = Object.keys(checkOptions);
@@ -36,7 +37,7 @@ function initialJPFilter(string) {
     ['\\u4E07\\u80FD', ' '],
   ];
 
-  return general.regexReplaceAllFromArray(arr, string, 'gi');
+  return replaceAllFromArray(arr, string, 'gi');
 }
 
 function ensureTwoDigitNumber(match, m1, month, m2, date, m3, hour, m4) {
@@ -77,7 +78,7 @@ function cleanGetRichCommaDateLists(string) {
     ['([JFMASON][aepuco][nbrynlgptvc]\\. )([0-3]?[0-9]), ([0-3]?[0-9]), ([0-3]?[0-9])(?!\\d)', '$1$2 $1$3 $1$4'],
     ['([JFMASON][aepuco][nbrynlgptvc]\\. )([0-3]?[0-9]), ([0-3]?[0-9])(?!\\d)', '$1$2 $1$3'],
   ];
-  return general.regexReplaceAllFromArray(formatChanges, string, 'gi');
+  return replaceAllFromArray(formatChanges, string, 'gi');
 }
 
 function cleanStringsBeforeDateCheck(src, tgt, checkOptions) {
@@ -86,21 +87,21 @@ function cleanStringsBeforeDateCheck(src, tgt, checkOptions) {
 
   // ///////////////////// SOURCE TEXT CLEANUP//////////////////////////////////////
   // replace all double-byte numbers with single byte versions
-  source = general.replaceDoubleByteNums(source);
+  source = replaceDoubleByteNums(source);
   // remove strings that should never be interpreted as numbers
   source = initialJPFilter(source);
   // parse all dates into the {2017-9-21} format
   // Still need to convert things into 2-digit format
-  source = general.regexReplaceAllFromArray(checkOptions.dateFormats[checkOptions.sourceLang], source, 'gi');
+  source = replaceAllFromArray(checkOptions.dateFormats[checkOptions.sourceLang], source, 'gi');
 
   // //////////////////// TARGET TEXT CLEANUP ////////////////////////////////////
   // change all 11am times to 11:00am
-  target = general.addMinutesToSimpleENTimes(target);
+  target = addMinutesToSimpleENTimes(target);
   // convert Jan. 21, 22 to: Jan. 21 Jan. 22
   target = cleanGetRichCommaDateLists(target);
 
   // perform the big scan to catch as many dates and times as possible
-  target = general.regexReplaceAllFromArray(checkOptions.dateFormats[checkOptions.targetLang], target, 'gi');
+  target = replaceAllFromArray(checkOptions.dateFormats[checkOptions.targetLang], target, 'gi');
 
   // convert any times that were caught to 24 hour format and remove am/pm
   target = convertToTwentyFourHourClock(target);

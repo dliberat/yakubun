@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
-import * as general from '../../utilities/general';
-import CheckResult from '../../utilities/CheckResult';
+import { CheckResult } from 'yakubun-utils';
+import { metalogger } from '../../utilities/general';
 
 /*
 Takes an array with the following arguments
@@ -37,7 +37,7 @@ function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
     if (arr[2].length > 0) { slashParsedInSource = arr[2].join(', '); }
 
     if (slashParsedInTarget !== '' || slashParsedInSource !== '') {
-      general.metalogger(`Found & parsed slash dates: ${slashParsedInTarget} ${slashParsedInSource} at segment ${Number(oAccumulator.currentSegment) + 1}`);
+      metalogger(`Found & parsed slash dates: ${slashParsedInTarget} ${slashParsedInSource} at segment ${Number(oAccumulator.currentSegment) + 1}`);
     }
   }
 

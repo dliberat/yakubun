@@ -2,7 +2,7 @@
  * Pass in either american or UK style. Detect periods either
  * before or after quotation marks as appropriate, and flag errors.
  */
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult } from 'yakubun-utils';
 
 let acc;
 let searchTerm;

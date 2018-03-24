@@ -1,8 +1,8 @@
-import * as general from '../../utilities/general';
+import { CheckResult, regexComparer, compareArrays } from 'yakubun-utils';
+import { metalogger } from '../../utilities/general';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';
-import CheckResult from '../../utilities/CheckResult';
 
 function removeMatchedDates(momentArr, sideArr = [], sideArrTarget = []) {
   let slashFormat;
@@ -71,7 +71,7 @@ function compareDates(source, target, checkOptions, accumulator) {
   if (!dates.verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
-    general.metalogger('Invalid checkOptions. Could not compare dates');
+    metalogger('Invalid checkOptions. Could not compare dates');
     return [null, oAccumulator];
   }
 
@@ -85,11 +85,10 @@ function compareDates(source, target, checkOptions, accumulator) {
   let rString = '{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9]}';
   rString += '|{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9][ap]?[m]?}';
   let datesRegExp = new RegExp(rString, 'gi');
-  let comparison = general.regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
-  let compare = general.compareArrays(comparison[0], comparison[1]);
+  let comparison = regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
 
   // return if the comparison matches exactly, since no further checking is necessary
-  if (compare) {
+  if (comparison[2]) {
     const res = new CheckResult('dates');
     res.hasError = false;
     res.hasTargetDate = datesRegExp.test(cleanTarget);
@@ -98,15 +97,20 @@ function compareDates(source, target, checkOptions, accumulator) {
 
   // extract dates with 9/21 format and leave them in a side array
   datesRegExp = new RegExp('[0-1]?[0-9]/[0-3]?[0-9]', 'gi');
-  const potentialSlashDates = general
-    .regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
+  const potentialSlashDates = regexComparer(
+    cleanSource,
+    cleanTarget,
+    datesRegExp,
+    datesRegExp,
+    false,
+  );
 
   // Turn all dates and times into two-digits so as to be ISO compliant
   comparison = dates.convertToTwoDigitDates(comparison);
 
   // convert to sorted moment array
   const momentArr = convertToMomentArr(comparison);
-  compare = general.compareArrays(momentArr[0], momentArr[1]);
+  const compare = compareArrays(momentArr[0], momentArr[1]);
 
   // compare moment arrays. If they don't match, search in the side array
   if (!compare) {

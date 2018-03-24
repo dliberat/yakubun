@@ -1,4 +1,4 @@
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult } from 'yakubun-utils';
 
 function generateResult(test, acc) {
   const checkResult = new CheckResult('double-spaces');

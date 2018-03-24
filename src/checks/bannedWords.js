@@ -1,5 +1,5 @@
-import * as general from '../utilities/general';
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
+// import * as general from '../utilities/general';
 
 /**
  * Creates a string to return as an output
@@ -38,7 +38,7 @@ function scanForBannedWords(str, wordsArr, caseSensitive = false, accumulatorArr
   // loop through the banned words, and add them to foundArr
   wordsArr.forEach((element) => {
     const re = new RegExp(element, patternParameters);
-    foundArr = general.regexReturnAllMatches(str, re, foundArr);
+    foundArr = regexMatchesToArray(str, re, foundArr);
   });
 
   return foundArr;

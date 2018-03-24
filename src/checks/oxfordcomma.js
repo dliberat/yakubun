@@ -1,4 +1,4 @@
-import CheckResult from '../utilities/CheckResult';
+import { CheckResult } from 'yakubun-utils';
 
 let acc;
 let msg;

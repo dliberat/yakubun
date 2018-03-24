@@ -1,14 +1,14 @@
-import * as general from '../../utilities/general';
+import { CheckResult, regexComparer } from 'yakubun-utils';
+import { metalogger } from '../../utilities/general';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';
-import CheckResult from '../../utilities/CheckResult';
 
 function compareDatesTz(source, target, checkOptions, oAccumulator) {
   if (!dates.verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
-    general.metalogger('Invalid checkOptions. Could not compare dates');
+    metalogger('Invalid checkOptions. Could not compare dates');
     const res = new CheckResult('dates-tz', false);
     return [res, oAccumulator];
   }
@@ -27,7 +27,7 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
 
   // extract dates in only this format {2017-9-21 12:00}
   const datesRegExp = new RegExp('{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9]}', 'gi');
-  let comparison = general.regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
+  let comparison = regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
 
   // turn all dates and times into two-digits so as to be ISO compliant
   comparison = dates.convertToTwoDigitDates(comparison);

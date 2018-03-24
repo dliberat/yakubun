@@ -1,6 +1,6 @@
 {
   "name": "yakubun",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Library for checking Japanese translations",
   "main": "dist/yakubun.js",
   "repository": {
@@ -12,7 +12,8 @@
     "comma-number": "^2.0.0",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.13",
-    "ordinal": "^1.0.2"
+    "ordinal": "^1.0.2",
+    "yakubun-utils": "^1.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

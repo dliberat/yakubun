@@ -1,83 +1,11 @@
+import { replaceAllFromArray } from 'yakubun-utils';
+
 function metalogger() {
 
 }
 
-function compareArrays(arr1, arr2) {
-  // checks if two arrays are identical or not
-  // does not perform proper deep equality checks (objects are not treated as equal);
-  if (arr1.length !== arr2.length) return false;
-
-  for (let i = 0; i < arr2.length; i += 1) {
-    if (Array.isArray(arr1[i])) { // To test values in nested arrays
-      if (!compareArrays(arr1[i], arr2[i])) return false;
-    } else if (arr1[i] !== arr2[i]) return false;
-  }
-
-  return true;
-}
-
-
-/** Returns an array of all the matches to the given regex.
- * If passed an initial array, it returns it with the new
- * matches tacked on at the end
- */
-function regexReturnAllMatches(str, regex, accumulatorArr = []) {
-  let m;
-
-  do {
-    m = regex.exec(str);
-    if (m) { accumulatorArr.push(m); }
-  } while (m);
-  return accumulatorArr;
-}
-
-function regexComparer(
-  source,
-  target,
-  sourceRegex,
-  targetRegex,
-  groupsExist,
-) {
-  // if we are looking for a captured group, then we need to set this to one
-  // otherwise, we simply return the first match (which is the whole match)
-  const capturingGroups = groupsExist ? 1 : 0;
-
-  // perform the RegExp.exec to get the matches
-  // .map discards all the metadata and only leaves the matches
-  // .sort puts the arrays in order so they can be compared
-  const sourceHits = regexReturnAllMatches(source, sourceRegex)
-    .map(x => x[capturingGroups]).sort();
-  const targetHits = regexReturnAllMatches(target, targetRegex)
-    .map(x => x[capturingGroups]).sort();
-
-  const equiv = compareArrays(sourceHits, targetHits);
-  return [sourceHits, targetHits, equiv];
-}
-
 function addMinutesToSimpleENTimes(target) {
   return target.replace(/\s([1]?[0-9])([ap]m)|^([1]?[0-9])([ap]m)/g, ' $1$3:00$2$4');
-}
-
-function regexReplaceAllFromArray(formatChangesArr, str, parameters = 'gi') {
-  let string = str;
-
-  // check that formatChangesArr really is an array
-  if (formatChangesArr === undefined) {
-    metalogger('Error. formatChangesArr is undefined.');
-    return string;
-  }
-
-  if (formatChangesArr.constructor !== Array) {
-    metalogger('Error. formatChangesArr is not an Array.');
-    return string;
-  }
-
-  formatChangesArr.forEach((e) => {
-    const re = new RegExp(e[0], parameters);
-    string = string.replace(re, e[1]);
-  });
-
-  return string;
 }
 
 function replaceDoubleByteNums(string) {
@@ -112,15 +40,11 @@ function replaceDoubleByteNums(string) {
     ['\u4E5D', '9'],
   ];
 
-  return regexReplaceAllFromArray(numArr, string, 'gi');
+  return replaceAllFromArray(numArr, string, 'gi');
 }
 
 export {
-  regexComparer,
-  regexReturnAllMatches,
   addMinutesToSimpleENTimes,
-  regexReplaceAllFromArray,
   replaceDoubleByteNums,
-  compareArrays,
   metalogger,
 };
