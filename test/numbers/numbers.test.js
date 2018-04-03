@@ -53,7 +53,7 @@ describe('Numbers check', () => {
     expect(res.hasError).to.be.false;
   });
   it('filter dates in {2018-2-10} format', () => {
-    const source = '私は{2015-8-9}に妻にあった。２０歳でした。';
+    const source = '私は{2015-8-9}に妻にあった。20歳でした。';
     const target = 'I met my wife six years ago. I was 20';
     const [res] = compareNumbers(source, target);
     expect(res.hasError).to.be.false;
@@ -103,6 +103,12 @@ describe('Numbers check', () => {
     const target = '';
     const [res] = compareNumbers(source, target);
     expect(res.hasError).to.be.true;
+  });
+  it('detect ② as 2', () => {
+    const source = '② TEST';
+    const target = '2. TEST';
+    const [res] = compareNumbers(source, target);
+    expect(res.hasError).to.be.false;
   });
   it('-[Sクラス]模倣設計図面(1級建築) should not be flagged when passed into the numIgnoreSource object', () => {
     const options = {

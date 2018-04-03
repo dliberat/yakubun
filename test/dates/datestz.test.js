@@ -29,7 +29,7 @@ describe('compareDatesTz', () => {
     expect(res[1]).to.be.an('object').that.has.all.keys('timeCheck_clean_target', 'timeCheck_clean_source');
   });
   it('should convert dates to {2017-01-01} format based on the given dateFormats object', () => {
-    const source = '2016年2月１２日から開催';
+    const source = '2016年2月12日から開催';
     const target = 'starts Jan. 2';
     const res = compareDatesTz(source, target, options, {});
     const cleanSource = res[1].timeCheck_clean_source;

@@ -1,5 +1,4 @@
 /* eslint no-console: off */
-import { metalogger } from '../utilities/general';
 import defaultDateFormats from '../dateformats';
 
 function vBannedWords(list) {

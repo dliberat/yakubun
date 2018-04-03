@@ -30,7 +30,7 @@ describe('compareTimes', () => {
     expect(res.HTML).to.equal('Times: Found <span class="text-time">14:00, 15:00</span> in source and <span class="text-time">14:01, 15:01</span> in target.');
   });
   it('return clean strings in accumulator', () => {
-    const source = '私は毎日22時３０分に寝る。';
+    const source = '私は毎日22時30分に寝る。';
     const target = 'I go to bed at 22:30 every night.';
     const [, acc] = compareTimes(source, target);
     expect(acc.timeCheck_clean_source).to.equal('私は毎日{22:30}に寝る。');

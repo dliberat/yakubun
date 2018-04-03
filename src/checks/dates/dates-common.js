@@ -1,6 +1,7 @@
 import { replaceAllFromArray } from 'yakubun-utils';
 import convertToTwentyFourHourClock from './convertToISOTime';
-import { addMinutesToSimpleENTimes, replaceDoubleByteNums } from '../../utilities/general';
+import addMinutesToSimpleENTimes from './addMinutesToTimes';
+import replaceKanjiNums from '../../utilities/replaceKanjiNums';
 
 function verifyOptions(checkOptions) {
   const optionKeys = Object.keys(checkOptions);
@@ -87,7 +88,7 @@ function cleanStringsBeforeDateCheck(src, tgt, checkOptions) {
 
   // ///////////////////// SOURCE TEXT CLEANUP//////////////////////////////////////
   // replace all double-byte numbers with single byte versions
-  source = replaceDoubleByteNums(source);
+  source = replaceKanjiNums(source);
   // remove strings that should never be interpreted as numbers
   source = initialJPFilter(source);
   // parse all dates into the {2017-9-21} format
