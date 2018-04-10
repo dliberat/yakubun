@@ -1,5 +1,4 @@
-/* Convert all double-byte numbers in the source text
-to single-byte numbers. */
+/* Convert all full-width numbers and letters to half-width form. */
 
 function replacer(ch) {
   return String.fromCharCode(ch.charCodeAt(0) - 0xfee0);

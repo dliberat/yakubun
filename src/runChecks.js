@@ -32,7 +32,7 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   return [oResults, accumulator];
 }
 
-function startScan(bilingualDoc, checkOptions, callback) {
+function startScan(bilingualDoc, checkOptions) {
   let oAccumulator = {
     currentSegment: 0,
     log: logger.bind(this),
@@ -63,12 +63,6 @@ function startScan(bilingualDoc, checkOptions, callback) {
     oAccumulator = acc;
 
     output[segment] = res;
-    // legacy
-    if (callback) {
-      /* eslint-disable-next-line no-console */
-      console.warn('Use of callbacks after individual tests has been deprecated.');
-      callback(segment, res);
-    }
   });
 
   output.logs = oAccumulator.logs;

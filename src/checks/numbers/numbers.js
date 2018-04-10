@@ -5,7 +5,7 @@ import {
   replaceAllFromArray,
   compareArrays,
 } from 'yakubun-utils';
-import { replaceDoubleByteNums } from '../../utilities/general';
+import replaceKanjiNums from '../../utilities/replaceKanjiNums';
 import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './numbers-utility';
 import oSubstitutions from './num-words';
 
@@ -116,8 +116,8 @@ function removeDates(source, target, checkOptions, oAccumulator) {
 }
 
 function replaceNumbers(source, target, checkOptions, oAccumulator) {
-  const src = replaceDoubleByteNums(source);
-  const tgt = replaceDoubleByteNums(target);
+  const src = replaceKanjiNums(source);
+  const tgt = replaceKanjiNums(target);
 
   return removeDates(src, tgt, checkOptions, oAccumulator);
 }

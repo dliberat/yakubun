@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import { CheckResult, regexComparer } from 'yakubun-utils';
-import { replaceDoubleByteNums, metalogger } from '../../utilities/general';
+import replaceKanjiNums from '../../utilities/replaceKanjiNums';
 import convertTimesToISO from '../../utilities/convertTimesToISO';
 
 let oAccumulator;
@@ -88,7 +88,7 @@ function parseTimeStringsIntoMomentArr(stringsArr) {
     if (mom.isValid()) {
       outArr.push(mom);
     } else {
-      metalogger('Invalid moment.');
+      console.warn('Invalid moment.');
     }
   });
 
@@ -138,7 +138,7 @@ function extract() {
 function clean() {
   // replace all double-byte numbers with single byte versions
   // TODO: This is probably not necessary since it's done at the beginning
-  source = replaceDoubleByteNums(source);
+  source = replaceKanjiNums(source);
 
   // replace kanji times with standard numerical times
   source = source.replace(/([0-2]?[0-9])\u6642([0-5][0-9])\u5206/g, '$1:$2');

@@ -1,6 +1,6 @@
 /* global describe, beforeEach, it */
 import { expect } from 'chai';
-import * as yakubun from '../../src/index';
+import * as yakubun from '../src/index';
 
 let bilingualDoc;
 
