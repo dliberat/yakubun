@@ -10,7 +10,6 @@
   "author": "Dan Liberatori <daniel.liberatori@gmail.com>",
   "dependencies": {
     "comma-number": "^2.0.0",
-    "moment-timezone": "^0.5.13",
     "ordinal": "^1.0.2",
     "yakubun-utils": "^1.0.2"
   },
@@ -28,7 +27,13 @@
     "webpack": "^4.5.0",
     "webpack-cli": "^2.0.14"
   },
+  "engines": {
+    "node": ">=9.6.1"
+  },
   "license": "MIT",
+  "peerDependencies": {
+    "moment-timezone": "^0.5.13"
+  },
   "scripts": {
     "build": "webpack",
     "test": "mocha --recursive --require babel-core/register",
