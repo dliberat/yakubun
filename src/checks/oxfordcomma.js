@@ -19,10 +19,10 @@ function setMessage(required) {
   if (required) {
     msg = 'Possibly missing an Oxford comma.';
     description = 'Comma-separated lists ending in "and" or "or" require a comma before the "and" or "or."';
+  } else {
+    msg = 'Oxford comma detected.';
+    description = 'Comma-separated lists ending in "and" or "or" should not have a comma before the "and" or "or."';
   }
-
-  msg = 'Oxford comma detected.';
-  description = 'Comma-separated lists ending in "and" or "or" should not have a comma before the "and" or "or."';
 }
 
 function detectOxfordCommas(source, target, checkOptions = {}, oAccumulator = {}) {

@@ -1,11 +1,12 @@
-/* eslint no-console: off */
+/* eslint no-console: off, no-param-reassign: off */
 import defaultDateFormats from '../dateformats';
 
-function vBannedWords(list) {
-  let wordList = list;
-  if (typeof wordList !== 'object' || Array.isArray(wordList) || wordList === null) {
-    console.warn('No valid banned words list detected. Reverting to blank list.');
+function vBannedWords(wordList) {
+  if (wordList === undefined) {
     wordList = {};
+  } else if (typeof wordList !== 'object' ||
+    Array.isArray(wordList) || wordList === null) {
+    throw new Error('Invalid banned words list. Must be an object');
   }
 
   const keys = Object.keys(wordList);
@@ -32,15 +33,13 @@ function vDateFormats(dateFormats, sourceLang, targetLang) {
   if (!dateFormats[sourceLang]) {
     dateFormats[sourceLang] = {};
   } else if (!Array.isArray(dateFormats[sourceLang])) {
-    console.warn(`ERROR: ${sourceLang} date format object must contain an array.`);
-    dateFormats[sourceLang] = {};
+    throw new Error(`${sourceLang} date format object must contain an array.`);
   }
 
   if (!dateFormats[targetLang]) {
     dateFormats[targetLang] = {};
   } else if (!Array.isArray(dateFormats[targetLang])) {
-    console.warn(`ERROR: ${targetLang} date format object must contain an array.`);
-    dateFormats[targetLang] = {};
+    throw new Error(`${targetLang} date format object must contain an array.`, 'verifyOptions');
   }
 
   return dateFormats;
@@ -53,8 +52,7 @@ function vLang(lang, defaultValue) {
   } else if (typeof lang !== 'string') {
     return defaultValue;
   } else if (lang.length !== 2) {
-    console.warn('Invalid language code. Source and target languages must be in ISO 639-1 format. Reverting to default.');
-    return defaultValue;
+    throw new Error('Invalid language code. Must use 2-letter lowercase ISO codes', 'verifyOptions');
   }
   return lang;
 }
