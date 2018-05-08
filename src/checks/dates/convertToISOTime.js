@@ -22,6 +22,12 @@ function twentyFourHours(match, hour, minutes, meridian = '') {
   return `${sHr}:${sMin}`;
 }
 
+/**
+ * Converts times in the text from 12 hour format into 24 hour format,
+ * accounting for "am/pm" immediately following the time display.
+ * @param {string} string - Text containing times
+ * @returns A new string with the times replaced
+ */
 function convertToTwentyFourHourClock(string) {
   return string.replace(/([0-2]?[0-9]):([0-5][0-9])([ap]m)?/gi, twentyFourHours);
 }

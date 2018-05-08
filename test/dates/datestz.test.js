@@ -44,19 +44,16 @@ describe('compareDatesTz', () => {
     const res = compareDatesTz(source, target, options, {});
     expect(res[0].hasError).to.be.false;
   });
-  it.skip('should recognize that a date in the source does not exist in the target', () => {
+  it('should recognize that a date in the source does not exist in the target', () => {
     const source = 'イベント期間：21:59 01/10';
     const target = 'Event period: ';
-    const res = compareDatesTz(source, target, options, {});
-    expect(res[0].hasError).to.be.true;
+    const [res] = compareDatesTz(source, target, options, {});
+    expect(res.hasError).to.be.true;
   });
-  it.skip('should recognize that a date in the target does not exist in the source', () => {
+  it('should recognize that a date in the target does not exist in the source', () => {
     const source = 'イベント期間：';
-    const target = 'Event period: 9:59pm, Dec. 10';
-    const res = compareDatesTz(source, target, options, {});
-    expect(res[0]).to.be.true;
+    const target = 'Event period: 9:59pm, Apr. 10';
+    const [res] = compareDatesTz(source, target, options, {});
+    expect(res.hasError).to.be.true;
   });
-  it('should not recognize ３日間 as a date, and leave the number in the clean string');
-  it('should not recognize ２日連続 as a date, and leave the number in the clean string');
-  it('should clean out some basic words with numeral kanji in them');
 });

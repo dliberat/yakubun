@@ -63,15 +63,16 @@ function removeSideArrStrings(sideArrStrings, cleanSource) {
 
 function compareDates(source, target, checkOptions, accumulator) {
   const oAccumulator = accumulator;
-  let retval = null;
+  let retval = new CheckResult('dates');
 
   // ensure that all the necessary options are in place
   // always return clean strings, even if nothing has changed
   if (!dates.verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
-    if (oAccumulator.log) oAccumulator.log('Invalid checkOptions. Could not compare dates');
-    return [null, oAccumulator];
+    retval.HTML = 'Could not check dates';
+    retval.plainText = retval.HTML;
+    return [retval, oAccumulator];
   }
 
   // source goes in [0], target goes in [1]
@@ -87,11 +88,15 @@ function compareDates(source, target, checkOptions, accumulator) {
   let comparison = regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
 
   // return if the comparison matches exactly, since no further checking is necessary
-  if (comparison[2]) {
-    const res = new CheckResult('dates');
-    res.hasError = false;
-    res.hasTargetDate = datesRegExp.test(cleanTarget);
-    return [res, oAccumulator];
+  const [
+    srcMatches,
+    tgtMatches,
+    datesMatch] = comparison;
+  if (datesMatch) {
+    retval.hasError = false;
+    retval.sourceDates = srcMatches;
+    retval.targetDates = tgtMatches;
+    return [retval, oAccumulator];
   }
 
   // extract dates with 9/21 format and leave them in a side array

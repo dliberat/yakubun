@@ -37,7 +37,6 @@ describe('compareDates', () => {
     expect(cleanSource).to.equal('{2018-1-2}から開催');
     expect(cleanTarget).to.equal('starts {2018-1-2}');
   });
-  it('should convert all months and days and times into two-digit format');
   it('should return no error if there are matching dates', () => {
     const source = '2018年1月2日から開催';
     const target = 'starts Jan. 2';
@@ -56,14 +55,22 @@ describe('compareDates', () => {
     const [res] = compareDates(source, target, options, {});
     expect(res.hasError).to.be.true;
   });
-  it('should not recognize ３日間 as a date, and leave the number in the clean string');
-  it('should not recognize ２日連続 as a date, and leave the number in the clean string');
-  it('should clean out some basic words with numeral kanji in them');
   it('Return detected dates in the results object', () => {
     const source = 'イベント期間：20:59 2/21 から　2018年3月20日まで';
     const target = 'Event from 8:59pm, Dec. 21 to Jan. 20';
     const [res] = compareDates(source, target, options, {});
     expect(res.sourceDates).to.be.an('array').that.has.lengthOf(2);
     expect(res.targetDates).to.be.an('array').that.has.lengthOf(2);
+  });
+  it('Parse simple slash dates', () => {
+    let source = 'イベント期間： 1/11';
+    let target = 'The event is on Jan. 11';
+    let [res] = compareDates(source, target, options, {});
+    expect(res.hasError).to.be.false;
+
+    source = 'イベント期間： 2017年1月14日';
+    target = 'The event is on 1/14';
+    [res] = compareDates(source, target, options, {});
+    expect(res.hasError).to.be.false;
   });
 });

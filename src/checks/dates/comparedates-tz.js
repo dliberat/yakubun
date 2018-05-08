@@ -7,19 +7,16 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   if (!dates.verifyOptions(checkOptions)) {
     oAccumulator.timeCheck_clean_source = source;
     oAccumulator.timeCheck_clean_target = target;
-
-    if (oAccumulator.log) oAccumulator.log('Invalid checkOptions. Could not compare dates');
-    const res = new CheckResult('dates-tz', false);
-    return [res, oAccumulator];
+    const retval = new CheckResult('dates-tz');
+    retval.HTML = 'Could not check dates';
+    retval.plainText = retval.HTML;
+    return [retval, oAccumulator];
   }
-
-  let retval = null;
 
   // check whether time zones have been provided
   const sourceTZ = checkOptions.sourceTimeZone || 'Asia/Tokyo';
   const targetTZ = checkOptions.targetTimeZone || 'Asia/Tokyo';
 
-  // source goes in [0], target goes in [1]
   const [cleanSource, cleanTarget] = dates
     .cleanStringsBeforeDateCheck(source, target, checkOptions);
   oAccumulator.timeCheck_clean_source = cleanSource;
@@ -51,7 +48,7 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   }
 
   // momentArr should now only contain the dates that have no matches
-  retval = formatForOutput(momentArr, oAccumulator, sourceTZ, targetTZ);
+  const retval = formatForOutput(momentArr, oAccumulator, sourceTZ, targetTZ);
 
   retval.checkName = 'dates-tz';
   retval.hasTargetDate = datesRegExp.test(cleanTarget);

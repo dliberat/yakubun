@@ -25,16 +25,6 @@ function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
 
   const inSourceNoMatch = `Source dates w/o match in target: <span class="text-date">${arr[0].join(', ')}</span>`;
   const inTargetNoMatch = `Target dates w/o match in source: <span class="text-date">${arr[1].join(', ')}</span>`;
-  // let slashParsedInSource = '';
-  // let slashParsedInTarget = '';
-
-  // if (arr.length > 3) {
-  //   if (arr[3].length > 0) { slashParsedInTarget = arr[3].join(', '); }
-  // }
-
-  // if (arr.length > 2) {
-  //   if (arr[2].length > 0) { slashParsedInSource = arr[2].join(', '); }
-  // }
 
   // create the output string
   let output;
