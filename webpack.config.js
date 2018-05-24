@@ -16,7 +16,7 @@ module.exports = {
     ],
   },
   output: {
-    filename: 'yakubun-var.js',
+    filename: 'yakubun.js',
     globalObject: 'typeof self !==\'undefined\' ? self : this',
     library: 'yakubun',
     libraryTarget: 'umd',
