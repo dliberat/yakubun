@@ -1,12 +1,31 @@
+/**
+  * @module runChecks
+  * @description
+  * This module iterates over the segments in the bilingualDoc, and executes each
+  * of the checks for every segment. It is expected that the checkOptions that
+  * are passed to this module are structurally valid, as the checks themselves
+  * are not guaranteed to behave properly or to raise informative error messages
+  * otherwise.
+  *
+  * Some checks may emit log messages in case of errors, or simply to provide
+  * information about the behavior of the check itself. These are fed to the
+  * accumulator object.
+ */
+
 import getChecks from './preprocessing/getChecks';
 
+/**
+ * Log issues to the accumulator object
+ * @param {string} msg - A message to save to the log.
+ * @private
+ */
 function logger(msg) {
   if (this.logs.indexOf(msg) < 0) this.logs.push(msg);
 }
 
 /**
  * Run a battery of checks on a single segment.
- * The list of checks to run is retrieved from `oAccumulator.checks`.
+ * The list of checks to run is retrieved from <tt>oAccumulator.checks</tt>.
  * @param source {string} - Source text
  * @param target {string} - Target text
  * @param checkOptions {object} - Config
@@ -14,6 +33,7 @@ function logger(msg) {
  * @returns An array of two elements. The first is an object
  * that contains the results of each of the checks. The second
  * is the updated state of the accumulator object.
+ * @private
  */
 function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   let accumulator = oAccumulator;
@@ -32,6 +52,57 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   return [oResults, accumulator];
 }
 
+/**
+ * Iterate over the keys in the bilingual document and execute all
+ * the check functions against each segment. Accumulate and return the
+ * results of all the checks.
+ * @param {Object} bilingualDoc - Object containing translation segments
+ * @param {Object} checkOptions - Object containing configuration options
+ * @return {Object} Object containing the results of all checks for each segment,
+ * plus a record of the logs that were generated during the checks.
+ *
+ * @alias module:runChecks
+ *
+ * @example
+ * const bilingualDoc = {
+ *   0: {
+ *     source: '犬',
+ *     target: 'dog'
+ *   },
+ *   1: {
+ *     source: '1月2日',
+ *     target: 'January 3'
+ *   }
+ * }
+ *
+ * // Using the default options is not recommended, as it will result in only
+ * // a few checks being able to perform any real work. At the bare minimum,
+ * // you should try to pass in a dateFormats object in with your options so
+ * // that the dates and numbers checks can work efficiently without raising
+ * // too many false positives.
+ * const options = {}
+ *
+ * const results = startScan(bilingualDoc, options);
+ * console.log(results);
+ *
+ * @example
+ * // returned value
+ * {
+ *  0: {
+ *    bannedwords: { hasError: false, HTML: '', plainText: '' },
+ *    oxfordComma: { hasError: false, HTML: '', plainText: '' },
+ *    dates: { hasError: false, HTML: '', plainText: '' },
+ *    ...
+ *   },
+ *  1: {
+ *    bannedwords: { hasError: false, HTML: '', plainText: '' },
+ *    oxfordComma: { hasError: false, HTML: '', plainText: '' },
+ *    dates: { hasError: true, HTML: 'Found <span class="error">Jan 2</span> in source and ...' },
+ *    ...
+ *  }
+ *  logs: []
+ * }
+ */
 function startScan(bilingualDoc, checkOptions) {
   let oAccumulator = {
     currentSegment: 0,

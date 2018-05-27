@@ -1,7 +1,43 @@
+/**
+ * @module dateformats
+ * @description
+ * A collection of regular expressions designed to capture some of the most common
+ * text formats for writing dates in both Japanese and English. These are used as
+ * default values only, and it is highly recommended that clients provide their own
+ * lists of date formats in the check options object. When a valid date formats object
+ * is provided in <tt>checkOptions.dateFormats</tt>, the defaults in this module are not used.
+ */
+
+
 const now = new Date();
+
+/**
+ * The current year. Used to assign a year where none is provided in the translation text.
+ * It is assumed that in most cases, if the text omits the year, it will be referring
+ * to the current year. Even in cases where this assumption does not hold, so long
+ * as both the source and target texts are consistent about including or excluding a
+ * year, translation errors should be detected accurately.
+ * @ignore
+ */
 const thisYear = now.getFullYear();
+
+/**
+ * The current month. Used to assign a month where none is provided in the translation text.
+ * It is assumed that in most cases, if the text omits the month, it will be referring
+ * to the current month.
+ * @ignore
+ */
 const thisMonth = now.getMonth() + 1;
 
+/**
+ * Strings for use with RegExp constructors, along with replacement patterns to go
+ * with each match pattern. Each of the match patterns is executed in sequence (ie. the
+ * function does not short-circuit once a match has been found), therefore careful
+ * sequencing of the patterns is important.
+ *
+ * These are intended as simple defaults, and ideally clients should provide their own
+ * lists with patterns that reflect the date formats they see on a regular basis.
+ */
 const dateFormats = {
   ja: [
     ['([0-9]{4})\\u5E74([0-1]?[0-9])\\u6708([0-3]?[0-9])\\u65E5\\s?([0-2]?[0-9])[\\u6642\\uFF1A:]([0-5][0-9])', '{$1-$2-$3 $4:$5}'], // 2017年9月10日10時３０分
