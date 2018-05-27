@@ -1,3 +1,8 @@
+/**
+ * Number comparison module.
+ * @module numbers
+ */
+
 import commaNumber from 'comma-number';
 import {
   CheckResult,

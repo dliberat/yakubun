@@ -5,8 +5,8 @@ function logger(msg) {
 }
 
 /**
- * Runs the battery of checks on a single segment
- * in the bilingual doc
+ * Run a battery of checks on a single segment.
+ * The list of checks to run is retrieved from `oAccumulator.checks`.
  * @param source {string} - Source text
  * @param target {string} - Target text
  * @param checkOptions {object} - Config

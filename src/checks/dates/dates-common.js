@@ -26,16 +26,15 @@ function verifyOptions(checkOptions) {
 
 /**
  * Remove words from the JP that have kanji in them that would normally be
- * mistaken for numbers, or that should never be translated as numbers.
+ * mistaken for dates/times, or that should never be translated as dates/times.
+ * @param {string} string - The text to replace
+ * @private
 */
 function initialJPFilter(string) {
   const arr = [
     ['([0-9]?[0-9])[\\u65E5\\u6642\\u5206][\\u9593\\u76EE]', ' $1 '], // 3日目 or ４日間 or 3時間 or 25分間
     ['([0-9]+)\\u65E5\\u9023\\u7D9A', ' $1 '], // 6日連続
     ['[0-9]\\u65E5([0-9]+)\\u56DE', ' $1 '], // 1日１回
-    ['\\u4E09\\u89D2', ' '], // 三角
-    ['\\u4E07\\u7AEF', ' '], // 万端
-    ['\\u4E07\\u80FD', ' '],
   ];
 
   return replaceAllFromArray(arr, string, 'gi');

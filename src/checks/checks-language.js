@@ -1,3 +1,8 @@
+/**
+ * Module containing various language quality checks.
+ * @module checks-language
+ */
+
 import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
 
 /** Find double byte brackets, colons, or exclamation marks

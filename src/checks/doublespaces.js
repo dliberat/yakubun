@@ -1,3 +1,8 @@
+/**
+ * Contains a check for double spaces in the target text.
+ * @module doublespaces
+ */
+
 import { CheckResult } from 'yakubun-utils';
 
 function generateResult(test, acc) {

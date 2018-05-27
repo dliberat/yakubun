@@ -1,3 +1,8 @@
+/**
+ * Date comparison module, without timezone conversions.
+ * @module comparedates
+ */
+
 import { CheckResult, regexComparer, compareArrays } from 'yakubun-utils';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';

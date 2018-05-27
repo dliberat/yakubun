@@ -1,3 +1,8 @@
+/**
+ * Time comparison module.
+ * @module compareTimes
+ */
+
 import moment from 'moment-timezone';
 import { CheckResult, regexComparer } from 'yakubun-utils';
 import replaceKanjiNums from '../../utilities/replaceKanjiNums';
@@ -58,6 +63,7 @@ function timeDisplayFormatting(momentArr) {
 * @param {array} arr1 - An array of moments
 * @param {array} arr2 - An array of moments
 * @param {string} comparison - If comparison === 'date', this function compares dates, not times.
+* @returns {boolean} True if arrays contain moment objects pointing to the same times.
 */
 function compareMomentTimes(arr1, arr2, comparison) {
   // if 'date' is passed as a third argument, compare dates

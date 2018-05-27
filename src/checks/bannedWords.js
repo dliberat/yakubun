@@ -1,3 +1,8 @@
+/**
+ * Module for checking the target text for words that should not be used.
+ * @module bannedWords
+ */
+
 import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
 
 /**

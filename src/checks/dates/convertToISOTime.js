@@ -1,5 +1,10 @@
-/** convert 12 hour clocks to 24 hour clocks
- *
+/**
+ * Convert 12 hour clocks to 24 hour clocks.
+ * @param {*} match - RegExp match object
+ * @param {Number} hour
+ * @param {Number} minutes
+ * @param {string} meridian - am' or 'pm', or an empty string.
+ * @private
  */
 function twentyFourHours(match, hour, minutes, meridian = '') {
   let hr = Number(hour);
@@ -27,6 +32,7 @@ function twentyFourHours(match, hour, minutes, meridian = '') {
  * accounting for "am/pm" immediately following the time display.
  * @param {string} string - Text containing times
  * @returns A new string with the times replaced
+ * @private
  */
 function convertToTwentyFourHourClock(string) {
   return string.replace(/([0-2]?[0-9]):([0-5][0-9])([ap]m)?/gi, twentyFourHours);

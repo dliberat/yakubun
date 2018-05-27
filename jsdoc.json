@@ -1,0 +1,9 @@
+{
+    "source": {
+        "includePattern": ".js$"
+    },
+    "opts": {
+        "destination": "docs",
+        "template": "node_modules/docdash"
+    }
+}
