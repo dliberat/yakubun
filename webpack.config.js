@@ -1,5 +1,6 @@
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const { NormalModuleReplacementPlugin, IgnorePlugin } = require('webpack');
 
 module.exports = {
   entry: './src/index.js',
@@ -31,5 +32,12 @@ module.exports = {
         },
       },
     }),
+    // Use custom tz info to reduce size
+    new NormalModuleReplacementPlugin(
+      /moment-timezone\/data\/packed\/latest\.json/,
+      require.resolve('./src/utilities/moment-timezones-2015-2022.json'),
+    ),
+    // Don't bundle moment locale data to reduce size
+    new IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
 };
