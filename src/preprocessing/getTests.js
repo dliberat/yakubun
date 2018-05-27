@@ -38,8 +38,11 @@ function buildArr(standard, custom) {
 
   // add in user-defined tests
   for (let i = 0; i < custom.length; i += 1) {
-    if (typeof custom[i][0] === 'string' &&
-        typeof custom[i][1] === 'function') tests.push(custom[i]);
+    if (typeof custom[i][0] !== 'string' || typeof custom[i][1] !== 'function') {
+      throw new Error('Invalid custom check.');
+    }
+
+    tests.push(custom[i]);
   }
 
   return tests;
