@@ -1,9 +1,20 @@
-/* global describe, it */
-/* eslint no-unused-expressions: off */
+/* global describe, it, before, after */
+/* eslint no-unused-expressions: off, no-console: off */
 import { expect } from 'chai';
 import verify from '../src/preprocessing/verifyOptions';
 
 describe('Verify an options object', () => {
+  let warnfunc;
+
+  before(() => {
+    warnfunc = console.warn;
+    console.warn = () => {};
+  });
+
+  after(() => {
+    console.warn = warnfunc;
+  });
+
   it('Return default source and target languages if not provided', () => {
     const obj = { bannedWords: false, doubleSpaces: true, dateFormats: {} };
     expect(verify(obj))
