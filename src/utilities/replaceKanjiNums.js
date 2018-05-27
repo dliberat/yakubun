@@ -10,8 +10,6 @@ function replaceKanjiNums(string) {
     .replace(/\u5341\u516B/g, '18')
     .replace(/\u5341\u4E5D/g, '19')
     .replace(/\u4E8C\u5341/g, '20')
-    // .replace(/\uFF10/g, '0')
-    // .replace(/\uFF11/g, '1')
     .replace(/\uFF12|\u4E8C/g, '2')
     .replace(/\uFF13|\u4E09/g, '3')
     .replace(/\uFF14|\u56DB/g, '4')
@@ -20,14 +18,6 @@ function replaceKanjiNums(string) {
     .replace(/\uFF17|\u4E03/g, '7')
     .replace(/\uFF18|\u516B/g, '8')
     .replace(/\uFF19|\u4E5D/g, '9');
-  // .replace(/\u4E8C/g, '2')
-  // .replace(/\u4E09/g, '3')
-  // .replace(/\u56DB/g, '4')
-  // .replace(/\u4E94/g, '5')
-  // .replace(/\u516D/g, '6')
-  // .replace(/\u4E03/g, '7')
-  // .replace(/\u516B/g, '8')
-  // .replace(/\u4E5D/g, '9');
 }
 
 export default replaceKanjiNums;
