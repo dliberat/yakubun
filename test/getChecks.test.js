@@ -1,24 +1,24 @@
 /* global describe, it */
 /* eslint no-unused-expressions: off */
 import { expect } from 'chai';
-import getTests from '../src/preprocessing/getTests';
+import getChecks from '../src/preprocessing/getChecks';
 
-describe('getTests', () => {
+describe('getChecks', () => {
   it('return an array of functions', () => {
-    const testsArray = getTests({});
-    for (let i = 0; i < testsArray.length; i += 1) {
-      expect(testsArray[i][1]).to.be.a('function');
+    const checksArray = getChecks({});
+    for (let i = 0; i < checksArray.length; i += 1) {
+      expect(checksArray[i][1]).to.be.a('function');
     }
   });
   it('disable tzDates by default', () => {
-    const testsArray = getTests({});
-    for (let i = 0; i < testsArray.length; i += 1) {
-      expect(testsArray[i][0]).to.not.equal('tzDates');
+    const checksArray = getChecks({});
+    for (let i = 0; i < checksArray.length; i += 1) {
+      expect(checksArray[i][0]).to.not.equal('tzDates');
     }
   });
   it('enable tzDates if passed true', () => {
-    const res = getTests({
-      tests: {
+    const res = getChecks({
+      checks: {
         tzDates: true,
       },
     });
@@ -31,8 +31,8 @@ describe('getTests', () => {
     expect(tzExists).to.equal(true);
   });
   it('disable dates if tzDates is enabled', () => {
-    const res = getTests({
-      tests: { tzDates: true },
+    const res = getChecks({
+      checks: { tzDates: true },
     });
 
     let datesExists = false;
@@ -46,18 +46,18 @@ describe('getTests', () => {
     const myCustomCheck = () => {};
     const checkArr = ['my-custom', myCustomCheck];
     const config = {
-      customTests: [
+      customChecks: [
         checkArr,
       ],
     };
-    const res = getTests(config);
+    const res = getChecks(config);
     expect(res).to.be.an('array').that.includes(checkArr);
 
     const badConfig = {
-      customTests: [
+      customChecks: [
         [myCustomCheck, 'check'],
       ],
     };
-    expect(getTests.bind(null, badConfig)).to.throw;
+    expect(getChecks.bind(null, badConfig)).to.throw;
   });
 });

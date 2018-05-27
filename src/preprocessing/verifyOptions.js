@@ -67,13 +67,13 @@ function verify(options) {
       targetLang: 'en',
       dateFormats: defaultDateFormats,
       bannedWordsList: {},
-      customTests: [],
+      customChecks: [],
     };
 
     return defaultOptions;
   }
 
-  // verify these keys by default, since they're critical for basic tests
+  // verify these keys by default, since they're critical for basic checks
   options.sourceLang = vLang(options.sourceLang, 'ja');
   options.targetLang = vLang(options.targetLang, 'en');
   options.bannedWordsList = vBannedWords(options.bannedWordsList);

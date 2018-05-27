@@ -10,7 +10,7 @@ import compareDatesTz from '../checks/dates/comparedates-tz';
 import compareNumbers from '../checks/numbers/numbers';
 import compareTimes from '../checks/time/time';
 
-const standardTests = [
+const standardChecks = [
   ['bannedWords', find],
   ['doubleSpaces', findDoubleSpaces],
   ['zenkakuCharacters', checksLang.findJPCharacters],
@@ -27,30 +27,30 @@ const standardTests = [
 ];
 
 function buildArr(standard, custom) {
-  const tests = [];
+  const checks = [];
 
-  // check to make sure the standard tests have not been disabled
-  for (let i = 0; i < standardTests.length; i += 1) {
-    if (standard[standardTests[i][0]] !== false) {
-      tests.push(standardTests[i]);
+  // check to make sure the standard checks have not been disabled
+  for (let i = 0; i < standardChecks.length; i += 1) {
+    if (standard[standardChecks[i][0]] !== false) {
+      checks.push(standardChecks[i]);
     }
   }
 
-  // add in user-defined tests
+  // add in user-defined checks
   for (let i = 0; i < custom.length; i += 1) {
     if (typeof custom[i][0] !== 'string' || typeof custom[i][1] !== 'function') {
       throw new Error('Invalid custom check.');
     }
 
-    tests.push(custom[i]);
+    checks.push(custom[i]);
   }
 
-  return tests;
+  return checks;
 }
 
-function getTests(checkOptions) {
-  const standard = checkOptions.tests || {};
-  const custom = checkOptions.customTests || {};
+function getChecks(checkOptions) {
+  const standard = checkOptions.checks || {};
+  const custom = checkOptions.customChecks || {};
 
   if (standard.tzDates === true) {
     // disable regular dates check
@@ -63,4 +63,4 @@ function getTests(checkOptions) {
   return buildArr(standard, custom);
 }
 
-export default getTests;
+export default getChecks;

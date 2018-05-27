@@ -1,4 +1,4 @@
-import getTests from './preprocessing/getTests';
+import getChecks from './preprocessing/getChecks';
 
 function logger(msg) {
   if (this.logs.indexOf(msg) < 0) this.logs.push(msg);
@@ -19,13 +19,13 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
   let accumulator = oAccumulator;
   const oResults = {};
 
-  // run each of the functions in oAccumulator.tests
+  // run each of the functions in oAccumulator.checks
   // store the results of that function in the oResults object
   // and keep any metadata they send back through the second parameter (b);
-  accumulator.tests.forEach((test) => {
-    const [testName, testFunc] = test;
-    const [res, acc] = testFunc(source, target, checkOptions, accumulator);
-    oResults[testName] = res;
+  accumulator.checks.forEach((check) => {
+    const [checkName, checkFunc] = check;
+    const [res, acc] = checkFunc(source, target, checkOptions, accumulator);
+    oResults[checkName] = res;
     accumulator = acc;
   });
 
@@ -37,7 +37,7 @@ function startScan(bilingualDoc, checkOptions) {
     currentSegment: 0,
     log: logger.bind(this),
     logs: [],
-    tests: getTests(checkOptions),
+    checks: getChecks(checkOptions),
     totalSegmentsChecked: 0,
   };
 
