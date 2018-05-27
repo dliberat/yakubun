@@ -77,20 +77,11 @@ describe('Numbers check', () => {
     expect(res.hasError).to.be.false;
   });
   it('Allow "once" and "per" to replace the number 1, only if needed', () => {
-    const source = '１日ごとにチケットもらえる';
-    const target = 'Get a free ticket once a day.';
-    const [res] = compareNumbers(source, target);
-    expect(res.hasError).to.be.false;
+    const [once] = compareNumbers('1ごとにチケットもらえる', 'Get a free ticket once a day.');
+    expect(once.hasError).to.be.false;
 
-    const s = '１個ずつチャンスある！最大４回もらえる！';
-    const t = 'You have 4 chances per coffee cup you drink!';
-    const r = compareNumbers(s, t);
-    expect(r[0].hasError).to.be.false;
-
-    const a = '薬を１日に３回飲みなさい';
-    const b = 'Take your medicine 3 times per day.';
-    const c = compareNumbers(a, b);
-    expect(c[0].hasError).to.be.false;
+    const [per] = compareNumbers('薬を1に３回飲みなさい', 'Take medicine 3 times per day.');
+    expect(per.hasError).to.be.false;
   });
   it('convert millions of numbers', () => {
     const source = 'トータル飾り個数が500万個、1,500万個、2,500万個達成時の特別アイテムは、クリスマスツリーに飾りを10個以上寄付されたユーザーに限り支給されます。';
