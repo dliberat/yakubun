@@ -70,6 +70,6 @@ describe('Entry point - index.js', () => {
     };
 
     const results = yakubun.scan(bilingualDoc, config);
-    expect(results[1].bannedWords.hasError).to.be.true;
+    expect(results[1].bannedWords.hasError).to.be.false;
   });
 });
