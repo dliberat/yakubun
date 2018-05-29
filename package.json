@@ -1,6 +1,6 @@
 {
   "name": "yakubun",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Library for checking Japanese translations",
   "main": "dist/yakubun.js",
   "repository": {
