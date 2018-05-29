@@ -72,4 +72,27 @@ describe('Entry point - index.js', () => {
     const results = yakubun.scan(bilingualDoc, config);
     expect(results[1].bannedWords.hasError).to.be.true;
   });
+
+  it('Check for errors in Spanish', () => {
+    const config = {
+      sourceLang: 'ja',
+      targetLang: 'es',
+      sourceTimeZone: 'Asia/Tokyo',
+      targetTimeZone: 'UTC',
+    };
+    const doc = {
+      0: {
+        source: 'わんわんが好きです。',
+        target: 'Me gustan los  perros',
+      },
+      1: {
+        source: 'クリアでコイン×10000GET！',
+        target: 'Completalo y recibiras 10.000 monedas!',
+      },
+    };
+
+    const results = yakubun.scan(doc, config);
+    expect(results[0].doubleSpaces.hasError).to.be.true;
+    expect(results[1].numbers.hasError).to.be.false;
+  });
 });
