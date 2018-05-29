@@ -80,6 +80,10 @@ function checkSequentialArray(arr) {
 }
 
 function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
+  const retval = new CheckResult('numbered-bullets');
+  retval.HTML = 'Suspected error in numbered list (# sequence or punctuation).';
+  retval.plainText = 'Suspected error in numbered list (# sequence or punctuation).';
+
   const periodArr = [];
   const bracketArr = [];
 
@@ -99,7 +103,7 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
   const re = new RegExp('^(\\d)[.)]\\s|[^\\w]\\s(\\d)[.)]\\s', 'gm');
   const matchArr = regexMatchesToArray(target, re);
   // if there are no matches, return right away
-  if (matchArr.length === 0) { return [null, oAccumulator]; }
+  if (matchArr.length === 0) { return [retval, oAccumulator]; }
 
   let num;
   // else loop through the results and sort them into the appropriate arrays
@@ -107,10 +111,8 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
     num = matchArr[i][1] || matchArr[i][2];
     if (matchArr[i][0].indexOf(')') > -1) {
       oAccumulator.trackNumberedBullets.bracket.push(num);
-      // oAccumulator.log(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num})]`);
     } else if (matchArr[i][0].indexOf('.') > -1) {
       oAccumulator.trackNumberedBullets.period.push(num);
-      // oAccumulator.log(`Found a numbered bullet point at segment ${Number(oAccumulator.currentSegment) + 1}. [${num}.]`);
     }
   }
   // search for errors. Returns FALSE if there is an error in the numerical sequence
@@ -118,22 +120,20 @@ function trackNumberedBullets(source, target, checkOptions, oAccumulator) {
   const ret2 = checkSequentialArray(oAccumulator.trackNumberedBullets.bracket);
   const numIsOne = num === 1 || num === '1';
 
-  let retval = null;
-
   if (ret1 === false || ret2 === false) {
-    retval = 'Suspected error in numbered list (# sequence or punctuation).';
+    retval.hasError = true;
     // if an error was detected, reset the relevant Accumulator array so that it
     // doesn't flag every single segment.
     if (ret1 === false) {
-      // reset the retval to null if the list is 3 or more items long and
+      // reset the retval if the list is 3 or more items long and
       // the match is a 1, since we most likely just started a new list.
       if (oAccumulator.trackNumberedBullets.period.length > 2 && numIsOne) {
-        retval = null;
+        retval.hasError = false;
       }
       oAccumulator.trackNumberedBullets.period = [];
     } else {
       if (oAccumulator.trackNumberedBullets.bracket.length > 2 && numIsOne) {
-        retval = null;
+        retval.hasError = false;
       }
       oAccumulator.trackNumberedBullets.bracket = [];
     }
