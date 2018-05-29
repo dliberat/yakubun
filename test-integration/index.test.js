@@ -1,4 +1,5 @@
 /* global describe, beforeEach, it */
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import * as yakubun from '../src/index';
 
@@ -25,7 +26,7 @@ describe('Entry point - index.js', () => {
       },
       4: {
         source: '期間：9/26 16:59',
-        target: 'Til 9/26, 12:59AM (PDT).',
+        target: 'Til 9/26, 12:59AM.',
       },
       5: {
         source: '最終ログイン日時が2017年2月7日0時0分より前、且つ、お客さまが保有する「クローバー」（有償のものも含む）のデータのみ（台湾でプレイされているお客さまを除く）',
@@ -34,9 +35,41 @@ describe('Entry point - index.js', () => {
     };
   });
 
+  it('Module exports the "scan" method', () => {
+    expect(yakubun.scan).to.be.a('function');
+  });
+
   it('Detect errors in the text', () => {
     const results = yakubun.scan(bilingualDoc, {});
-    /* eslint-disable-next-line no-unused-expressions */
     expect(results[2].doubleSpaces.hasError).to.be.true;
+    expect(results[3].numbers.hasError).to.be.false;
+    expect(results[4].times.hasError).to.be.true;
+    expect(results[4].dates.hasError).to.be.false;
+  });
+
+  it('Perform time zone dates check', () => {
+    const config = {
+      sourceTimeZone: 'Asia/Tokyo',
+      targetTimeZone: 'America/Los_Angeles',
+      checks: {
+        dates: false,
+        times: false,
+        tzDates: true,
+      },
+    };
+
+    const results = yakubun.scan(bilingualDoc, config);
+    expect(results[4].tzDates.hasError).to.be.false;
+  });
+
+  it('Check for banned words', () => {
+    const config = {
+      bannedWordsList: {
+        CaseInsensitive: ['dog'],
+      },
+    };
+
+    const results = yakubun.scan(bilingualDoc, config);
+    expect(results[1].bannedWords.hasError).to.be.true;
   });
 });
