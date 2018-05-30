@@ -73,7 +73,6 @@ function ordinalNumbers(source, target, checkOptions = {}, oAccumulator) {
   accumulator = oAccumulator;
 
   if (checkOptions.targetLang !== 'en') {
-    // accumulator.log('Ordinal number checks are only supported for English.');
     return returnNull();
   }
 

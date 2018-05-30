@@ -19,8 +19,8 @@ import getChecks from './preprocessing/getChecks';
  * @param {string} msg - A message to save to the log.
  * @private
  */
-function logger(msg) {
-  if (this.logs.indexOf(msg) < 0) this.logs.push(msg);
+function logger() {
+  // deprecated
 }
 
 /**
