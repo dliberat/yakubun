@@ -15,15 +15,6 @@
 import getChecks from './preprocessing/getChecks';
 
 /**
- * Log issues to the accumulator object
- * @param {string} msg - A message to save to the log.
- * @private
- */
-function logger() {
-  // deprecated
-}
-
-/**
  * Run a battery of checks on a single segment.
  * The list of checks to run is retrieved from <tt>oAccumulator.checks</tt>.
  * @param source {string} - Source text
@@ -100,14 +91,11 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
  *    dates: { hasError: true, HTML: 'Found <span class="error">Jan 2</span> in source and ...' },
  *    ...
  *  }
- *  logs: []
  * }
  */
 function startScan(bilingualDoc, checkOptions) {
-  let oAccumulator = {
+  const oAccumulator = {
     currentSegment: 0,
-    log: logger.bind(this),
-    logs: [],
     checks: getChecks(checkOptions),
     totalSegmentsChecked: 0,
   };
@@ -123,20 +111,15 @@ function startScan(bilingualDoc, checkOptions) {
     oAccumulator.currentSegment = segment;
     oAccumulator.totalSegmentsChecked += 1;
 
-    const [res, acc] = singleSegmentChecks(
+    const [res] = singleSegmentChecks(
       bilingualDoc[segment].source,
       bilingualDoc[segment].target,
       checkOptions,
       oAccumulator,
     );
 
-    // use the accumulator to carry over data between segments
-    oAccumulator = acc;
-
     output[segment] = res;
   });
-
-  output.logs = oAccumulator.logs;
 
   return output;
 }

@@ -26,11 +26,11 @@ function setStyle(location = 'US') {
   if (location === 'UK') {
     searchTerm = '."';
     searchTermComma = ',"';
-    caution = 'Quotation marks should precede periods.';
+    caution = 'Quotation marks should precede punctuation.';
   } else {
     searchTerm = '".';
     searchTermComma = '",';
-    caution = 'Periods should precede quotation marks.';
+    caution = 'Punctuation should precede quotation marks.';
   }
 }
 

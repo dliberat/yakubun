@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach */
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-import { trackNumberedBullets } from '../src/checks/checks-language';
+import trackNumberedBullets from '../src/checks/numberedBullets';
 
 describe('Ordered list tracker', () => {
   const options = {};

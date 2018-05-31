@@ -1,11 +1,22 @@
-/* global describe, beforeEach, it */
-/* eslint-disable no-unused-expressions */
+/* global describe, beforeEach, it, before, after */
+/* eslint-disable no-unused-expressions, no-console */
 import { expect } from 'chai';
 import * as yakubun from '../src/index';
+import { log } from 'util';
 
 let bilingualDoc;
 
 describe('Entry point - index.js', () => {
+
+  let consolelog;
+  before(() => {
+    consolelog = console.warn;
+    console.warn = () => {};
+  });
+  after(() => {
+    console.warn = consolelog;
+  });
+
   beforeEach(() => {
     bilingualDoc = {
       0: {
@@ -60,6 +71,26 @@ describe('Entry point - index.js', () => {
 
     const results = yakubun.scan(bilingualDoc, config);
     expect(results[4].tzDates.hasError).to.be.false;
+  });
+
+  it('Find errors in numbered lists', () => {
+    const doc = {
+      0: {
+        source: '1. 日本語',
+        target: '1. Japanese',
+      },
+      1: {
+        source: '2. 犬',
+        target: '2. Dog',
+      },
+      2: {
+        source: '4. わんわんが好きです。',
+        target: '4. I like  dogs.',
+      },
+    };
+
+    const results = yakubun.scan(doc, {});
+    expect(results[2].numberedBullets.hasError).to.be.true;
   });
 
   it('Check for banned words', () => {

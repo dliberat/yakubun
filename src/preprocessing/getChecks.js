@@ -1,4 +1,5 @@
 import * as checksLang from '../checks/checks-language';
+import trackNumberedBullets from '../checks/numberedBullets';
 import findDoubleSpaces from '../checks/doublespaces';
 import findRepeatedWords from '../checks/repeatedwords';
 import detectOxfordCommas from '../checks/oxfordcomma';
@@ -19,7 +20,7 @@ const standardChecks = [
   ['ordinalNumbers', ordinalNumbers],
   ['bulletSpaces', checksLang.findBulletsWithNoSpaces],
   ['oxfordCommas', detectOxfordCommas],
-  ['numberedBullets', checksLang.trackNumberedBullets],
+  ['numberedBullets', trackNumberedBullets],
   ['tzDates', compareDatesTz],
   ['dates', compareDates],
   ['times', compareTimes],
