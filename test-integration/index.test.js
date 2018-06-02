@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-expressions, no-console */
 import { expect } from 'chai';
 import * as yakubun from '../src/index';
-import { log } from 'util';
 
 let bilingualDoc;
 
