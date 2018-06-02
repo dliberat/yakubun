@@ -84,7 +84,7 @@ function replaceSlashDates(slashDates, text) {
  * single- or double-digits.
  * @param {string} cleanSource - Segment text with natural text dates converted into bracket format.
  * @param {string} cleanTarget - Segment text with natural text dates converted into bracket format.
- * @returns {*[]} The 0th element in the array is the regex matches from the source text.
+ * @returns {*} The 0th element in the array is the regex matches from the source text.
  * The 1st element in the array is the regex matches from the target text.
  * The 2nd element in the array is a boolean indicating whether the two arrays are identical or not.
  */
@@ -104,8 +104,8 @@ function extractDates(cleanSource, cleanTarget) {
  * accumulator should use this bracketed format in place of the original strings.
  * @param {string} source - Source text
  * @param {string} target - Target text
- * @param {*{}} options - CheckOptions object
- * @param {*{}} oAccumulator - Accumulator object
+ * @param {*} options - CheckOptions object
+ * @param {*} oAccumulator - Accumulator object
  */
 function compareDates(source, target, options, oAccumulator) {
   /* Idiot check. Modifies accumulator. */

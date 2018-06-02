@@ -15,7 +15,7 @@ class ResultFactory {
    * ALWAYS includes a value in the timeCheck_clean_source key.
    * @param {string} source - Source text
    * @param {string} target - Target text
-   * @param {*{}} acc - Accumulator object
+   * @param {*} acc - Accumulator object
    */
   invalid(source, target, acc) {
     const result = new CheckResult(this.checkName);
@@ -48,12 +48,12 @@ class ResultFactory {
    * (i.e., strings in the text that look like "1/2" but have been determined to represent
    * dates as opposed to fractions), and then the decide function completes the process
    * by adding in any dates that were found in the original passes with the regex tests.
-   * @param {*[]} res - Array of arrays indicating where different dates were identified.
-   * @param {*{}} acc - Accumulator object
+   * @param {*} res - Array of arrays indicating where different dates were identified.
+   * @param {*} acc - Accumulator object
    * @param {string} sTz - Source time zone
    * @param {string} tTz - Target time zone
-   * @param {Moment[]} sMoments - Moments identified in source text
-   * @param {Moment[]} tMoments - Moments identified in target text
+   * @param {Moment} sMoments - Moments identified in source text
+   * @param {Moment} tMoments - Moments identified in target text
    */
   decide(res, acc, sMoments, tMoments, sTz = null, tTz = null) {
     const result = formatForOutput(res, acc, sTz, tTz);
