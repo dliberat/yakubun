@@ -21,26 +21,22 @@ import getChecks from './preprocessing/getChecks';
  * @param target {string} - Target text
  * @param checkOptions {object} - Config
  * @param oAccumulator {object} - Accumulates data over iterations
- * @returns An array of two elements. The first is an object
- * that contains the results of each of the checks. The second
- * is the updated state of the accumulator object.
+ * @returns An object containing the results for each check.
  * @private
  */
 function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
-  let accumulator = oAccumulator;
   const oResults = {};
 
   // run each of the functions in oAccumulator.checks
   // store the results of that function in the oResults object
   // and keep any metadata they send back through the second parameter (b);
-  accumulator.checks.forEach((check) => {
+  oAccumulator.checks.forEach((check) => {
     const [checkName, checkFunc] = check;
-    const [res, acc] = checkFunc(source, target, checkOptions, accumulator);
+    const [res] = checkFunc(source, target, checkOptions, oAccumulator);
     oResults[checkName] = res;
-    accumulator = acc;
   });
 
-  return [oResults, accumulator];
+  return oResults;
 }
 
 /**
@@ -49,8 +45,7 @@ function singleSegmentChecks(source, target, checkOptions, oAccumulator) {
  * results of all the checks.
  * @param {Object} bilingualDoc - Object containing translation segments
  * @param {Object} checkOptions - Object containing configuration options
- * @return {Object} Object containing the results of all checks for each segment,
- * plus a record of the logs that were generated during the checks.
+ * @return {Object} Object containing the results of all checks for each segment
  *
  * @alias module:runChecks
  *
@@ -111,14 +106,14 @@ function startScan(bilingualDoc, checkOptions) {
     oAccumulator.currentSegment = segment;
     oAccumulator.totalSegmentsChecked += 1;
 
-    const [res] = singleSegmentChecks(
+    const singleSegmentResults = singleSegmentChecks(
       bilingualDoc[segment].source,
       bilingualDoc[segment].target,
       checkOptions,
       oAccumulator,
     );
 
-    output[segment] = res;
+    output[segment] = singleSegmentResults;
   });
 
   return output;
