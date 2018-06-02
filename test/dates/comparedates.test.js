@@ -21,23 +21,18 @@ describe('compareDates', () => {
     },
   };
 
-  it('should always return timeCheck_clean_source and timeCheck_clean_target keys in the accumulator', () => {
-    const source = 'こんにちは、世界';
-    const target = 'Hello, World!';
-    const res = compareDates(source, target, {}, {});
-    expect(res[1]).to.be.an('object').that.has.all.keys('timeCheck_clean_target', 'timeCheck_clean_source');
+  it('Return timeCheck_clean_source and timeCheck_clean_target keys in the accumulator', () => {
+    const accumulator = {};
+    compareDates('source', 'target', {}, accumulator);
+    expect(accumulator).to.be.an('object').that.has.all.keys('timeCheck_clean_target', 'timeCheck_clean_source');
   });
-  it('should convert dates to {2017-01-01} format based on the given dateFormats object', () => {
-    const source = '2018年1月2日から開催';
-    const target = 'starts Jan. 2';
-    const res = compareDates(source, target, options, {});
-    const cleanSource = res[1].timeCheck_clean_source;
-    const cleanTarget = res[1].timeCheck_clean_target;
-
-    expect(cleanSource).to.equal('{2018-1-2}から開催');
-    expect(cleanTarget).to.equal('starts {2018-1-2}');
+  it('Convert dates to {2017-01-01} format based on the given dateFormats object', () => {
+    const accumulator = {};
+    compareDates('2018年1月2日から開催', 'starts Jan. 2', options, accumulator);
+    expect(accumulator.timeCheck_clean_source).to.equal('{2018-1-2}から開催');
+    expect(accumulator.timeCheck_clean_target).to.equal('starts {2018-1-2}');
   });
-  it('should return no error if there are matching dates', () => {
+  it('Return no error if there are matching dates', () => {
     const source = '2018年1月2日から開催';
     const target = 'starts Jan. 2';
     const [res] = compareDates(source, target, options, {});
@@ -55,13 +50,6 @@ describe('compareDates', () => {
     const [res] = compareDates(source, target, options, {});
     expect(res.hasError).to.be.true;
   });
-  it('Return detected dates in the results object', () => {
-    const source = 'イベント期間：20:59 2/21 から　2018年3月20日まで';
-    const target = 'Event from 8:59pm, Dec. 21 to Jan. 20';
-    const [res] = compareDates(source, target, options, {});
-    expect(res.sourceDates).to.be.an('array').that.has.lengthOf(2);
-    expect(res.targetDates).to.be.an('array').that.has.lengthOf(2);
-  });
   it('Parse simple slash dates', () => {
     let source = 'イベント期間： 1/11';
     let target = 'The event is on Jan. 11';
@@ -72,5 +60,24 @@ describe('compareDates', () => {
     target = 'The event is on 1/14';
     [res] = compareDates(source, target, options, {});
     expect(res.hasError).to.be.false;
+  });
+  it('Ignore fractions', () => {
+    const [noerrorA] = compareDates('1/2 OFF!', 'Half off!', options, {});
+    expect(noerrorA.hasError).to.be.false;
+
+    const [noerrorB] = compareDates('半額', '1/2 off!', options, {});
+    expect(noerrorB.hasError).to.be.false;
+  });
+  it('Return detected dates in the results object', () => {
+    const source = 'イベント期間：20:59 2/21 から　2018年3月20日まで';
+    const target = 'Event from 8:59pm, Dec. 21 to Jan. 20';
+    const [res] = compareDates(source, target, options, {});
+    expect(res.sourceDates).to.be.an('array').that.has.lengthOf(2);
+    expect(res.targetDates).to.be.an('array').that.has.lengthOf(2);
+  });
+  it('Return identified dates in the results object', () => {
+    const [res] = compareDates('イベント期間： 1/11', 'The event is on Jan. 11', options, {});
+    expect(res.sourceDates.length).to.equal(1);
+    expect(res.targetDates.length).to.equal(1);
   });
 });

@@ -1,6 +1,20 @@
 import moment from 'moment-timezone';
 import { CheckResult } from 'yakubun-utils';
 
+let f = 'MMM. D';
+
+/**
+ * Callback function for an array .map method that, whenever it
+ * encounters a moment object, it converts it into a string.
+ * @param {*} element - Element in an array
+ * @returns {*} The same element that was passed in, unless it was
+ * a moment object, in which case its string representation is returned.
+ */
+function format(element) {
+  if (moment.isMoment(element)) return element.format(f);
+  return element;
+}
+
 /*
 Takes an array with the following arguments
 0: Array of dates found in source with no match in target
@@ -9,30 +23,22 @@ Takes an array with the following arguments
 3: (optional) Array of slash dates that were parsed in the target
 */
 function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
-  // if the array elements are still moments, change them to readable formats
-  let format = 'MMM. D';
-  if (sourceTZ !== targetTZ) {
-    format += ' HH:MM z';
-  }
+  if (sourceTZ !== targetTZ) f += ' HH:MM z';
 
-  for (let j = 0; j < 2; j += 1) {
-    for (let i = 0; i < arr[j].length; i += 1) {
-      if (moment.isMoment(arr[j][i])) {
-        arr[j][i] = arr[j][i].format(format);
-      }
-    }
-  }
+  // Convert any moment objects to strings, so they can be used in the output string
+  const noMatchSource = arr[0].map(format);
+  const noMatchTarget = arr[1].map(format);
 
-  const inSourceNoMatch = `Source dates w/o match in target: <span class="text-date">${arr[0].join(', ')}</span>`;
-  const inTargetNoMatch = `Target dates w/o match in source: <span class="text-date">${arr[1].join(', ')}</span>`;
+  const inSourceNoMatch = `Source dates w/o match in target: <span class="text-date">${noMatchSource.join(', ')}</span>`;
+  const inTargetNoMatch = `Target dates w/o match in source: <span class="text-date">${noMatchTarget.join(', ')}</span>`;
 
   // create the output string
   let output;
-  if (arr[0].length > 0 && arr[1].length > 0) {
+  if (noMatchSource.length > 0 && noMatchTarget.length > 0) {
     output = `${inSourceNoMatch}<br>${inTargetNoMatch}`;
-  } else if (arr[0].length > 0 && arr[1].length === 0) {
+  } else if (noMatchSource.length > 0 && noMatchTarget.length === 0) {
     output = inSourceNoMatch;
-  } else if (arr[0].length === 0 && arr[1].length > 0) {
+  } else if (noMatchSource.length === 0 && noMatchTarget.length > 0) {
     output = inTargetNoMatch;
   } else {
     output = null;
@@ -41,6 +47,8 @@ function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
   const checkResult = new CheckResult('dates');
   checkResult.hasError = output !== null;
   checkResult.HTML = output;
+  checkResult.sourceDates = checkResult.sourceDates.concat(arr[2]);
+  checkResult.targetDates = checkResult.targetDates.concat(arr[3]);
 
   if (output) {
     checkResult.plainText = output.replace(/<(?:.|\n)*?>/gm, '');
