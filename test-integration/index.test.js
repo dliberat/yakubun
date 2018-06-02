@@ -6,7 +6,6 @@ import * as yakubun from '../src/index';
 let bilingualDoc;
 
 describe('Entry point - index.js', () => {
-
   let consolelog;
   before(() => {
     consolelog = console.warn;
