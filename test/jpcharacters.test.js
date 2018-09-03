@@ -55,5 +55,20 @@ describe('Find JP characters', () => {
       const [res] = langchecks.findJPCharacters('', target, options, undefined);
       expect(res.HTML).to.equal('Double-byte characters: <span class="text-alert">！ [Space]</span>');
     });
+    it('Numbers', () => {
+      const target = 'This is a　test１２３４５６７８９';
+      const [res1] = langchecks.findJPCharacters('', target, options, undefined);
+      expect(res.HTML).to.equal('Double-byte characters: <span class="text-alert">１ ２ ３ ４ ５ ６ ７ ８ ９</span>');
+    });
+    it('＋', () => {
+      const target = 'This＋is a test';
+      const [res] = langchecks.findJPCharacters('', target, options, undefined);
+      expect(res.hasError).to.be.true;
+    });
+    it('※', () => {
+      const target = '※ This is a test';
+      const [res] = langchecks.findJPCharacters('', target, options, undefined);
+      expect(res.hasError).to.be.true;
+    });
   });
 });
