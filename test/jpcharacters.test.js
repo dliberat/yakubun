@@ -56,8 +56,8 @@ describe('Find JP characters', () => {
       expect(res.HTML).to.equal('Double-byte characters: <span class="text-alert">！ [Space]</span>');
     });
     it('Numbers', () => {
-      const target = 'This is a　test１２３４５６７８９';
-      const [res1] = langchecks.findJPCharacters('', target, options, undefined);
+      const target = 'This is a test１２３４５６７８９';
+      const [res] = langchecks.findJPCharacters('', target, options, undefined);
       expect(res.HTML).to.equal('Double-byte characters: <span class="text-alert">１ ２ ３ ４ ５ ６ ７ ８ ９</span>');
     });
     it('＋', () => {
