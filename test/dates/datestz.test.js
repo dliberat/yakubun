@@ -60,6 +60,8 @@ describe('compareDatesTz', () => {
     const [res] = compareDatesTz('イベント期間： 23:59 1/11', 'The event starts at 11:59pm, Jan. 11', options, {});
     expect(res.hasError).to.be.true;
     expect(res.sourceDates.length).to.equal(1);
+    expect(res.sourceDates[0]).to.not.be.undefined;
     expect(res.targetDates.length).to.equal(1);
+    expect(res.targetDates[0]).to.not.be.undefined;
   });
 });

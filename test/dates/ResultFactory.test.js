@@ -23,4 +23,10 @@ describe('Dates result factory', () => {
     const [result] = RF.decide([[], [], [], []], {}, null, null, [], []);
     expect(result.hasError).to.be.false;
   });
+  it('ok() -> appends to sourceDates and targetDates', () => {
+    const factory = new ResultFactory('dates');
+    const [result] = factory.ok([1,2,3], ['a', 'b', 'c']);
+    expect(result.sourceDates).to.deep.equal([1, 2, 3]);
+    expect(result.targetDates).to.deep.equal(['a', 'b', 'c']);
+  })
 });
