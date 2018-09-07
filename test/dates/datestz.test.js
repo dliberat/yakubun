@@ -62,7 +62,6 @@ describe('compareDatesTz', () => {
 
     expect(res.hasError).to.be.true;
     expect(res.sourceDates.map(x => x.format('MM-DD'))).to.deep.equal(['01-11']);
-    console.log(res.targetDates);
     expect(res.targetDates.map(x => x.format('MM-DD'))).to.deep.equal(['01-11']);
   });
   it('Return empty array if there are no dates', () => {
