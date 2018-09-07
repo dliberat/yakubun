@@ -77,7 +77,17 @@ describe('compareDates', () => {
   });
   it('Return identified dates in the results object', () => {
     const [res] = compareDates('イベント期間： 1/11', 'The event is on Jan. 11', options, {});
-    expect(res.sourceDates.length).to.equal(1);
-    expect(res.targetDates.length).to.equal(1);
+    const now = new Date();
+    const year = now.getFullYear();
+    expect(res.sourceDates).to.deep.equal(['1/11']);
+    expect(res.targetDates).to.be.an('array').that.has.lengthOf(1);
+    expect(res.targetDates[0].format('MM-DD')).to.equal('01-11');
+  });
+  it('Return empty array if there are no dates', () => {
+    const [res] = compareDates('bogus', 'fake', options, {});
+    const now = new Date();
+    const year = now.getFullYear();
+    expect(res.sourceDates).to.deep.equal([]);
+    expect(res.targetDates).to.deep.equal([]);
   });
 });

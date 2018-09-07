@@ -15,6 +15,7 @@ describe('compareDatesTz', () => {
         ['([0-2]?[0-9])[:\\uFF1A]([0-5][0-9]) ([0-1]?[0-9])\\/([0-3]?[0-9])', '{2018-$3-$4 $1:$2}'], // 21:59 09/10
       ],
       en: [
+        ['([1]?[0-9]:[0-5][0-9][ap]m), Jan(?:il)?\\.? ([0-3]?[0-9])', '{2018-01-$2 $1}'], // 12:30pm, Jan. 23
         ['([1]?[0-9]:[0-5][0-9][ap]m), Apr(?:il)?\\.? ([0-3]?[0-9])', '{2018-04-$2 $1}'], // 12:30pm, Apr. 23
         ['Jan(?:uary)?\\.? ([0-3]?[0-9])', '{2018-1-$1}'], // Jan. 15
         ['([0-1]?[0-9])\\/([0-3]?[0-9]),? ([0-2]?[0-9]:[0-5][0-9][AP]M)', '{2018-$1-$2 $3}'], // 11/5, 16:59AM
@@ -58,10 +59,19 @@ describe('compareDatesTz', () => {
   });
   it('Return identified dates in the results object', () => {
     const [res] = compareDatesTz('イベント期間： 23:59 1/11', 'The event starts at 11:59pm, Jan. 11', options, {});
+
     expect(res.hasError).to.be.true;
-    expect(res.sourceDates.length).to.equal(1);
-    expect(res.sourceDates[0]).to.not.be.undefined;
-    expect(res.targetDates.length).to.equal(1);
-    expect(res.targetDates[0]).to.not.be.undefined;
+    expect(res.sourceDates.map(x => x.format('MM-DD'))).to.deep.equal(['01-11']);
+    console.log(res.targetDates);
+    expect(res.targetDates.map(x => x.format('MM-DD'))).to.deep.equal(['01-11']);
+  });
+  it('Return empty array if there are no dates', () => {
+    const [res] = compareDatesTz('bogus', 'fake', options, {});
+    const now = new Date();
+    const year = now.getFullYear();
+
+    expect(res.hasError).to.be.false;
+    expect(res.sourceDates).to.deep.equal([]);
+    expect(res.targetDates).to.deep.equal([]);
   });
 });
