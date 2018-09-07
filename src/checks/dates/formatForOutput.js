@@ -47,8 +47,8 @@ function formatForOutput(arr, oAccumulator, sourceTZ, targetTZ) {
   const checkResult = new CheckResult('dates');
   checkResult.hasError = output !== null;
   checkResult.HTML = output;
-  checkResult.sourceDates = checkResult.sourceDates.concat(arr[2]);
-  checkResult.targetDates = checkResult.targetDates.concat(arr[3]);
+  checkResult.sourceDates = checkResult.sourceDates.concat(arr[2] === undefined ? [] : arr[2]);
+  checkResult.targetDates = checkResult.targetDates.concat(arr[3] === undefined ? [] : arr[3]);
 
   if (output) {
     checkResult.plainText = output.replace(/<(?:.|\n)*?>/gm, '');

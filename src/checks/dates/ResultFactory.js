@@ -58,6 +58,8 @@ class ResultFactory {
   decide(res, acc, sMoments, tMoments, sTz = null, tTz = null) {
     const result = formatForOutput(res, acc, sTz, tTz);
     result.checkName = this.checkName;
+
+    // This is overwriting something that formatForOutput is already putting into these fields
     result.sourceDates = result.sourceDates.concat(sMoments);
     result.targetDates = result.targetDates.concat(tMoments);
     return [result];

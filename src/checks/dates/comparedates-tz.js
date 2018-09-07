@@ -4,6 +4,7 @@
  */
 
 import { CheckResult, regexComparer } from 'yakubun-utils';
+import ResultFactory from './ResultFactory';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
 import formatForOutput from './formatForOutput';
@@ -31,6 +32,10 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   const datesRegExp = new RegExp('{[0-9]{4}-[0-1]?[0-9]-[0-3]?[0-9] [0-2]?[0-9]:[0-5][0-9]}', 'gi');
   let comparison = regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
 
+  // shitty hack so that we can pass the dates that were found on to the results object
+  const datesFoundInSource = cleanSource.match(datesRegExp);
+  const datesFoundInTarget = cleanTarget.match(datesRegExp);
+
   // turn all dates and times into two-digits so as to be ISO compliant
   comparison = dates.convertToTwoDigitDates(comparison);
 
@@ -42,7 +47,7 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   // an array of the target language dates
 
   for (let i = momentArr[0].length - 1; i >= 0; i -= 1) {
-    for (let j = 0; j < momentArr[1].length; j += 1) {
+    for (let j = momentArr[1].length - 1; j >= 0; j -= 1) {
       if (momentArr[0][i].isSame(momentArr[1][j])) {
         // remove the moments from the arrays
         momentArr[0].splice(i, 1);
@@ -52,13 +57,10 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
     }
   }
 
-  // momentArr should now only contain the dates that have no matches
-  const retval = formatForOutput(momentArr, oAccumulator, sourceTZ, targetTZ);
+  const factory = new ResultFactory('dates-tz');
+  const [re] = factory.decide(momentArr, oAccumulator, momentArr[0], momentArr[1], sourceTZ, targetTZ);
 
-  retval.checkName = 'dates-tz';
-  retval.hasTargetDate = datesRegExp.test(cleanTarget);
-
-  return [retval, oAccumulator];
+  return [re, oAccumulator];
 }
 
 export default compareDatesTz;
