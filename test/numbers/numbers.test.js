@@ -1,5 +1,5 @@
 /* global describe, it */
-/* eslint no-unused-expressions: off */
+/* eslint no-unused-expressions: off, no-console: off */
 import { expect } from 'chai';
 import compareNumbers from '../../src/checks/numbers/numbers';
 
@@ -38,6 +38,13 @@ describe('Numbers check', () => {
     const source = 'みんなで飾りつけたツリーの飾りが500万個を達成';
     const target = 'The number of decorations on the tree reached 5,000,000!';
     const [res] = compareNumbers(source, target);
+    expect(res.hasError).to.be.false;
+  });
+  it.only('５７万６８３０ should match 576,830', () => {
+    const source = '５７万６８３０人が志願している';
+    const target = ' 576,830 applicants,';
+    const [res] = compareNumbers(source, target);
+    console.log(`\n${res.plainText}`);
     expect(res.hasError).to.be.false;
   });
   it('1.5万 should match 15000', () => {
