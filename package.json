@@ -38,7 +38,7 @@
     "build": "webpack",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "generate-docs": "jsdoc -r ./src -c jsdoc.json --readme README.md",
-    "test": "mocha --recursive --require babel-core/register",
+    "test": "mocha --recursive --require babel-core/register --reporter=progress",
     "test-integration": "mocha test-integration/* --require babel-core/register",
     "report": "nyc mocha test/* --require babel-core/register"
   }
