@@ -10,13 +10,18 @@ import {
   replaceAllFromArray,
   compareArrays,
 } from 'yakubun-utils';
-import replaceKanjiNums from '../../utilities/replaceKanjiNums';
-import { removeDelimiters, letterSubs, subber, oncePerAdjustReduce } from './numbers-utility';
+import {
+  removeDelimiters,
+  letterSubs,
+  subber,
+  oncePerAdjustReduce,
+} from './numbers-utility';
 import oSubstitutions from './num-words';
+import replaceKanjiNums from '../../utilities/replaceKanjiNums';
+
 
 function commonSubs(string, lang) {
   const language = lang.toLowerCase();
-
   if (oSubstitutions[language]) {
     return replaceAllFromArray(oSubstitutions[language], string, 'gi');
   }
