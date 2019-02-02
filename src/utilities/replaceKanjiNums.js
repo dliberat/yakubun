@@ -17,7 +17,8 @@ function replaceKanjiNums(string) {
     .replace(/\uFF16|\u516D/g, '6')
     .replace(/\uFF17|\u4E03/g, '7')
     .replace(/\uFF18|\u516B/g, '8')
-    .replace(/\uFF19|\u4E5D/g, '9');
+    .replace(/\uFF19|\u4E5D/g, '9')
+    .replace(/\uFF10/g, '0');
 }
 
 export default replaceKanjiNums;
