@@ -25,6 +25,11 @@ npm install yakubun
    import yakubun from 'yakubun';
 ```
 
+### Live Demo
+
+You can play around with an implementation of Yakubun that interacts with the Google Sheets API at (http://danliberatori.com/projects/yakubun)[http://danliberatori.com/projects/yakubun].
+
+
 ### Usage
 
 Use the `yakubun.scan(bilingualDoc, checkOptions)` function to run scans on a bilingual document. The results for each segment are passed along to the callback function you provide.
