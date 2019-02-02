@@ -15,6 +15,16 @@ Download the minified library and include it in the browser.
 <script type="text/javascript" src="yakubun.js"></script>
 ```
 
+Alternatively, install the npm package and import it into your project.
+
+```
+npm install yakubun
+```
+
+```
+   import yakubun from 'yakubun';
+```
+
 ### Usage
 
 Use the `yakubun.scan(bilingualDoc, checkOptions)` function to run scans on a bilingual document. The results for each segment are passed along to the callback function you provide.
