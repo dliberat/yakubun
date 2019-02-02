@@ -27,7 +27,7 @@ npm install yakubun
 
 ### Live Demo
 
-You can play around with an implementation of Yakubun that interacts with the Google Sheets API at (http://danliberatori.com/projects/yakubun)[http://danliberatori.com/projects/yakubun].
+You can play around with an implementation of Yakubun that interacts with the Google Sheets API at http://danliberatori.com/projects/yakubun
 
 
 ### Usage
