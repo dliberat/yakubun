@@ -1,10 +1,10 @@
 /**
- * @module numberedBullets
  * Contains the check function for tracking numbers such as
  * 1)
  * 2)
  * 3)
  * etc. If a number appears out of order, this check will raise a warning.
+ * @module numberedBullets
  */
 
 import { CheckResult, regexMatchesToArray } from 'yakubun-utils';
