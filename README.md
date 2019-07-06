@@ -222,7 +222,22 @@ bannedWordsList = {
 
 11. Times
 
-   Details coming soon.
+   The time check module begins by executing a series of find-and-replaces against the provided segment. It searches for times written in the standard HH:MM format as well as times written using Japanese characters (such as "13時24分").
+
+   Next, the `convertTimesToISO` utility is used to convert the times that were parsed into the ISO standard date format. This allows the times to be cast as Moment.js objects, which makes comparing the source and target language times a bit easier. Note that in order to do this, the ISO date format requires a date, and May 20 1985 is selected arbitrarily as a default date. This can occasionally lead to some cryptic error messages.
+
+   Once the times from the source and target texts have been parsed and converted into Moment.js objects, the times are sorted. By sorting before we compare, we avoid false positives in situations where translators reorder certain statements. 
+   
+   _Example: The following translation will not result in a warning_
+
+   ```
+      source: １８時 まで 作業 できる。図書館は朝９時から入れる。
+      target: The library opens at 9am, and you can work there until 6pm.
+
+   ```
+
+   If the time check module detects any errors, it will output all the times that it has detected in the source and target texts and leave it up to the translator to determine whether the error is legitimate. By allowing the translator to see every single time that appears in the segment it becomes easier to spot any legitimate errors that exist in the translation, as well as any potential parsing errors that Yakubun has made.
+
 
 12. Numbers
 
