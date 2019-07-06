@@ -9,27 +9,27 @@
   },
   "author": "Dan Liberatori <daniel.liberatori@gmail.com>",
   "dependencies": {
-    "comma-number": "^2.0.0",
-    "moment-timezone": "^0.5.23",
-    "ordinal": "^1.0.2",
+    "comma-number": "^2.0.1",
+    "moment-timezone": "^0.5.25",
+    "ordinal": "^1.0.3",
     "yakubun-utils": "^1.0.2"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
+    "@babel/core": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "@babel/register": "^7.4.4",
+    "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.2",
-    "docdash": "^1.0.2",
-    "eslint": "^5.13.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "jsdoc": "^3.5.5",
-    "mocha": "^5.2.0",
-    "nyc": "^11.8.0",
-    "uglifyjs-webpack-plugin": "^1.2.5",
-    "webpack": "^4.8.3",
-    "webpack-cli": "^2.1.4"
+    "coveralls": "^3.0.4",
+    "docdash": "^1.1.1",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "jsdoc": "^3.6.2",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
   },
   "engines": {
     "node": ">=9.6.1"
@@ -39,8 +39,8 @@
     "build": "webpack",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "generate-docs": "jsdoc -r ./src -c jsdoc.json --readme README.md",
-    "test": "mocha --recursive --require babel-core/register --reporter=progress",
-    "test-integration": "mocha test-integration/* --require babel-core/register",
-    "report": "nyc mocha test/* --require babel-core/register"
+    "test": "mocha --recursive --require @babel/register --reporter=progress",
+    "test-integration": "mocha test-integration/* --require @babel/register",
+    "report": "nyc mocha test/* --require @babel/register"
   }
 }

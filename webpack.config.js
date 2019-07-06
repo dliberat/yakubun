@@ -1,6 +1,6 @@
 const path = require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const { NormalModuleReplacementPlugin, IgnorePlugin } = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -24,14 +24,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new UglifyJSPlugin({
-      uglifyOptions: {
-        output: {
-          ascii_only: true,
-          comments: /^YAKUBUN/,
-        },
-      },
-    }),
     // Use custom tz info to reduce size
     new NormalModuleReplacementPlugin(
       /moment-timezone\/data\/packed\/latest\.json/,
@@ -40,4 +32,16 @@ module.exports = {
     // Don't bundle moment locale data to reduce size
     new IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          output: {
+            ascii_only: true,
+            comments: /^\s*YAKUBUN/,
+          }
+        }
+      }),
+    ]
+  }
 };
