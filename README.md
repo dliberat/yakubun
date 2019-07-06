@@ -1,6 +1,6 @@
 # YAKUBUN
-[![Build Status](https://travis-ci.org/garroadran/yakubun.svg?branch=master)](https://travis-ci.org/garroadran/yakubun)
-[![Coverage Status](https://coveralls.io/repos/github/garroadran/yakubun/badge.svg?branch=master)](https://coveralls.io/github/garroadran/yakubun?branch=master)
+[![Build Status](https://travis-ci.org/dliberat/yakubun.svg?branch=master)](https://travis-ci.org/dliberat/yakubun)
+[![Coverage Status](https://coveralls.io/repos/github/dliberat/yakubun/badge.svg?branch=master)](https://coveralls.io/github/dliberat/yakubun?branch=master)
 
 ## Overview
 
@@ -22,7 +22,7 @@ npm install yakubun
 ```
 
 ```
-   import yakubun from 'yakubun';
+import yakubun from 'yakubun';
 ```
 
 ### Live Demo
@@ -236,6 +236,8 @@ bannedWordsList = {
 
    ```
 
+   Finally, the arrays of times are compared to see if both the source and target texts contain the same times.
+
    If the time check module detects any errors, it will output all the times that it has detected in the source and target texts and leave it up to the translator to determine whether the error is legitimate. By allowing the translator to see every single time that appears in the segment it becomes easier to spot any legitimate errors that exist in the translation, as well as any potential parsing errors that Yakubun has made.
 
 
@@ -305,4 +307,4 @@ The `CheckResult` object required in the return value of a check function can be
    }
 ```
 
-A basic constructor for this object, as well as a few other useful functions for use when crafting custom checks, are available in a the [yakubun-utils](https://github.com/garroadran/yakubun-utils) package.
+A basic constructor for this object, as well as a few other useful functions for use when crafting custom checks, are available in the [yakubun-utils](https://github.com/dliberat/yakubun-utils) package.

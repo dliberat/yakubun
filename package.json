@@ -5,7 +5,7 @@
   "main": "dist/yakubun.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/garroadran/yakubun"
+    "url": "https://github.com/dliberat/yakubun"
   },
   "author": "Dan Liberatori <daniel.liberatori@gmail.com>",
   "dependencies": {
