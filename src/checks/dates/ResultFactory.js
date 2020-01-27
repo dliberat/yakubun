@@ -8,6 +8,7 @@ class ResultFactory {
   constructor(checkName = 'dates') {
     this.checkName = checkName;
   }
+
   /**
    * Generate a check result for use when the config that was passed
    * to the dates check was invalid.

@@ -124,4 +124,28 @@ describe('Entry point - index.js', () => {
     expect(results[0].doubleSpaces.hasError).to.be.true;
     expect(results[1].numbers.hasError).to.be.false;
   });
+
+  it('Perform multiple time zone dates checks in sequence', () => {
+    const config = {
+      sourceTimeZone: 'Asia/Tokyo',
+      targetTimeZone: 'America/Los_Angeles',
+      checks: {
+        dates: false,
+        times: false,
+        tzDates: true,
+      },
+    };
+
+    const doc = {
+      0: {
+        source: '期間：9/26 10:59',
+        target: 'Til 9/26, 10:59AM.',
+      },
+    };
+
+    const results = yakubun.scan(doc, config);
+    const report = results[0].tzDates;
+    expect(report.hasError).to.be.true;
+    expect(report.plainText).to.equal('Source dates w/o match in target: Sep. 26 10:09 JST Target dates w/o match in source: Sep. 26 10:09 PDT');
+  });
 });

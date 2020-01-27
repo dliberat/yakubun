@@ -7,7 +7,6 @@ import { CheckResult, regexComparer } from 'yakubun-utils';
 import ResultFactory from './ResultFactory';
 import * as dates from './dates-common';
 import convertToMomentArr from './convertToMomentArr';
-import formatForOutput from './formatForOutput';
 
 function compareDatesTz(source, target, checkOptions, oAccumulator) {
   if (!dates.verifyOptions(checkOptions)) {
@@ -33,8 +32,8 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   let comparison = regexComparer(cleanSource, cleanTarget, datesRegExp, datesRegExp, false);
 
   // shitty hack so that we can pass the dates that were found on to the results object
-  const datesFoundInSource = cleanSource.match(datesRegExp);
-  const datesFoundInTarget = cleanTarget.match(datesRegExp);
+  // const datesFoundInSource = cleanSource.match(datesRegExp);
+  // const datesFoundInTarget = cleanTarget.match(datesRegExp);
 
   // turn all dates and times into two-digits so as to be ISO compliant
   comparison = dates.convertToTwoDigitDates(comparison);
@@ -58,7 +57,14 @@ function compareDatesTz(source, target, checkOptions, oAccumulator) {
   }
 
   const factory = new ResultFactory('dates-tz');
-  const [re] = factory.decide(momentArr, oAccumulator, momentArr[0], momentArr[1], sourceTZ, targetTZ);
+  const [re] = factory.decide(
+    momentArr,
+    oAccumulator,
+    momentArr[0],
+    momentArr[1],
+    sourceTZ,
+    targetTZ,
+  );
 
   return [re, oAccumulator];
 }
