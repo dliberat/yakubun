@@ -1,4 +1,4 @@
-/* YAKUBUN 0.1.0 https://github.com/garroadran/yakubun Created by Dan Liberatori. Free for use and modification (but notify the author please!) */
+/* YAKUBUN 0.5.0 https://github.com/garroadran/yakubun Created by Dan Liberatori. Free for use and modification (but notify the author please!) */
 
 /**
  * A segment of source and translated target text.
@@ -75,6 +75,7 @@ function scan(bilingualDoc, checkOptions, callback) {
   return runChecks(cleanBilingualDoc, cleanCheckOptions, callback);
 }
 
-module.exports = {
+export {
+  // eslint-disable-next-line import/prefer-default-export
   scan,
 };

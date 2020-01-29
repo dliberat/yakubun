@@ -49,7 +49,8 @@ function removeDelimiters(string, lang) {
   if (language === 'ja' || language === 'en') {
     // TODO: Running the replacement twice is a bit of a hack. Improve this.
     return string.replace(/([0-9]+),([0-9]{3})/g, '$1$2').replace(/([0-9]+),([0-9]{3})/g, '$1$2');
-  } else if (language === 'es') {
+  }
+  if (language === 'es') {
     return string.replace(/([0-9]+)\.([0-9]{3})/g, '$1$2').replace(/([0-9]+)\.([0-9]{3})/g, '$1$2');
   }
   return string.replace(/([0-9]+),([0-9]{3})/g, '$1$2').replace(/([0-9]+),([0-9]{3})/g, '$1$2');

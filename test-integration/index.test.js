@@ -1,7 +1,7 @@
 /* global describe, beforeEach, it, before, after */
 /* eslint-disable no-unused-expressions, no-console */
 import { expect } from 'chai';
-import * as yakubun from '../src/index';
+import * as yakubun from '../dist/yakubun';
 
 let bilingualDoc;
 
